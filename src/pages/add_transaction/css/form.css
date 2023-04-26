@@ -1,0 +1,64 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 1170px;
+  padding: 0 16px;
+}
+
+.formdiv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 2px solid orange;
+  padding: 10px;
+}
+
+.form {
+  padding: 10px;
+  border: 2px solid greenyellow;
+}
+
+.fieldsrow{
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  margin: 10px;
+  border: 2px solid black;
+}
+
+.fields{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.boxes{
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.fields :first-child{
+  margin-right: 10px;
+}
+
+.fields :last-child{
+  margin-left: 10px;
+}
+
+.actions
+{
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.defpadding {
+  padding: 10px;
+}
+

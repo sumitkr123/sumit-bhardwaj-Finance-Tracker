@@ -1,0 +1,29 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 1170px;
+  padding: 0 16px;
+}
+
+.table {
+  background-color: aqua;
+  border: 1px solid black;
+}
+
+.defpadding {
+  padding: 10px;
+}
+
+.th {
+  border: 2px solid black;
+}
+
+.td {
+  border: 2px solid black;
+  padding: 10px;
+}
