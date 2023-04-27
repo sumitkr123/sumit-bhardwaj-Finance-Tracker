@@ -5,7 +5,7 @@
 }
 
 .container {
-  margin: 0 auto;
+  margin: 50px auto;
   max-width: 1170px;
   padding: 0 16px;
 }
@@ -26,4 +26,28 @@
 .td {
   border: 2px solid black;
   padding: 10px;
+}
+
+.pages {
+  display: flex;
+  flex-direction: row;
+}
+
+.page {
+  width: fit-content;
+  text-align: center;
+  border-radius: 15px;
+  background-color: darkorange;
+  opacity: 80%;
+  padding: 10px;
+  margin: 10px;
+  cursor: pointer;
+}
+
+.groupdiv{
+  width: fit-content;
+  background-color: aquamarine;
+  border: 3px solid burlywood;
+  border-radius: 10px;
+  padding: 20px;
 }
