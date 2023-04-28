@@ -4,7 +4,6 @@ import logo from "../../logo.svg";
 import "../../App.css";
 import "../../pages/all_transactions/css/transaction.css";
 import { Link, useParams } from "react-router-dom";
-import { TransactionData } from "../../components/transaction_data";
 
 export const Transaction = () => {
   const { id } = useParams();
@@ -12,20 +11,23 @@ export const Transaction = () => {
   const [transaction, setTransactions] = useState([]);
 
   useEffect(() => {
-    console.log("useeffect called..");
-
     if (
       localStorage.getItem("userdata") !== null &&
       localStorage.getItem("userdata") !== undefined
     ) {
       let existingData = JSON.parse(localStorage.getItem("userdata"));
 
-      setTransactions([existingData[id]]);
+      let data = [];
+      for (let i in existingData) {
+        if (parseInt(existingData[i].id) === parseInt(id)) {
+          data.push(existingData[i]);
+          break;
+        }
+      }
+
+      setTransactions(data);
     }
   }, [id]);
-
-  console.log("transaction index called");
-  console.log(transaction);
 
   if (transaction.length === 0) {
     return (
@@ -48,12 +50,32 @@ export const Transaction = () => {
             <th className="th">Amount</th>
             <th className="th">Receipt</th>
             <th className="th">Notes</th>
-            <th className="th">Action</th>
           </tr>
         </thead>
         <tbody className="tabcontent">
-          {transaction.map((tdata, index) => (
-            <TransactionData transaction={tdata} key={index} index={index} />
+          {transaction.map((tdata) => (
+            <tr className="contentrow" key={tdata.id}>
+              <td className="td">{tdata.tdate}</td>
+              <td className="td">{tdata.monthyear}</td>
+              <td className="td">{tdata.ttype}</td>
+              <td className="td">{tdata.FromAc}</td>
+              <td className="td">{tdata.ToAc}</td>
+              <td className="td">{tdata.amount}</td>
+
+              <td className="td">
+                {
+                  // eslint-disable-next-line
+                  <img
+                    src={tdata.receipt}
+                    width={80}
+                    height={60}
+                    alt="receiptimage"
+                  />
+                }
+              </td>
+
+              <td className="td">{tdata.notes}</td>
+            </tr>
           ))}
         </tbody>
       </table>

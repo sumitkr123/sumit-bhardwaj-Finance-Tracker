@@ -1,7 +1,7 @@
 export const Pagination = (props) => {
   const pagination = props.pagination;
   const changepageno = props.changepageno;
-
+  
   return (
     <div className="pages">
       {pagination.pageno - 1 >= 1 && (
@@ -17,26 +17,8 @@ export const Pagination = (props) => {
           </div>
         </>
       )}
-      {pagination.pageno + 1 < pagination.totalpage && (
-        <>
-          {pagination.pages
-            .slice(pagination.pageno - 1, pagination.totalpage - 1)
-            .map((pageno, index) => (
-              <div
-                className="page"
-                key={index}
-                onClick={() => changepageno(pageno)}
-              >
-                <span>{pageno}</span>
-              </div>
-            ))}
-          <div className="page">
-            <span>...</span>
-          </div>
-        </>
-      )}
 
-      {pagination.pageno + 1 >= pagination.totalpage && (
+      {pagination.pageno + 1 <= pagination.totalpage && (
         <>
           {pagination.pages
             .slice(pagination.pageno - 1, pagination.totalpage - 1)
@@ -56,6 +38,7 @@ export const Pagination = (props) => {
           )}
         </>
       )}
+      
 
       {pagination.pageno + 1 <= pagination.totalpage && (
         <>

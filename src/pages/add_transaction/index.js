@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../../App.css";
 import "./css/form.css";
 
@@ -74,23 +74,85 @@ export const AddTransaction = () => {
     },
   });
 
+  useEffect(() => {
+    let allvalues = form.values;
+    let allerrors = form.errors;
+
+    let errflag = 0;
+
+    for (let i in allvalues) {
+      // if (typeof allvalues[i] === "object") {
+      //   Object.keys(allvalues[i]).forEach((e) => {
+      //     if (allvalues[i][e] === "") {
+      //       errflag = 1;
+      //       return;
+      //     }
+      //   });
+      //   if (errflag === 1) {
+      //     break;
+      //   }
+      // } else {
+      if (allvalues[i].length === 0) {
+        console.log(i, allvalues[i]);
+        errflag = 1;
+      }
+      // }
+    }
+
+    for (let i in allerrors) {
+      // if (typeof allerrors[i] === "object") {
+      //   Object.keys(allerrors[i]).forEach((e) => {
+      //     if (allerrors[i][e] !== "") {
+      //       errflag = 1;
+      //       return;
+      //     }
+      //   });
+      //   if (errflag === 1) {
+      //     break;
+      //   }
+      // } else {
+
+      if (allerrors[i] !== "" && i !== "errcolor") {
+        errflag = 1;
+      }
+
+      // }
+    }
+
+    if (errflag !== 1) {
+      if (
+        localStorage.getItem("userdata") !== null &&
+        localStorage.getItem("userdata") !== undefined
+      ) {
+        let existingData = JSON.parse(localStorage.getItem("userdata"));
+        let previd = existingData.at(existingData.length - 1).id;
+
+        let pushData = form.values;
+        pushData["id"] = previd + 1;
+
+        existingData.push(pushData);
+
+        localStorage.setItem("userdata", JSON.stringify(existingData));
+      } else {
+        let pushData = [form.values];
+        pushData[0]["id"] = 1;
+
+        localStorage.setItem("userdata", JSON.stringify(pushData));
+      }
+
+      navigate(`/view`);
+    }
+  }, [form]);
+
   const allvalidate = (e) => {
-    // e.preventDefault();
+    console.log(form);
+
+    e.preventDefault();
     let newform = e.target;
 
     // let allelements = document.getElementsByClassName("allvalidate");
 
     let allelements = [];
-    // console.log(typeof allelements);
-
-    // console.log(typeof newform);
-    // console.log(newform);
-
-    // newform.forEach((item)=>{
-    //   if (item.className.split(" ")[0] === "allvalidate") {
-    //     allelements.push(item);
-    //   }
-    // })
 
     for (let i = 0; i < newform.length; i++) {
       if (newform[i].className.split(" ")[0] === "allvalidate") {
@@ -127,81 +189,18 @@ export const AddTransaction = () => {
         validateimgfile(name, value, errfield, item);
       }
     });
-
-    let allvalues = form.values;
-    let allerrors = form.errors;
-
-    let errflag = 0;
-
-    for (let i in allvalues) {
-      if (typeof allvalues[i] === "object") {
-        Object.keys(allvalues[i]).forEach((e) => {
-          if (allvalues[i][e] === "") {
-            errflag = 1;
-            return;
-          }
-        });
-        if (errflag === 1) {
-          break;
-        }
-      } else {
-        if (allvalues[i] === "") {
-          errflag = 1;
-        }
-      }
-    }
-
-    for (let i in allerrors) {
-      if (typeof allerrors[i] === "object") {
-        Object.keys(allerrors[i]).forEach((e) => {
-          if (allerrors[i][e] !== "") {
-            errflag = 1;
-            return;
-          }
-        });
-        if (errflag === 1) {
-          break;
-        }
-      } else {
-        if (i !== "errcolor") {
-          if (allerrors[i].length !== 0) {
-            errflag = 1;
-          }
-        }
-      }
-    }
-
-    if (errflag !== 1) {
-      if (
-        localStorage.getItem("userdata") !== null &&
-        localStorage.getItem("userdata") !== undefined
-      ) {
-        let existingData = JSON.parse(localStorage.getItem("userdata"));
-        existingData.push(form.values);
-
-        localStorage.setItem("userdata", JSON.stringify(existingData));
-      } else {
-        localStorage.setItem("userdata", JSON.stringify([form.values]));
-      }
-
-      navigate(`/view`);
-    }
-    else
-    {
-      e.preventDefault();
-    }
   };
 
   function validatefixedlength(name, value, errfield) {
     let newerrors = form.errors;
     let newvalues = form.values;
 
-    if (value === "") {
+    if (value.trim() === "") {
       newerrors[name] = `**${errfield} can't be empty..!`;
     } else {
-      if (value.length <= fixedLengthValue && value.length !== 0) {
+      if (value.trim().length <= fixedLengthValue && value.trim().length !== 0) {
         newerrors[name] = "";
-        newvalues[name] = value;
+        newvalues[name] = value.trim();
       } else {
         newerrors[
           name
@@ -238,7 +237,7 @@ export const AddTransaction = () => {
     let newerrors = form.errors;
     let newvalues = form.values;
 
-    if (value === "") {
+    if (value.trim() === "") {
       newerrors[name] = `**${errfield} can't be empty..!`;
     } else {
       newerrors[name] = "";
@@ -320,10 +319,9 @@ export const AddTransaction = () => {
 
       fileReader.addEventListener("load", function () {
         newvalues[name] = this.result;
+        setForm({ ...form, values: newvalues, errors: newerrors });
       });
     }
-
-    setForm({ ...form, values: newvalues, errors: newerrors });
   }
 
   return (
