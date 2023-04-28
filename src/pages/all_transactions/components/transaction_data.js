@@ -26,10 +26,16 @@ month.map((month) => monthYears.push(`${month} ${currentyear}`));
 
 const fixedimit = 3;
 
+// Buggy code group by sort error...
+
 export const TransactionData = (props) => {
   const transactions = props.transactions;
   const initTransactions = props.initTransactions;
   const setCurrentData = props.setData;
+
+  const [newData, setNewData] = useState([]);
+
+  const fromGroup = props.fromGroup;
 
   const [sorting, setSorting] = useState({
     sortingColumnName: "",
@@ -78,7 +84,8 @@ export const TransactionData = (props) => {
   }, [clickCount]);
 
   useEffect(() => {
-    let getAllTransactions = [...transactions];
+    let getAllTransactions =
+      fromGroup === true ? [...newData] : [...transactions];
 
     if (sorting.sortingOrder === "asc") {
       getAllTransactions.sort((a, b) => {
@@ -206,7 +213,12 @@ export const TransactionData = (props) => {
       getAllTransactions = initTransactions;
     }
 
-    setCurrentData(getAllTransactions);
+    if (props.fromGroup === true) {
+      setNewData(getAllTransactions);
+    } else {
+      setCurrentData(getAllTransactions);
+    }
+
     // eslint-disable-next-line
   }, [sorting]);
 
@@ -228,6 +240,8 @@ export const TransactionData = (props) => {
       columnValueType: type,
     });
   }
+
+  console.log('new',newData)
 
   return (
     <>
