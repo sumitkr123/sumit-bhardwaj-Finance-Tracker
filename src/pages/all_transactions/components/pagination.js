@@ -23,13 +23,25 @@ export const Pagination = (props) => {
           {pagination.pages
             .slice(pagination.pageno - 1, pagination.totalpage - 1)
             .map((pageno, index) => (
-              <div
-                className="page"
-                key={index}
-                onClick={() => changepageno(pageno)}
-              >
-                <span>{pageno}</span>
-              </div>
+              <>
+                {pagination.pageno === pageno ? (
+                  <div
+                    className="page animate1page"
+                    key={index}
+                    onClick={() => changepageno(pageno)}
+                  >
+                    <span>{pageno}</span>
+                  </div>
+                ) : (
+                  <div
+                    className="page"
+                    key={index}
+                    onClick={() => changepageno(pageno)}
+                  >
+                    <span>{pageno}</span>
+                  </div>
+                )}
+              </>
             ))}
           {pagination.pageno !== pagination.totalpage && (
             <div className="page">
