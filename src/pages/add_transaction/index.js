@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "../../App.css";
 import "./css/form.css";
 
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Account } from "./components/accountlist";
 import { MonthYear } from "./components/monthyearlist";
 
@@ -48,6 +48,8 @@ const fileReader = new FileReader();
 month.map((month) => monthYears.push(`${month} ${currentyear}`));
 
 export const AddTransaction = () => {
+  const { id } = useParams();
+
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
@@ -72,80 +74,100 @@ export const AddTransaction = () => {
       receipt: "",
       errcolor: "red",
     },
+    submit: false,
   });
 
   useEffect(() => {
-    let allvalues = form.values;
-    let allerrors = form.errors;
-
-    let errflag = 0;
-
-    for (let i in allvalues) {
-      // if (typeof allvalues[i] === "object") {
-      //   Object.keys(allvalues[i]).forEach((e) => {
-      //     if (allvalues[i][e] === "") {
-      //       errflag = 1;
-      //       return;
-      //     }
-      //   });
-      //   if (errflag === 1) {
-      //     break;
-      //   }
-      // } else {
-      if (allvalues[i].length === 0) {
-        console.log(i, allvalues[i]);
-        errflag = 1;
-      }
-      // }
-    }
-
-    for (let i in allerrors) {
-      // if (typeof allerrors[i] === "object") {
-      //   Object.keys(allerrors[i]).forEach((e) => {
-      //     if (allerrors[i][e] !== "") {
-      //       errflag = 1;
-      //       return;
-      //     }
-      //   });
-      //   if (errflag === 1) {
-      //     break;
-      //   }
-      // } else {
-
-      if (allerrors[i] !== "" && i !== "errcolor") {
-        errflag = 1;
-      }
-
-      // }
-    }
-
-    if (errflag !== 1) {
+    if (id !== null && id !== undefined && id !== "") {
       if (
         localStorage.getItem("userdata") !== null &&
         localStorage.getItem("userdata") !== undefined
       ) {
         let existingData = JSON.parse(localStorage.getItem("userdata"));
-        let previd = existingData.at(existingData.length - 1).id;
 
-        let pushData = form.values;
-        pushData["id"] = previd + 1;
+        let data = [];
+        for (let i in existingData) {
+          if (parseInt(existingData[i].id) === parseInt(id)) {
+            data.push(existingData[i]);
+            break;
+          }
+        }
 
-        existingData.push(pushData);
+        if (data.length !== 0) {
+          let newform = { ...form };
+          for (let i in data[0]) {
+            newform.values[i] = data[0][i];
+          }
+          setForm(newform);
+        } else {
+          navigate("/");
+        }
+      }
+    }
+    // eslint-disable-next-line
+  }, []);
 
-        localStorage.setItem("userdata", JSON.stringify(existingData));
-      } else {
-        let pushData = [form.values];
-        pushData[0]["id"] = 1;
+  useEffect(() => {
+    if (form.submit === true) {
+      let allvalues = form.values;
+      let allerrors = form.errors;
 
-        localStorage.setItem("userdata", JSON.stringify(pushData));
+      let errflag = 0;
+
+      for (let i in allvalues) {
+        if (allvalues[i].length === 0) {
+          console.log(i, allvalues[i]);
+          errflag = 1;
+        }
       }
 
-      navigate(`/view`);
+      for (let i in allerrors) {
+        if (allerrors[i] !== "" && i !== "errcolor") {
+          errflag = 1;
+        }
+      }
+
+      if (errflag !== 1) {
+        if (
+          localStorage.getItem("userdata") !== null &&
+          localStorage.getItem("userdata") !== undefined
+        ) {
+          let existingData = JSON.parse(localStorage.getItem("userdata"));
+
+          if (id !== null && id !== undefined && id !== "") {
+            const editid = parseInt(id);
+
+            for (let i in existingData) {
+              if (parseInt(existingData[i].id) === editid) {
+                existingData[i] = form.values;
+                break;
+              }
+            }
+          } else {
+            let previd = existingData.at(existingData.length - 1).id;
+
+            let pushData = form.values;
+            pushData["id"] = previd + 1;
+
+            existingData.push(pushData);
+          }
+
+          localStorage.setItem("userdata", JSON.stringify(existingData));
+        } else {
+          let pushData = [form.values];
+          pushData[0]["id"] = 1;
+
+          localStorage.setItem("userdata", JSON.stringify(pushData));
+        }
+
+        navigate(`/view`);
+      }
     }
+    // eslint-disable-next-line
   }, [form]);
 
   const allvalidate = (e) => {
-    console.log(form);
+    let newstateform = { ...form };
 
     e.preventDefault();
     let newform = e.target;
@@ -189,139 +211,166 @@ export const AddTransaction = () => {
         validateimgfile(name, value, errfield, item);
       }
     });
+
+    newstateform.submit = true;
+
+    setForm(newstateform);
   };
 
   function validatefixedlength(name, value, errfield) {
-    let newerrors = form.errors;
-    let newvalues = form.values;
+    let newform = { ...form };
 
     if (value.trim() === "") {
-      newerrors[name] = `**${errfield} can't be empty..!`;
+      newform.errors[name] = `**${errfield} can't be empty..!`;
     } else {
-      if (value.trim().length <= fixedLengthValue && value.trim().length !== 0) {
-        newerrors[name] = "";
-        newvalues[name] = value.trim();
+      if (
+        value.trim().length <= fixedLengthValue &&
+        value.trim().length !== 0
+      ) {
+        newform.errors[name] = "";
+        newform.values[name] = value.trim();
       } else {
-        newerrors[
+        newform.errors[
           name
         ] = `**${errfield} length must be of ${fixedLengthValue} or lesser than it..!`;
       }
     }
 
-    setForm({ ...form, values: newvalues, errors: newerrors });
+    newform.values[name] = value;
+
+    newform.submit = false;
+
+    setForm(newform);
   }
 
   function validatenumgthan0(name, value, errfield) {
-    let newerrors = form.errors;
-    let newvalues = form.values;
+    let newform = { ...form };
 
     if (value === "") {
-      newerrors[name] = `**${errfield} can't be empty..!`;
+      newform.errors[name] = `**${errfield} can't be empty..!`;
     } else {
       if (value.match(numRegex)) {
         if (value > 0) {
-          newerrors[name] = "";
-          newvalues[name] = value;
+          newform.errors[name] = "";
+          newform.values[name] = value;
         } else {
-          newerrors[name] = `**${errfield} is not valid..!`;
+          newform.errors[name] = `**${errfield} is not valid..!`;
         }
       } else {
-        newerrors[name] = `**${errfield} is not valid..!`;
+        newform.errors[name] = `**${errfield} is not valid..!`;
       }
     }
+    newform.values[name] = value;
 
-    setForm({ ...form, values: newvalues, errors: newerrors });
+    newform.submit = false;
+
+    setForm(newform);
   }
 
   function validateempty(name, value, errfield) {
-    let newerrors = form.errors;
-    let newvalues = form.values;
+    let newform = { ...form };
 
     if (value.trim() === "") {
-      newerrors[name] = `**${errfield} can't be empty..!`;
+      newform.errors[name] = `**${errfield} can't be empty..!`;
     } else {
-      newerrors[name] = "";
+      newform.errors[name] = "";
     }
-    newvalues[name] = value;
+    newform.values[name] = value;
 
-    setForm({ ...form, values: newvalues, errors: newerrors });
+    newform.submit = false;
+
+    setForm(newform);
   }
 
   function validateaccount(name, value, errfield) {
-    let newerrors = form.errors;
-    let newvalues = form.values;
+    let newform = { ...form };
 
-    newvalues[name] = value;
+    newform.values[name] = value;
 
-    if (newvalues.FromAc === "" || newvalues.ToAc === "") {
-      if (newvalues.FromAc === "") {
-        newerrors.FromAc = `**FromAc can't be empty..!`;
+    if (newform.values.FromAc === "" || newform.values.ToAc === "") {
+      if (newform.values.FromAc === "") {
+        newform.errors.FromAc = `**FromAc can't be empty..!`;
       } else {
-        newerrors.FromAc = ``;
+        newform.errors.FromAc = ``;
       }
-      if (newvalues.ToAc === "") {
-        newerrors.ToAc = `**ToAc can't be empty..!`;
+      if (newform.values.ToAc === "") {
+        newform.errors.ToAc = `**ToAc can't be empty..!`;
       } else {
-        newerrors.ToAc = ``;
+        newform.errors.ToAc = ``;
       }
     } else {
-      if (newvalues.FromAc === newvalues.ToAc) {
-        newerrors.FromAc = `**FromAc and ToAc are same..!`;
-        newerrors.ToAc = `**FromAc and ToAc are same..!`;
+      if (newform.values.FromAc === newform.values.ToAc) {
+        newform.errors.FromAc = `**FromAc and ToAc are same..!`;
+        newform.errors.ToAc = `**FromAc and ToAc are same..!`;
       } else {
-        newerrors[name] = ``;
+        newform.errors.FromAc = ``;
+        newform.errors.ToAc = ``;
       }
     }
 
-    setForm({ ...form, values: newvalues, errors: newerrors });
+    newform.submit = false;
+
+    setForm(newform);
   }
 
   function validatedate(name, value, errfield) {
-    let newerrors = form.errors;
-    let newvalues = form.values;
+    let newform = { ...form };
 
     let datevalue = new Date(value);
     let today = new Date();
 
     if (value === "") {
-      newerrors[name] = `**${errfield} can't be empty..!`;
+      newform.errors[name] = `**${errfield} can't be empty..!`;
     } else {
       if (datevalue > today) {
-        newerrors[name] = `**${errfield} is not valid..!`;
+        newform.errors[name] = `**${errfield} is not valid..!`;
       } else {
-        newerrors[name] = "";
+        newform.errors[name] = "";
       }
     }
 
-    newvalues[name] = value;
+    newform.values[name] = value;
 
-    setForm({ ...form, values: newvalues, errors: newerrors });
+    newform.submit = false;
+
+    setForm(newform);
   }
 
   function validateimgfile(name, value, errfield, file) {
-    let newerrors = form.errors;
-    let newvalues = form.values;
+    let newform = { ...form };
 
     let filenamelist = value.split(".");
 
     if (value === "") {
-      newerrors[name] = `**${errfield} can't be empty..!`;
+      newform.errors[name] = `**${errfield} can't be empty..!`;
     } else {
       if (supportedImg.includes(filenamelist[filenamelist.length - 1])) {
-        newerrors[name] = "";
-      } else if (file.files[0].size > mb1) {
-        newerrors[name] = `**${errfield} size exceeds..!`;
+        if (file.files[0].size > mb1) {
+          newform.errors[name] = `**${errfield} size exceeds..!`;
+        } else {
+          newform.errors[name] = "";
+        }
       } else {
-        newerrors[name] = `**${errfield} format is not valid..!`;
+        newform.errors[name] = `**${errfield} format is not valid..!`;
       }
 
       fileReader.readAsDataURL(file.files[0]);
 
       fileReader.addEventListener("load", function () {
-        newvalues[name] = this.result;
-        setForm({ ...form, values: newvalues, errors: newerrors });
+        newform.values[name] = this.result;
+        newform.submit = false;
+        setForm(newform);
       });
     }
+  }
+
+  function removeFile() {
+    let newform = { ...form };
+
+    newform.values.receipt = "";
+    newform.errors.receipt = "";
+
+    setForm(newform);
   }
 
   return (
@@ -334,7 +383,15 @@ export const AddTransaction = () => {
               <input
                 type="date"
                 name="tdate"
+                value={form.values.tdate}
                 className="allvalidate validate-type-date Transaction-date"
+                onChange={(e) =>
+                  validatedate(
+                    e.target.name,
+                    e.target.value,
+                    "Transaction-date"
+                  )
+                }
               />
             </div>
             {form.errors.tdate !== "" && (
@@ -351,7 +408,11 @@ export const AddTransaction = () => {
               <label>Notes :-</label>
               <textarea
                 name="notes"
+                value={form.values.notes}
                 className="allvalidate validate-type-fixedlength Notes"
+                onChange={(e) =>
+                  validatefixedlength(e.target.name, e.target.value, "Notes")
+                }
               />
             </div>
             {form.errors.notes !== "" && (
@@ -369,7 +430,11 @@ export const AddTransaction = () => {
               <input
                 type="text"
                 name="amount"
+                value={form.values.amount}
                 className="allvalidate validate-type-num_gthan0 Amount"
+                onChange={(e) =>
+                  validatenumgthan0(e.target.name, e.target.value, "Amount")
+                }
               />
             </div>
             {form.errors.amount !== "" && (
@@ -387,7 +452,11 @@ export const AddTransaction = () => {
               <select
                 type="text"
                 name="FromAc"
+                value={form.values.FromAc}
                 className="allvalidate validate-type-account FromAc"
+                onChange={(e) =>
+                  validateaccount(e.target.name, e.target.value, "FromAc")
+                }
               >
                 <option value={""}>Select A/c</option>
                 <Account accountTypes={accountTypes} />
@@ -408,7 +477,11 @@ export const AddTransaction = () => {
               <select
                 type="text"
                 name="ToAc"
+                value={form.values.ToAc}
                 className="allvalidate validate-type-account ToAc"
+                onChange={(e) =>
+                  validateaccount(e.target.name, e.target.value, "ToAc")
+                }
               >
                 <option value={""}>Select A/c</option>
                 <Account accountTypes={accountTypes} />
@@ -429,7 +502,15 @@ export const AddTransaction = () => {
               <select
                 type="text"
                 name="ttype"
+                value={form.values.ttype}
                 className="allvalidate validate-type-checkempty Transaction-type"
+                onChange={(e) =>
+                  validateempty(
+                    e.target.name,
+                    e.target.value,
+                    "Transaction-type"
+                  )
+                }
               >
                 <option value={""}>Select transaction type</option>
                 {transactionTypes.map((item, i) => (
@@ -454,7 +535,11 @@ export const AddTransaction = () => {
               <select
                 type="text"
                 name="monthyear"
+                value={form.values.monthyear}
                 className="allvalidate validate-type-checkempty Month-year"
+                onChange={(e) =>
+                  validateempty(e.target.name, e.target.value, "Month-year")
+                }
               >
                 <MonthYear monthYears={monthYears} />
               </select>
@@ -471,11 +556,34 @@ export const AddTransaction = () => {
           <div className="fieldsrow">
             <div className="fields">
               <label>Receipt :-</label>
-              <input
-                type="file"
-                name="receipt"
-                className="allvalidate validate-type-imgfile Receipt"
-              />
+              {form.values.receipt === "" ? (
+                <input
+                  type="file"
+                  name="receipt"
+                  value={form.values.receipt}
+                  className="allvalidate validate-type-imgfile Receipt"
+                  onChange={(e) =>
+                    validateimgfile(
+                      e.target.name,
+                      e.target.value,
+                      "Receipt",
+                      e.target
+                    )
+                  }
+                />
+              ) : (
+                <div>
+                  <div className="cross" onClick={() => removeFile()}>
+                    X
+                  </div>
+                  <img
+                    width={80}
+                    height={60}
+                    src={`${form.values.receipt}`}
+                    alt="alt"
+                  />
+                </div>
+              )}
             </div>
             {form.errors.receipt !== "" && (
               <div className="fields">
@@ -489,7 +597,6 @@ export const AddTransaction = () => {
           <div className="fieldsrow">
             <div className="actions">
               <input type="submit" name="submit" value={"Submit"} />
-              <input type="reset" name="reset" value={"Reset"} />
             </div>
           </div>
         </form>

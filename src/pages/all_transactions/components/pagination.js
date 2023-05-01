@@ -1,7 +1,7 @@
 export const Pagination = (props) => {
   const pagination = props.pagination;
   const changepageno = props.changepageno;
-  
+
   return (
     <div className="pages">
       {pagination.pageno - 1 >= 1 && (
@@ -38,7 +38,6 @@ export const Pagination = (props) => {
           )}
         </>
       )}
-      
 
       {pagination.pageno + 1 <= pagination.totalpage && (
         <>

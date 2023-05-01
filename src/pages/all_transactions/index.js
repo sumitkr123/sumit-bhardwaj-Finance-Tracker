@@ -6,10 +6,6 @@ import logo from "../../logo.svg";
 import "../../App.css";
 import "./css/transaction.css";
 import { Link } from "react-router-dom";
-import { Pagination } from "./components/pagination";
-
-const today = new Date();
-const currentyear = today.getFullYear();
 
 const month = [
   "Jan",
@@ -26,11 +22,15 @@ const month = [
   "Dec",
 ];
 
-const monthYears = [];
+const fixedimit = 3;
 
-month.map((month) => monthYears.push(`${month} ${currentyear}`));
-
-// const fixedimit = 2;
+const currency = {
+  rupee: <span>&#8377;</span>,
+  dollar: <span>&#36;</span>,
+  pound: <span>&#163;</span>,
+  yen: <span>&#165;</span>,
+  euro: <span>&#8364;</span>,
+};
 
 const groupby = [
   { tdate: "Transaction-date" },
@@ -43,6 +43,7 @@ const groupby = [
 ];
 
 export const AllData = () => {
+  // eslint-disable-next-line
   const [initTransactions, setInitTransactions] = useState([]);
   const [transactions, setTransactions] = useState([]);
 
@@ -75,6 +76,44 @@ export const AllData = () => {
     setGroupedData([result]);
   }
 
+  function amountFormatter(amount, type) {
+    let newamount = amount.toString();
+    let length = newamount.length;
+    let newstr = "";
+
+    if (length <= 3) {
+      newstr += newamount;
+    } else {
+      let j = 0;
+      newamount
+        .split("")
+        .reverse()
+        .forEach((item) => {
+          if (j === 3) {
+            newstr = newstr + "," + item;
+          } else if (j % 2 !== 0 && j > 3) {
+            newstr = newstr + "," + item;
+          } else {
+            newstr += item;
+          }
+
+          j++;
+        });
+      newstr = newstr.split("").reverse().join("");
+    }
+
+    newstr = (
+      <p>
+        {type !== null && type !== undefined && type !== ""
+          ? currency[type]
+          : currency.rupee}
+        {newstr}
+      </p>
+    );
+
+    return newstr;
+  }
+
   if (transactions.length === 0) {
     return (
       <div>
@@ -99,34 +138,39 @@ export const AllData = () => {
         </div>
         <br></br>
         <br></br>
+        <h1>Sorting with Pagination</h1>
         <TransactionData
           transactions={transactions}
-          initTransactions={initTransactions}
-          setData={setTransactions}
-          fromGroup={false}
-          // setSortingColumn={setSortingColumn}
+          month={month}
+          fixedimit={fixedimit}
+          amountFormatter={amountFormatter}
         />
 
-        <br></br>
-        <br></br>
         {groupedData.length !== 0 &&
-          groupedData.map((item) =>
-            Object.keys(item).map(
-              (value) =>
-                value !== "undefined" && (
-                  <div key={value}>
-                    <h1>{value}</h1>
-                    <TransactionData
-                      transactions={item[value]}
-                      setData={setTransactions}
-                      initTransactions={initTransactions}
-                      fromGroup={true}
-                      // setData={setGroupedData}
-                      // setSortingColumn={setSortingColumn}
-                    />
-                  </div>
-                )
-            )
+          Object.keys(groupedData[0]).map(
+            (value, index) =>
+              value !== "undefined" && (
+                <div key={value}>
+                  {index === 0 && (
+                    <>
+                      <br></br>
+                      <br></br>
+                      <h1>Group-by with Sorting & Pagination</h1>
+                      <br></br>
+                      <br></br>
+                    </>
+                  )}
+                  <h1>{value}</h1>
+                  <TransactionData
+                    transactions={groupedData[0][value]}
+                    month={month}
+                    fixedimit={fixedimit}
+                    amountFormatter={amountFormatter}
+                  />
+                  <br></br>
+                  <br></br>
+                </div>
+              )
           )}
 
         <br />

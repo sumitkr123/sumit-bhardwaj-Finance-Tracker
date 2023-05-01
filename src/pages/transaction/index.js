@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 
-import logo from "../../logo.svg";
 import "../../App.css";
 import "../../pages/all_transactions/css/transaction.css";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 export const Transaction = () => {
+  console.log('aavyu...!')
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [transaction, setTransactions] = useState([]);
 
@@ -25,17 +26,14 @@ export const Transaction = () => {
         }
       }
 
-      setTransactions(data);
+      if (data.length !== 0) {
+        setTransactions(data);
+      } else {
+        navigate("/");
+      }
     }
-  }, [id]);
-
-  if (transaction.length === 0) {
-    return (
-      <div>
-        <img src={logo} className="App-logo" alt="logo" />
-      </div>
-    );
-  }
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <div className="container">
@@ -63,15 +61,7 @@ export const Transaction = () => {
               <td className="td">{tdata.amount}</td>
 
               <td className="td">
-                {
-                  // eslint-disable-next-line
-                  <img
-                    src={tdata.receipt}
-                    width={80}
-                    height={60}
-                    alt="receiptimage"
-                  />
-                }
+                {<img src={tdata.receipt} width={80} height={60} alt="alt" />}
               </td>
 
               <td className="td">{tdata.notes}</td>

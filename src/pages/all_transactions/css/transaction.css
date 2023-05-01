@@ -12,6 +12,7 @@
 
 .table {
   background-color: aqua;
+  width: 100%;
   border: 1px solid black;
 }
 
@@ -33,12 +34,14 @@
 .pages {
   display: flex;
   flex-direction: row;
+  justify-content: flex-end;
 }
 
 .page {
   width: fit-content;
   text-align: center;
-  border-radius: 15px;
+  border-radius: 20% 10%;
+  box-shadow: darkorange 5px 9px 20px;
   background-color: darkorange;
   opacity: 80%;
   padding: 10px;
@@ -46,15 +49,19 @@
   cursor: pointer;
 }
 
-.pages :first-child{
+.page:hover {
+  transform: rotate(10deg);
+}
+
+.pages :first-child {
   margin-left: 0;
 }
 
-.pages :last-child{
+.pages :last-child {
   margin-right: 0;
 }
 
-.groupdiv{
+.groupdiv {
   width: fit-content;
   background-color: aquamarine;
   border: 3px solid burlywood;

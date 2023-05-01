@@ -9,8 +9,9 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<AddTransaction />}></Route>
+        <Route path="/:id" element={<AddTransaction />}></Route>
         <Route path="/view" element={<AllData />}></Route>
-        <Route path="/transactions/:id" element={<Transaction />}></Route>
+        <Route path="/view/:id" element={<Transaction />}></Route>
       </Routes>
     </BrowserRouter>
   );
