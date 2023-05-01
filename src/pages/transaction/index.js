@@ -5,7 +5,7 @@ import "../../pages/all_transactions/css/transaction.css";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 export const Transaction = () => {
-  console.log('aavyu...!')
+  console.log("aavyu...!");
   const { id } = useParams();
   const navigate = useNavigate();
 

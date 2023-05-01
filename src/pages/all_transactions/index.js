@@ -105,7 +105,7 @@ export const AllData = () => {
     newstr = (
       <p>
         {type !== null && type !== undefined && type !== ""
-          ? currency[type]
+          ? currency[type.trim().toLowerCase()]
           : currency.rupee}
         {newstr}
       </p>
