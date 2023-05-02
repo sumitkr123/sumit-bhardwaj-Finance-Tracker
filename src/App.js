@@ -1,19 +1,51 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import { AddTransaction } from "./pages/add_transaction";
-import { AllData } from "./pages/all_transactions";
-import { Transaction } from "./pages/transaction";
+import { AddTransaction } from "./pages/core/add_transaction";
+import { AllData } from "./pages/core/all_transactions";
+import { Transaction } from "./pages/core/transaction";
+import { Login } from "./pages/auth_screens/login";
+import { Protected } from "./protected";
+import { NavBar } from "./components/navbar";
+
+import AuthProvider from "./providers/authprovider";
+import { Register } from "./pages/auth_screens/register";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<AddTransaction />}></Route>
-        <Route path="/:id" element={<AddTransaction />}></Route>
-        <Route path="/view" element={<AllData />}></Route>
-        <Route path="/view/:id" element={<Transaction />}></Route>
-      </Routes>
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route element={<NavBar />}>
+            {/* Public routes :- */}
+            <Route path="/login" element={<Login />}></Route>
+            <Route path="/register" element={<Register />}></Route>
+
+            {/* Protected routes :- */}
+            <Route
+              path="/"
+              element={<Protected component={<AddTransaction />} />}
+            ></Route>
+            <Route
+              path="/edit/:id"
+              element={<Protected component={<AddTransaction />} />}
+            ></Route>
+
+            <Route
+              path="/view"
+              element={<Protected component={<AllData />} />}
+            ></Route>
+
+            <Route
+              path="/view/:id"
+              element={<Protected component={<Transaction />} />}
+            ></Route>
+
+            {/* Any other routes */}
+            <Route path="/*" element={<h1>Page not found..!</h1>}></Route>
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 

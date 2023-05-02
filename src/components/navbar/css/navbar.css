@@ -1,0 +1,57 @@
+/* Global css */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0px;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 1170px;
+  padding: 0 16px;
+}
+
+/*header part*/
+.header {
+  margin-top: 30px;
+}
+
+.hcontent {
+  display: flex;
+  justify-content: space-between;
+}
+
+.logo {
+  display: inherit;
+  align-items: center;
+}
+
+.logo :first-child {
+  width: 50%;
+  height: 100%;
+}
+
+.navdiv {
+  display: inherit;
+}
+
+.nav {
+  display: inherit;
+}
+
+.ul {
+  display: inherit;
+  align-items: center;
+  padding: 0;
+  flex-wrap: wrap;
+  list-style-type: none;
+}
+
+.li {
+  display: inherit;
+  padding: 0px 30px;
+  align-items: center;
+}
+

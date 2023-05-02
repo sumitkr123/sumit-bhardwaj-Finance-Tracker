@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 
 import { TransactionData } from "./components/transaction_data";
 
-import logo from "../../logo.svg";
-import "../../App.css";
+import logo from "../../../logo.svg";
+import "../../../App.css";
 import "./css/transaction.css";
 import { Link } from "react-router-dom";
 
@@ -22,7 +22,7 @@ const month = [
   "Dec",
 ];
 
-const fixedimit = 3;
+const fixedimit = 2;
 
 const currency = {
   rupee: <span>&#8377;</span>,
@@ -49,6 +49,8 @@ export const AllData = () => {
 
   const [groupedData, setGroupedData] = useState([]);
 
+  const [searchedData, setSearchedData] = useState([]);
+
   useEffect(() => {
     if (
       localStorage.getItem("userdata") !== null &&
@@ -74,6 +76,39 @@ export const AllData = () => {
     });
 
     setGroupedData([result]);
+  }
+
+  // useEffect(()=>{
+  //   clearData()
+  // },[])
+
+  // function clearData()
+  // {
+  //   setSearchedData([]);
+  // }
+
+  function searchData(event) {
+    event.preventDefault();
+
+    let temp = [...transactions];
+
+    let result = [];
+
+    let form = event.target;
+
+    let searchvalue = form.search.value;
+
+    temp.forEach((mainitem) => {
+      Object.keys(mainitem).forEach((item) => {
+        if (mainitem[item]===searchvalue) {
+          result.push(mainitem);
+        }
+      });
+    });
+
+    console.log(result, "in search method");
+
+    setSearchedData(result);
   }
 
   function amountFormatter(amount, type) {
@@ -114,6 +149,8 @@ export const AllData = () => {
     return newstr;
   }
 
+  console.log(searchedData, "in index");
+
   if (transactions.length === 0) {
     return (
       <div>
@@ -145,6 +182,28 @@ export const AllData = () => {
           fixedimit={fixedimit}
           amountFormatter={amountFormatter}
         />
+
+        <div className="searchdiv">
+          <label>Search :-</label>
+          <form onSubmit={(e) => searchData(e)}>
+            <input type="text" name="search" />
+            <input type="submit" value={'Search'}/>
+          </form>
+        </div>
+        <br></br>
+        <br></br>
+
+        {searchedData.length !== 0 && (
+          <>
+            <h1>Searched data</h1>
+            <TransactionData
+              transactions={searchedData}
+              month={month}
+              fixedimit={fixedimit}
+              amountFormatter={amountFormatter}
+            />
+          </>
+        )}
 
         {groupedData.length !== 0 &&
           Object.keys(groupedData[0]).map(

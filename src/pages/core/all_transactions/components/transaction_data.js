@@ -18,11 +18,16 @@ export const TransactionData = (props) => {
   });
 
   const [pagination, setPagination] = useState({
+    showPage: 5,
     totalpage: 0,
     limit: fixedimit,
     pageno: 1,
     pages: [],
   });
+
+  useEffect(()=>{
+    setNewData(props.transactions)
+  },[props.transactions])
 
   useEffect(() => {
     let totpage = Math.ceil(newData.length / fixedimit);
@@ -159,6 +164,11 @@ export const TransactionData = (props) => {
       sortingColumnName: column,
       columnValueType: type,
     });
+
+    setPagination({
+      ...pagination,
+      pageno: 1,
+    });
   }
 
   function changepageno(pageno) {
@@ -166,6 +176,10 @@ export const TransactionData = (props) => {
       ...pagination,
       pageno: pageno,
     });
+  }
+
+  {
+    console.log(newData, "sduifhasidjfnk");
   }
 
   return (
@@ -246,26 +260,36 @@ export const TransactionData = (props) => {
               pagination.pageno * pagination.limit
             )
             .map((tdata) => (
-              <tr className="contentrow" key={tdata.id}>
-                <td className="td">{tdata.tdate}</td>
-                <td className="td">{tdata.monthyear}</td>
-                <td className="td">{tdata.ttype}</td>
-                <td className="td">{tdata.FromAc}</td>
-                <td className="td">{tdata.ToAc}</td>
-                <td className="td">{amountFormatter(tdata.amount)}</td>
+              <>
+                {console.log('tdata',tdata)}
+                <tr className="contentrow" key={tdata.id}>
+                  <td className="td">{tdata.tdate}</td>
+                  <td className="td">{tdata.monthyear}</td>
+                  <td className="td">{tdata.ttype}</td>
+                  <td className="td">{tdata.FromAc}</td>
+                  <td className="td">{tdata.ToAc}</td>
+                  <td className="td">{amountFormatter(tdata.amount)}</td>
 
-                <td className="td">
-                  {<img src={tdata.receipt} width={80} height={60} alt="alt" />}
-                </td>
+                  <td className="td">
+                    {
+                      <img
+                        src={tdata.receipt}
+                        width={80}
+                        height={60}
+                        alt="alt"
+                      />
+                    }
+                  </td>
 
-                <td className="td">{tdata.notes}</td>
-                <td className="td">
-                  <Link to={`/view/${tdata.id}`}>View</Link>
-                </td>
-                <td className="td">
-                  <Link to={`/${tdata.id}`}>Edit</Link>
-                </td>
-              </tr>
+                  <td className="td">{tdata.notes}</td>
+                  <td className="td">
+                    <Link to={`/view/${tdata.id}`}>View</Link>
+                  </td>
+                  <td className="td">
+                    <Link to={`/edit/${tdata.id}`}>Edit</Link>
+                  </td>
+                </tr>
+              </>
             ))}
         </tbody>
       </table>

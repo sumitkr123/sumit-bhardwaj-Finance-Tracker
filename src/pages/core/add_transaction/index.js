@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "../../App.css";
+import "../../../App.css";
 import "./css/form.css";
 
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -103,9 +103,34 @@ export const AddTransaction = () => {
           navigate("/");
         }
       }
+    } else {
+      setForm({
+        values: {
+          notes: "",
+          amount: "",
+          FromAc: "",
+          ToAc: "",
+          ttype: "",
+          monthyear: "",
+          tdate: "",
+          receipt: "",
+        },
+        errors: {
+          notes: "",
+          amount: "",
+          FromAc: "",
+          ToAc: "",
+          ttype: "",
+          monthyear: "",
+          tdate: "",
+          receipt: "",
+          errcolor: "red",
+        },
+        submit: false,
+      });
     }
     // eslint-disable-next-line
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     if (form.submit === true) {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
-import "../../App.css";
-import "../../pages/all_transactions/css/transaction.css";
+import "../../../App.css";
+import"../all_transactions/css/transaction.css"
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 export const Transaction = () => {

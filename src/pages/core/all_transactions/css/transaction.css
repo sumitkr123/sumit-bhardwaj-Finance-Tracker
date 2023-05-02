@@ -61,7 +61,7 @@
   margin-right: 0;
 }
 
-.groupdiv {
+.groupdiv, .searchdiv {
   width: fit-content;
   background-color: aquamarine;
   border: 3px solid burlywood;
@@ -71,17 +71,17 @@
 
 @media (prefers-reduced-motion: no-preference) {
   .animate1page {
-    animation: page-spin infinite 1s linear;
+    /* animation: page-spin infinite 1s linear; */
     background-color: aqua;
     /* transform: scale(1.5); */
   }
 }
 
-@keyframes page-spin {
+/* @keyframes page-spin {
   from {
     transform: rotate(0deg);
   }
   to {
     transform: rotate(360deg);
   }
-}
+} */
