@@ -25,12 +25,9 @@ export const TransactionData = (props) => {
     pages: [],
   });
 
-  useEffect(()=>{
-    setNewData(props.transactions)
-  },[props.transactions])
-
   useEffect(() => {
-    let totpage = Math.ceil(newData.length / fixedimit);
+    setNewData(props.transactions);
+    let totpage = Math.ceil(props.transactions.length / fixedimit);
 
     let pagelist = [];
 
@@ -44,7 +41,7 @@ export const TransactionData = (props) => {
       pages: pagelist,
     });
     // eslint-disable-next-line
-  }, []);
+  }, [props.transactions]);
 
   useEffect(() => {
     let getAllTransactions = [...newData];
@@ -178,10 +175,6 @@ export const TransactionData = (props) => {
     });
   }
 
-  {
-    console.log(newData, "sduifhasidjfnk");
-  }
-
   return (
     <>
       <table className="table">
@@ -260,36 +253,26 @@ export const TransactionData = (props) => {
               pagination.pageno * pagination.limit
             )
             .map((tdata) => (
-              <>
-                {console.log('tdata',tdata)}
-                <tr className="contentrow" key={tdata.id}>
-                  <td className="td">{tdata.tdate}</td>
-                  <td className="td">{tdata.monthyear}</td>
-                  <td className="td">{tdata.ttype}</td>
-                  <td className="td">{tdata.FromAc}</td>
-                  <td className="td">{tdata.ToAc}</td>
-                  <td className="td">{amountFormatter(tdata.amount)}</td>
+              <tr className="contentrow" key={tdata.id}>
+                <td className="td">{tdata.tdate}</td>
+                <td className="td">{tdata.monthyear}</td>
+                <td className="td">{tdata.ttype}</td>
+                <td className="td">{tdata.FromAc}</td>
+                <td className="td">{tdata.ToAc}</td>
+                <td className="td">{amountFormatter(tdata.amount)}</td>
 
-                  <td className="td">
-                    {
-                      <img
-                        src={tdata.receipt}
-                        width={80}
-                        height={60}
-                        alt="alt"
-                      />
-                    }
-                  </td>
+                <td className="td">
+                  {<img src={tdata.receipt} width={80} height={60} alt="alt" />}
+                </td>
 
-                  <td className="td">{tdata.notes}</td>
-                  <td className="td">
-                    <Link to={`/view/${tdata.id}`}>View</Link>
-                  </td>
-                  <td className="td">
-                    <Link to={`/edit/${tdata.id}`}>Edit</Link>
-                  </td>
-                </tr>
-              </>
+                <td className="td">{tdata.notes}</td>
+                <td className="td">
+                  <Link to={`/view/${tdata.id}`}>View</Link>
+                </td>
+                <td className="td">
+                  <Link to={`/edit/${tdata.id}`}>Edit</Link>
+                </td>
+              </tr>
             ))}
         </tbody>
       </table>

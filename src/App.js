@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
 import { AddTransaction } from "./pages/core/add_transaction";
 import { AllData } from "./pages/core/all_transactions";
@@ -41,7 +41,10 @@ function App() {
             ></Route>
 
             {/* Any other routes */}
-            <Route path="/*" element={<h1>Page not found..!</h1>}></Route>
+            <Route
+              path="/*"
+              element={<Navigate to="/login" replace={true} />}
+            ></Route>
           </Route>
         </Routes>
       </BrowserRouter>

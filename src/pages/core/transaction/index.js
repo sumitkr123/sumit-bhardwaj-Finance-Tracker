@@ -1,37 +1,45 @@
 import { useEffect, useState } from "react";
 
 import "../../../App.css";
-import"../all_transactions/css/transaction.css"
+import "../all_transactions/css/transaction.css";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { useAuth } from "../../../providers/authprovider";
 
 export const Transaction = () => {
-  console.log("aavyu...!");
   const { id } = useParams();
   const navigate = useNavigate();
 
   const [transaction, setTransactions] = useState([]);
 
-  useEffect(() => {
-    if (
-      localStorage.getItem("userdata") !== null &&
-      localStorage.getItem("userdata") !== undefined
-    ) {
-      let existingData = JSON.parse(localStorage.getItem("userdata"));
+  const auth = useAuth();
 
-      let data = [];
-      for (let i in existingData) {
-        if (parseInt(existingData[i].id) === parseInt(id)) {
-          data.push(existingData[i]);
-          break;
+  // eslint-disable-next-line
+  const [userData, setUserData] = useState(auth.user);
+
+  useEffect(() => {
+    if (userData !== null && userData !== undefined) {
+      if (
+        localStorage.getItem(userData.email) !== null &&
+        localStorage.getItem(userData.email) !== undefined
+      ) {
+        let existingData = JSON.parse(localStorage.getItem(userData.email));
+
+        let data = [];
+        for (let i in existingData) {
+          if (parseInt(existingData[i].id) === parseInt(id)) {
+            data.push(existingData[i]);
+            break;
+          }
+        }
+
+        if (data.length !== 0) {
+          setTransactions(data);
+        } else {
+          navigate("/");
         }
       }
-
-      if (data.length !== 0) {
-        setTransactions(data);
-      } else {
-        navigate("/");
-      }
     }
+
     // eslint-disable-next-line
   }, []);
 

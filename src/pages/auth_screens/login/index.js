@@ -31,21 +31,21 @@ export const Login = () => {
         form.password.value;
 
       let flag = 0;
+      let auth_data = {};
+
       for (let i in existingData) {
         if (
           existingData[i].email === form.email.value &&
           existingData[i].pass === form.password.value
         ) {
+          auth_data = existingData[i]
           flag = 1;
           break;
         }
       }
 
       if (flag === 1) {
-        let auth_data = {};
         auth_data["token"] = randomstr;
-        auth_data["email"] = form.email.value;
-        auth_data["pass"] = form.password.value;
 
         console.log(auth_data);
 

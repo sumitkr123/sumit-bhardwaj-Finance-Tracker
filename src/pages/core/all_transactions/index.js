@@ -6,6 +6,7 @@ import logo from "../../../logo.svg";
 import "../../../App.css";
 import "./css/transaction.css";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../../providers/authprovider";
 
 const month = [
   "Jan",
@@ -51,17 +52,24 @@ export const AllData = () => {
 
   const [searchedData, setSearchedData] = useState([]);
 
-  useEffect(() => {
-    if (
-      localStorage.getItem("userdata") !== null &&
-      localStorage.getItem("userdata") !== undefined
-    ) {
-      let existingData = JSON.parse(localStorage.getItem("userdata"));
+  const auth = useAuth();
 
-      setTransactions(existingData);
-      setInitTransactions(existingData);
+  // eslint-disable-next-line
+  const [userData, setUserData] = useState(auth.user);
+
+  useEffect(() => {
+    if (userData !== undefined && userData !== null) {
+      if (
+        localStorage.getItem(userData.email) !== null &&
+        localStorage.getItem(userData.email) !== undefined
+      ) {
+        let existingData = JSON.parse(localStorage.getItem(userData.email));
+
+        setTransactions(existingData);
+        setInitTransactions(existingData);
+      }
     }
-  }, []);
+  }, [userData]);
 
   function groupdata(event) {
     let temp = [...transactions];
@@ -78,37 +86,32 @@ export const AllData = () => {
     setGroupedData([result]);
   }
 
-  // useEffect(()=>{
-  //   clearData()
-  // },[])
-
-  // function clearData()
-  // {
-  //   setSearchedData([]);
-  // }
-
   function searchData(event) {
-    event.preventDefault();
-
     let temp = [...transactions];
 
     let result = [];
 
-    let form = event.target;
+    let searchvalue = event.target.value;
 
-    let searchvalue = form.search.value;
+    if (
+      searchvalue !== null &&
+      searchvalue !== undefined &&
+      searchvalue !== ""
+    ) {
+      let regex = new RegExp("^" + searchvalue + "+");
 
-    temp.forEach((mainitem) => {
-      Object.keys(mainitem).forEach((item) => {
-        if (mainitem[item]===searchvalue) {
-          result.push(mainitem);
-        }
+      temp.forEach((mainitem) => {
+        Object.keys(mainitem).forEach((item) => {
+          if (mainitem[item].toString().match(regex)) {
+            result.push(mainitem);
+          }
+        });
       });
-    });
 
-    console.log(result, "in search method");
-
-    setSearchedData(result);
+      setSearchedData(result);
+    } else {
+      setSearchedData([]);
+    }
   }
 
   function amountFormatter(amount, type) {
@@ -149,8 +152,6 @@ export const AllData = () => {
     return newstr;
   }
 
-  console.log(searchedData, "in index");
-
   if (transactions.length === 0) {
     return (
       <div>
@@ -162,6 +163,22 @@ export const AllData = () => {
   return (
     <>
       <div className="container">
+        <br></br>
+        <br></br>
+        {transactions.length !== 0 && (
+          <>
+            <h1>Sorting with Pagination</h1>
+            <TransactionData
+              transactions={transactions}
+              month={month}
+              fixedimit={fixedimit}
+              amountFormatter={amountFormatter}
+            />
+            <br></br>
+            <br></br>
+          </>
+        )}
+
         <div className="groupdiv">
           <label>Group by :-</label>
           <select type="text" name="group" onChange={(e) => groupdata(e)}>
@@ -175,36 +192,6 @@ export const AllData = () => {
         </div>
         <br></br>
         <br></br>
-        <h1>Sorting with Pagination</h1>
-        <TransactionData
-          transactions={transactions}
-          month={month}
-          fixedimit={fixedimit}
-          amountFormatter={amountFormatter}
-        />
-
-        <div className="searchdiv">
-          <label>Search :-</label>
-          <form onSubmit={(e) => searchData(e)}>
-            <input type="text" name="search" />
-            <input type="submit" value={'Search'}/>
-          </form>
-        </div>
-        <br></br>
-        <br></br>
-
-        {searchedData.length !== 0 && (
-          <>
-            <h1>Searched data</h1>
-            <TransactionData
-              transactions={searchedData}
-              month={month}
-              fixedimit={fixedimit}
-              amountFormatter={amountFormatter}
-            />
-          </>
-        )}
-
         {groupedData.length !== 0 &&
           Object.keys(groupedData[0]).map(
             (value, index) =>
@@ -231,6 +218,25 @@ export const AllData = () => {
                 </div>
               )
           )}
+
+        <div className="searchdiv">
+          <label>Search :-</label>
+          <input type="text" name="search" onChange={(e) => searchData(e)} />
+        </div>
+        <br></br>
+        <br></br>
+
+        {searchedData.length !== 0 && (
+          <>
+            <h1>Searched data</h1>
+            <TransactionData
+              transactions={searchedData}
+              month={month}
+              fixedimit={fixedimit}
+              amountFormatter={amountFormatter}
+            />
+          </>
+        )}
 
         <br />
         <Link to={`/`}>Go to Home</Link>

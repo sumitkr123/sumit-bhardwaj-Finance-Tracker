@@ -5,6 +5,7 @@ import "./css/form.css";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Account } from "./components/accountlist";
 import { MonthYear } from "./components/monthyearlist";
+import { useAuth } from "../../../providers/authprovider";
 
 const fixedLengthValue = 250;
 const numRegex = /^[1-9]{1}[0-9]*$/;
@@ -77,30 +78,37 @@ export const AddTransaction = () => {
     submit: false,
   });
 
+  const auth = useAuth();
+
+  // eslint-disable-next-line
+  const [userData, setUserData] = useState(auth.user);
+
   useEffect(() => {
     if (id !== null && id !== undefined && id !== "") {
-      if (
-        localStorage.getItem("userdata") !== null &&
-        localStorage.getItem("userdata") !== undefined
-      ) {
-        let existingData = JSON.parse(localStorage.getItem("userdata"));
+      if (userData !== null && userData !== undefined) {
+        if (
+          localStorage.getItem(userData.email) !== null &&
+          localStorage.getItem(userData.email) !== undefined
+        ) {
+          let existingData = JSON.parse(localStorage.getItem(userData.email));
 
-        let data = [];
-        for (let i in existingData) {
-          if (parseInt(existingData[i].id) === parseInt(id)) {
-            data.push(existingData[i]);
-            break;
+          let data = [];
+          for (let i in existingData) {
+            if (parseInt(existingData[i].id) === parseInt(id)) {
+              data.push(existingData[i]);
+              break;
+            }
           }
-        }
 
-        if (data.length !== 0) {
-          let newform = { ...form };
-          for (let i in data[0]) {
-            newform.values[i] = data[0][i];
+          if (data.length !== 0) {
+            let newform = { ...form };
+            for (let i in data[0]) {
+              newform.values[i] = data[0][i];
+            }
+            setForm(newform);
+          } else {
+            navigate("/");
           }
-          setForm(newform);
-        } else {
-          navigate("/");
         }
       }
     } else {
@@ -154,10 +162,10 @@ export const AddTransaction = () => {
 
       if (errflag !== 1) {
         if (
-          localStorage.getItem("userdata") !== null &&
-          localStorage.getItem("userdata") !== undefined
+          localStorage.getItem(userData.email) !== null &&
+          localStorage.getItem(userData.email) !== undefined
         ) {
-          let existingData = JSON.parse(localStorage.getItem("userdata"));
+          let existingData = JSON.parse(localStorage.getItem(userData.email));
 
           if (id !== null && id !== undefined && id !== "") {
             const editid = parseInt(id);
@@ -177,12 +185,12 @@ export const AddTransaction = () => {
             existingData.push(pushData);
           }
 
-          localStorage.setItem("userdata", JSON.stringify(existingData));
+          localStorage.setItem(userData.email, JSON.stringify(existingData));
         } else {
           let pushData = [form.values];
           pushData[0]["id"] = 1;
 
-          localStorage.setItem("userdata", JSON.stringify(pushData));
+          localStorage.setItem(userData.email, JSON.stringify(pushData));
         }
 
         navigate(`/view`);

@@ -26,8 +26,15 @@ export const NavBar = () => {
           <div className="hcontent">
             <div className="logo">
               <img src="/logo192.png" alt="alt" />
-              {userData && <h1>Welcome {userData.email}</h1>}
+             
             </div>
+
+            {userData && (
+                <div className="namediv">
+                  <h2>Welcome</h2>
+                  <h1>{userData.name}</h1>
+                </div>
+              )}
 
             <div className="navdiv">
               <nav className="nav">

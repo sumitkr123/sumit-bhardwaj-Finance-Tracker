@@ -25,6 +25,7 @@ body {
 
 .logo {
   display: inherit;
+  width: 15%;
   align-items: center;
 }
 
@@ -35,6 +36,8 @@ body {
 
 .navdiv {
   display: inherit;
+  width: 50%;
+  justify-content: flex-end;
 }
 
 .nav {
@@ -55,3 +58,9 @@ body {
   align-items: center;
 }
 
+.namediv{
+  display: flex;
+  flex-direction: column;
+  width: 35%;
+  justify-content: center;
+}
