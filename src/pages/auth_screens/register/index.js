@@ -80,7 +80,7 @@ export const Register = () => {
             </div>
             <br></br>
 
-            <input type="submit" name="submit" value={"Login"} />
+            <input type="submit" name="submit" value={"Register"} />
           </form>
         </div>
       </div>

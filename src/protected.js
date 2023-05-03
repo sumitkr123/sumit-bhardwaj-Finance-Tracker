@@ -9,7 +9,7 @@ export const Protected = (props) => {
   const auth = useAuth();
 
   useEffect(() => {
-    if (!auth.auth) {
+    if (auth.auth === false && auth !== null) {
       navigate("/login");
     }
     // eslint-disable-next-line

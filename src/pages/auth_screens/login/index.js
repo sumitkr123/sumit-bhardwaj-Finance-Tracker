@@ -38,7 +38,7 @@ export const Login = () => {
           existingData[i].email === form.email.value &&
           existingData[i].pass === form.password.value
         ) {
-          auth_data = existingData[i]
+          auth_data = existingData[i];
           flag = 1;
           break;
         }
@@ -46,8 +46,6 @@ export const Login = () => {
 
       if (flag === 1) {
         auth_data["token"] = randomstr;
-
-        console.log(auth_data);
 
         localStorage.setItem("auth_token", JSON.stringify(auth_data));
         auth.setAuth(true);

@@ -80,10 +80,10 @@ export const AddTransaction = () => {
 
   const auth = useAuth();
 
-  // eslint-disable-next-line
   const [userData, setUserData] = useState(auth.user);
 
   useEffect(() => {
+    setUserData(auth.user);
     if (id !== null && id !== undefined && id !== "") {
       if (userData !== null && userData !== undefined) {
         if (
@@ -107,7 +107,7 @@ export const AddTransaction = () => {
             }
             setForm(newform);
           } else {
-            navigate("/");
+            navigate("/*");
           }
         }
       }
@@ -137,8 +137,7 @@ export const AddTransaction = () => {
         submit: false,
       });
     }
-    // eslint-disable-next-line
-  }, [id]);
+  }, [auth, id]);
 
   useEffect(() => {
     if (form.submit === true) {

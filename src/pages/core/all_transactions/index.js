@@ -50,14 +50,12 @@ export const AllData = () => {
 
   const [groupedData, setGroupedData] = useState([]);
 
-  const [searchedData, setSearchedData] = useState([]);
-
   const auth = useAuth();
 
-  // eslint-disable-next-line
   const [userData, setUserData] = useState(auth.user);
 
   useEffect(() => {
+    setUserData(auth.user);
     if (userData !== undefined && userData !== null) {
       if (
         localStorage.getItem(userData.email) !== null &&
@@ -69,48 +67,23 @@ export const AllData = () => {
         setInitTransactions(existingData);
       }
     }
-  }, [userData]);
+  }, [auth]);
 
   function groupdata(event) {
     let temp = [...transactions];
 
     let result = {};
 
-    temp.forEach((item) => {
-      const value = item[event.target.value];
+    if (event.target.value) {
+      temp.forEach((item) => {
+        const value = item[event.target.value];
 
-      result[value] = result[value] ?? [];
-      result[value].push(item);
-    });
-
-    setGroupedData([result]);
-  }
-
-  function searchData(event) {
-    let temp = [...transactions];
-
-    let result = [];
-
-    let searchvalue = event.target.value;
-
-    if (
-      searchvalue !== null &&
-      searchvalue !== undefined &&
-      searchvalue !== ""
-    ) {
-      let regex = new RegExp("^" + searchvalue + "+");
-
-      temp.forEach((mainitem) => {
-        Object.keys(mainitem).forEach((item) => {
-          if (mainitem[item].toString().match(regex)) {
-            result.push(mainitem);
-          }
-        });
+        result[value] = result[value] ?? [];
+        result[value].push(item);
       });
-
-      setSearchedData(result);
+      setGroupedData([result]);
     } else {
-      setSearchedData([]);
+      setGroupedData([]);
     }
   }
 
@@ -165,20 +138,6 @@ export const AllData = () => {
       <div className="container">
         <br></br>
         <br></br>
-        {transactions.length !== 0 && (
-          <>
-            <h1>Sorting with Pagination</h1>
-            <TransactionData
-              transactions={transactions}
-              month={month}
-              fixedimit={fixedimit}
-              amountFormatter={amountFormatter}
-            />
-            <br></br>
-            <br></br>
-          </>
-        )}
-
         <div className="groupdiv">
           <label>Group by :-</label>
           <select type="text" name="group" onChange={(e) => groupdata(e)}>
@@ -192,52 +151,36 @@ export const AllData = () => {
         </div>
         <br></br>
         <br></br>
-        {groupedData.length !== 0 &&
-          Object.keys(groupedData[0]).map(
-            (value, index) =>
-              value !== "undefined" && (
-                <div key={value}>
-                  {index === 0 && (
-                    <>
-                      <br></br>
-                      <br></br>
-                      <h1>Group-by with Sorting & Pagination</h1>
-                      <br></br>
-                      <br></br>
-                    </>
-                  )}
-                  <h1>{value}</h1>
-                  <TransactionData
-                    transactions={groupedData[0][value]}
-                    month={month}
-                    fixedimit={fixedimit}
-                    amountFormatter={amountFormatter}
-                  />
-                  <br></br>
-                  <br></br>
-                </div>
-              )
-          )}
 
-        <div className="searchdiv">
-          <label>Search :-</label>
-          <input type="text" name="search" onChange={(e) => searchData(e)} />
-        </div>
-        <br></br>
-        <br></br>
-
-        {searchedData.length !== 0 && (
-          <>
-            <h1>Searched data</h1>
-            <TransactionData
-              transactions={searchedData}
-              month={month}
-              fixedimit={fixedimit}
-              amountFormatter={amountFormatter}
-            />
-          </>
-        )}
-
+        {groupedData.length !== 0
+          ? Object.keys(groupedData[0]).map(
+              (value) =>
+                value !== "undefined" && (
+                  <div key={value}>
+                    <h1>{value}</h1>
+                    <TransactionData
+                      transactions={groupedData[0][value]}
+                      month={month}
+                      fixedimit={fixedimit}
+                      amountFormatter={amountFormatter}
+                    />
+                    <br></br>
+                    <br></br>
+                  </div>
+                )
+            )
+          : transactions.length !== 0 && (
+              <>
+                <TransactionData
+                  transactions={transactions}
+                  month={month}
+                  fixedimit={fixedimit}
+                  amountFormatter={amountFormatter}
+                />
+                <br></br>
+                <br></br>
+              </>
+            )}
         <br />
         <Link to={`/`}>Go to Home</Link>
       </div>

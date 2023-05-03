@@ -61,12 +61,21 @@
   margin-right: 0;
 }
 
-.groupdiv, .searchdiv {
+.groupdiv {
   width: fit-content;
   background-color: aquamarine;
   border: 3px solid burlywood;
   border-radius: 10px;
   padding: 20px;
+}
+
+.searchdiv {
+  width: fit-content;
+  background-color: aquamarine;
+  border: 3px solid burlywood;
+  border-radius: 10px;
+  padding: 20px;
+  float: right;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -85,3 +94,12 @@
     transform: rotate(360deg);
   }
 } */
+
+.pagindiv{
+  width: fit-content;
+  background-color: aquamarine;
+  border: 3px solid burlywood;
+  border-radius: 10px;
+  padding: 20px;
+  float: left;
+}

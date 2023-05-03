@@ -13,10 +13,10 @@ export const Transaction = () => {
 
   const auth = useAuth();
 
-  // eslint-disable-next-line
   const [userData, setUserData] = useState(auth.user);
 
   useEffect(() => {
+    setUserData(auth.user);
     if (userData !== null && userData !== undefined) {
       if (
         localStorage.getItem(userData.email) !== null &&
@@ -35,13 +35,11 @@ export const Transaction = () => {
         if (data.length !== 0) {
           setTransactions(data);
         } else {
-          navigate("/");
+          navigate("/*");
         }
       }
     }
-
-    // eslint-disable-next-line
-  }, []);
+  }, [auth]);
 
   return (
     <div className="container">

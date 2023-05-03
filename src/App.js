@@ -9,6 +9,7 @@ import { NavBar } from "./components/navbar";
 
 import AuthProvider from "./providers/authprovider";
 import { Register } from "./pages/auth_screens/register";
+import { ErrorPage } from "./components/errorpage";
 
 function App() {
   return (
@@ -39,13 +40,9 @@ function App() {
               path="/view/:id"
               element={<Protected component={<Transaction />} />}
             ></Route>
-
-            {/* Any other routes */}
-            <Route
-              path="/*"
-              element={<Navigate to="/login" replace={true} />}
-            ></Route>
           </Route>
+          {/* Any other routes */}
+          <Route path="/*" element={<ErrorPage />}></Route>
         </Routes>
       </BrowserRouter>
     </AuthProvider>
