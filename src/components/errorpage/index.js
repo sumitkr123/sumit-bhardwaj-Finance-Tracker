@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
 import "./css/error.css";
 
-export const ErrorPage = () => {
+export const ErrorPage = (props) => {
+  const errorTitle = props.errorTitle;
+  const errorSubTitle = props.errorSubTitle;
+  const redirect = props.redirect;
   return (
     <div className="page_404">
       <div className="row">
@@ -11,16 +14,17 @@ export const ErrorPage = () => {
               <h1 className="text-center ">404</h1>
             </div>
 
-            <div className="showImage">
-
-            </div>
+            <div className="showImage"></div>
 
             <div className="contant_box_404">
-              <h3 className="h2">Look like you're lost</h3>
+              <h3 className="h2">{errorTitle || `Look like you're lost`}</h3>
+              <br></br>
 
-              <p>the page you are looking for not avaible!</p>
+              <p>
+                {errorSubTitle || `the page you are looking for not avaible!`}
+              </p>
 
-              <Link to={`/`} className="link_404">
+              <Link to={redirect || `/`} className="link_404">
                 Go to Home
               </Link>
             </div>

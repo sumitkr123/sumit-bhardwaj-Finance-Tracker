@@ -5,48 +5,20 @@ import "./css/form.css";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Account } from "./components/accountlist";
 import { MonthYear } from "./components/monthyearlist";
-import { useAuth } from "../../../providers/authprovider";
-
-const fixedLengthValue = 250;
-const numRegex = /^[1-9]{1}[0-9]*$/;
-
-const accountTypes = [
-  "Personal Account",
-  "Real Living",
-  "My Dream Home",
-  "Full Circle",
-  "Core Realtors",
-  "Big Block",
-];
-
-const transactionTypes = ["Home Expense", "Personal Expense", "Income"];
-
-const today = new Date();
-const currentyear = today.getFullYear();
-
-const month = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
-const monthYears = [];
-
-const supportedImg = ["png", "jpg", "jpeg"];
-
-const mb1 = 1024 * 1024;
-
-const fileReader = new FileReader();
-
-month.map((month) => monthYears.push(`${month} ${currentyear}`));
+import monthYears, {
+  accountTypes,
+  fileReader,
+  fixedLengthValue,
+  mb1,
+  numRegex,
+  supportedImg,
+  transactionTypes,
+} from "../../../utils/constants";
+import {
+  saveData,
+  getAllTransactions,
+  getSingleTransaction,
+} from "../../../requests/requests";
 
 export const AddTransaction = () => {
   const { id } = useParams();
@@ -78,27 +50,24 @@ export const AddTransaction = () => {
     submit: false,
   });
 
-  const auth = useAuth();
-
-  const [userData, setUserData] = useState(auth.user);
+  const [userData, setUserData] = useState({});
 
   useEffect(() => {
-    setUserData(auth.user);
+    let auth_data = JSON.parse(localStorage.getItem("auth_token"));
+
+    setUserData(auth_data);
+  }, []);
+
+  useEffect(() => {
     if (id !== null && id !== undefined && id !== "") {
       if (userData !== null && userData !== undefined) {
         if (
           localStorage.getItem(userData.email) !== null &&
           localStorage.getItem(userData.email) !== undefined
         ) {
-          let existingData = JSON.parse(localStorage.getItem(userData.email));
-
           let data = [];
-          for (let i in existingData) {
-            if (parseInt(existingData[i].id) === parseInt(id)) {
-              data.push(existingData[i]);
-              break;
-            }
-          }
+
+          data = getSingleTransaction(userData.email, id);
 
           if (data.length !== 0) {
             let newform = { ...form };
@@ -137,7 +106,7 @@ export const AddTransaction = () => {
         submit: false,
       });
     }
-  }, [auth, id]);
+  }, [userData, id]);
 
   useEffect(() => {
     if (form.submit === true) {
@@ -164,35 +133,20 @@ export const AddTransaction = () => {
           localStorage.getItem(userData.email) !== null &&
           localStorage.getItem(userData.email) !== undefined
         ) {
-          let existingData = JSON.parse(localStorage.getItem(userData.email));
+          let existingData = getAllTransactions(userData.email);
 
-          if (id !== null && id !== undefined && id !== "") {
-            const editid = parseInt(id);
-
-            for (let i in existingData) {
-              if (parseInt(existingData[i].id) === editid) {
-                existingData[i] = form.values;
-                break;
-              }
-            }
-          } else {
-            let previd = existingData.at(existingData.length - 1).id;
-
-            let pushData = form.values;
-            pushData["id"] = previd + 1;
-
-            existingData.push(pushData);
-          }
-
-          localStorage.setItem(userData.email, JSON.stringify(existingData));
+          saveData(
+            userData.email,
+            form.values,
+            "create-edit",
+            existingData,
+            id
+          );
         } else {
-          let pushData = [form.values];
-          pushData[0]["id"] = 1;
-
-          localStorage.setItem(userData.email, JSON.stringify(pushData));
+          saveData(userData.email, form.values, "first");
         }
 
-        navigate(`/view`);
+        navigate(`/transactions`);
       }
     }
     // eslint-disable-next-line
@@ -307,7 +261,7 @@ export const AddTransaction = () => {
     } else {
       newform.errors[name] = "";
     }
-    newform.values[name] = value;
+    newform.values[name] = value.trim();
 
     newform.submit = false;
 
@@ -416,6 +370,7 @@ export const AddTransaction = () => {
                 type="date"
                 name="tdate"
                 value={form.values.tdate}
+                max={new Date().toISOString().split("T")[0]}
                 className="allvalidate validate-type-date Transaction-date"
                 onChange={(e) =>
                   validatedate(
@@ -633,7 +588,7 @@ export const AddTransaction = () => {
           </div>
         </form>
       </div>
-      <Link to={`/view`}>See Data..!</Link>
+      <Link to={`/transactions`}>See Data..!</Link>
     </div>
   );
 };

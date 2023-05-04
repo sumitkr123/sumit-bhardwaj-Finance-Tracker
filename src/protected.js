@@ -1,18 +1,22 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "./providers/authprovider";
+import { Navigate } from "react-router-dom";
 
 export const Protected = (props) => {
   const Component = props.component;
-  const navigate = useNavigate();
+  const isPublic = props.public;
 
-  const auth = useAuth();
+  let auth_token = JSON.parse(localStorage.getItem("auth_token"));
 
-  useEffect(() => {
-    if (auth.auth === false && auth !== null) {
-      navigate("/login");
+  if (isPublic) {
+    if (!auth_token) {
+      return Component;
+    } else {
+      return <Navigate to={"/transactions"} />;
     }
-    // eslint-disable-next-line
-  }, []);
-  return Component;
+  } else {
+    if (auth_token) {
+      return Component;
+    } else {
+      return <Navigate to="/login" />;
+    }
+  }
 };

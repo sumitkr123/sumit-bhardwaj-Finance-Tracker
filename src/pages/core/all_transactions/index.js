@@ -2,46 +2,12 @@ import { useEffect, useState } from "react";
 
 import { TransactionData } from "./components/transaction_data";
 
-import logo from "../../../logo.svg";
 import "../../../App.css";
 import "./css/transaction.css";
-import { Link } from "react-router-dom";
-import { useAuth } from "../../../providers/authprovider";
-
-const month = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
-
-const fixedimit = 2;
-
-const currency = {
-  rupee: <span>&#8377;</span>,
-  dollar: <span>&#36;</span>,
-  pound: <span>&#163;</span>,
-  yen: <span>&#165;</span>,
-  euro: <span>&#8364;</span>,
-};
-
-const groupby = [
-  { tdate: "Transaction-date" },
-  { monthyear: "Month-year" },
-  { ttype: "Transaction-type" },
-  { FromAc: "From-Ac" },
-  { ToAc: "To-Ac" },
-  { amount: "Amount" },
-  { notes: "Notes" },
-];
+import { Link, useNavigate } from "react-router-dom";
+import { groupby } from "../../../utils/constants";
+import { getAllTransactions } from "../../../requests/requests";
+import { ErrorPage } from "../../../components/errorpage";
 
 export const AllData = () => {
   // eslint-disable-next-line
@@ -50,24 +16,37 @@ export const AllData = () => {
 
   const [groupedData, setGroupedData] = useState([]);
 
-  const auth = useAuth();
+  const [userData, setUserData] = useState({});
 
-  const [userData, setUserData] = useState(auth.user);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    setUserData(auth.user);
+    let auth_data = JSON.parse(localStorage.getItem("auth_token"));
+
+    setUserData(auth_data);
+  }, []);
+
+  useEffect(() => {
     if (userData !== undefined && userData !== null) {
       if (
         localStorage.getItem(userData.email) !== null &&
         localStorage.getItem(userData.email) !== undefined
       ) {
-        let existingData = JSON.parse(localStorage.getItem(userData.email));
+        let existingData = getAllTransactions(userData.email);
 
         setTransactions(existingData);
         setInitTransactions(existingData);
       }
     }
-  }, [auth]);
+  }, [userData]);
+
+  const logout = () => {
+    let logoutstatus = window.confirm("Are you sure you want to logout..!");
+    if (logoutstatus) {
+      localStorage.removeItem("auth_token");
+      navigate("/login");
+    }
+  };
 
   function groupdata(event) {
     let temp = [...transactions];
@@ -87,49 +66,13 @@ export const AllData = () => {
     }
   }
 
-  function amountFormatter(amount, type) {
-    let newamount = amount.toString();
-    let length = newamount.length;
-    let newstr = "";
-
-    if (length <= 3) {
-      newstr += newamount;
-    } else {
-      let j = 0;
-      newamount
-        .split("")
-        .reverse()
-        .forEach((item) => {
-          if (j === 3) {
-            newstr = newstr + "," + item;
-          } else if (j % 2 !== 0 && j > 3) {
-            newstr = newstr + "," + item;
-          } else {
-            newstr += item;
-          }
-
-          j++;
-        });
-      newstr = newstr.split("").reverse().join("");
-    }
-
-    newstr = (
-      <p>
-        {type !== null && type !== undefined && type !== ""
-          ? currency[type.trim().toLowerCase()]
-          : currency.rupee}
-        {newstr}
-      </p>
-    );
-
-    return newstr;
-  }
-
   if (transactions.length === 0) {
     return (
-      <div>
-        <img src={logo} className="App-logo" alt="logo" />
-      </div>
+      <ErrorPage
+        errorTitle={"Oops Data Not Found..!"}
+        errorSubTitle={"Go Add Some Data..!"}
+        redirect={"create"}
+      />
     );
   }
 
@@ -138,17 +81,28 @@ export const AllData = () => {
       <div className="container">
         <br></br>
         <br></br>
-        <div className="groupdiv">
-          <label>Group by :-</label>
-          <select type="text" name="group" onChange={(e) => groupdata(e)}>
-            <option value={""}>Select any column</option>
-            {groupby.map((item, index) => (
-              <option key={index} value={Object.keys(item)}>
-                {Object.values(item)}
-              </option>
-            ))}
-          </select>
+        <div className="headerdiv">
+          <div className="groupdiv">
+            <label>
+              Group by :-
+              <select type="text" name="group" onChange={(e) => groupdata(e)}>
+                <option value={""}>Select any column</option>
+                {groupby.map((item, index) => (
+                  <option key={index} value={Object.keys(item)}>
+                    {Object.values(item)}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+
+          <div className="logoutdiv">
+            <button type="button" className="logout" onClick={() => logout()}>
+              Logout
+            </button>
+          </div>
         </div>
+
         <br></br>
         <br></br>
 
@@ -157,13 +111,10 @@ export const AllData = () => {
               (value) =>
                 value !== "undefined" && (
                   <div key={value}>
+                    <br></br>
+                    <br></br>
                     <h1>{value}</h1>
-                    <TransactionData
-                      transactions={groupedData[0][value]}
-                      month={month}
-                      fixedimit={fixedimit}
-                      amountFormatter={amountFormatter}
-                    />
+                    <TransactionData transactions={groupedData[0][value]} />
                     <br></br>
                     <br></br>
                   </div>
@@ -171,18 +122,13 @@ export const AllData = () => {
             )
           : transactions.length !== 0 && (
               <>
-                <TransactionData
-                  transactions={transactions}
-                  month={month}
-                  fixedimit={fixedimit}
-                  amountFormatter={amountFormatter}
-                />
+                <TransactionData transactions={transactions} />
                 <br></br>
                 <br></br>
               </>
             )}
         <br />
-        <Link to={`/`}>Go to Home</Link>
+        <Link to={`create`}>Add Transactions</Link>
       </div>
     </>
   );

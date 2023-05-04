@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import "../../../App.css";
 import "../all_transactions/css/transaction.css";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { useAuth } from "../../../providers/authprovider";
+import { amountFormatter } from "../../../utils/constants";
+import { getSingleTransaction } from "../../../requests/requests";
 
 export const Transaction = () => {
   const { id } = useParams();
@@ -11,26 +12,23 @@ export const Transaction = () => {
 
   const [transaction, setTransactions] = useState([]);
 
-  const auth = useAuth();
-
-  const [userData, setUserData] = useState(auth.user);
+  const [userData, setUserData] = useState({});
 
   useEffect(() => {
-    setUserData(auth.user);
+    let auth_data = JSON.parse(localStorage.getItem("auth_token"));
+
+    setUserData(auth_data);
+  }, []);
+
+  useEffect(() => {
     if (userData !== null && userData !== undefined) {
       if (
         localStorage.getItem(userData.email) !== null &&
         localStorage.getItem(userData.email) !== undefined
       ) {
-        let existingData = JSON.parse(localStorage.getItem(userData.email));
-
         let data = [];
-        for (let i in existingData) {
-          if (parseInt(existingData[i].id) === parseInt(id)) {
-            data.push(existingData[i]);
-            break;
-          }
-        }
+
+        data = getSingleTransaction(userData.email,id);
 
         if (data.length !== 0) {
           setTransactions(data);
@@ -39,7 +37,7 @@ export const Transaction = () => {
         }
       }
     }
-  }, [auth]);
+  }, [userData]);
 
   return (
     <div className="container">
@@ -64,7 +62,7 @@ export const Transaction = () => {
               <td className="td">{tdata.ttype}</td>
               <td className="td">{tdata.FromAc}</td>
               <td className="td">{tdata.ToAc}</td>
-              <td className="td">{tdata.amount}</td>
+              <td className="td">{amountFormatter(tdata.amount)}</td>
 
               <td className="td">
                 {<img src={tdata.receipt} width={80} height={60} alt="alt" />}
@@ -75,7 +73,7 @@ export const Transaction = () => {
           ))}
         </tbody>
       </table>
-      <Link to={`/`}>Go to Home</Link>
+      <Link to={`/transactions`}>Go to home</Link>
     </div>
   );
 };

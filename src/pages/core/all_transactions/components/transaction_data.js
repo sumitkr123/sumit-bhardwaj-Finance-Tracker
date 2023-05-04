@@ -1,13 +1,14 @@
 import { Link } from "react-router-dom";
 import { Pagination } from "./pagination";
 import { useEffect, useState } from "react";
-import { paginno } from "../../../../utils/constants";
+import {
+  fixedimit,
+  month,
+  paginno,
+  amountFormatter,
+} from "../../../../utils/constants";
 
 export const TransactionData = (props) => {
-  const month = props.month;
-  const fixedimit = props.fixedimit;
-  const amountFormatter = props.amountFormatter;
-
   //Getting Data From Main component and doing sorting and pagination here..!
 
   const [newData, setNewData] = useState(props.transactions);
@@ -181,11 +182,13 @@ export const TransactionData = (props) => {
     if (rec >= 1) {
       setPagination({
         ...pagination,
+        pageno: 1,
         limit: rec,
       });
     } else {
       setPagination({
         ...pagination,
+        pageno: 1,
         limit: 2,
       });
     }
@@ -201,19 +204,20 @@ export const TransactionData = (props) => {
       searchvalue !== undefined &&
       searchvalue !== ""
     ) {
-      let regex = new RegExp("^" + searchvalue.toLowerCase().trim() + "");
-
-      let abc = temp.filter((mainitem) => {
-        for (let column of Object.keys(mainitem)) {
+      let abc = temp.filter((mainitem) =>
+        Object.keys(mainitem).some((column) => {
           if (
-            mainitem[column].toString().toLowerCase().trim().match(regex) &&
             column !== "receipt" &&
-            column !== "id"
+            column !== "id" &&
+            mainitem[column]
+              .toString()
+              .toLowerCase()
+              .includes(searchvalue.trim().toLowerCase())
           ) {
             return mainitem;
           }
-        }
-      });
+        })
+      );
 
       setNewData(abc);
     } else {
@@ -224,14 +228,18 @@ export const TransactionData = (props) => {
   return (
     <>
       <div className="searchdiv">
-        <label>Search :-</label>
-        <input type="text" name="search" onChange={(e) => searchData(e)} />
+        <label>
+          Search :-
+          <input type="text" name="search" onChange={(e) => searchData(e)} />
+        </label>
       </div>
       <br></br>
       <br></br>
 
       {newData.length !== 0 && (
         <>
+          <br></br>
+          <br></br>
           <table className="table">
             <thead className="header">
               <tr className="headerrow">
@@ -243,7 +251,10 @@ export const TransactionData = (props) => {
                       : setSortingColumn("tdate", "date")
                   }
                 >
-                  Transaction-Date
+                  <div className="sortHeader">
+                    Transaction-Date
+                    <img src="sort_icon.png" width={20} height={20} alt="alt" />
+                  </div>
                 </th>
                 <th
                   className="th"
@@ -253,7 +264,10 @@ export const TransactionData = (props) => {
                       : setSortingColumn("monthyear", "monthyear")
                   }
                 >
-                  Month-Year
+                  <div className="sortHeader">
+                    Month-Year
+                    <img src="sort_icon.png" width={20} height={20} alt="alt" />
+                  </div>
                 </th>
                 <th
                   className="th"
@@ -261,7 +275,10 @@ export const TransactionData = (props) => {
                     newData.length <= 1 ? null : setSortingColumn("ttype")
                   }
                 >
-                  Transaction-Type
+                  <div className="sortHeader">
+                    Transaction-Type
+                    <img src="sort_icon.png" width={20} height={20} alt="alt" />
+                  </div>
                 </th>
                 <th
                   className="th"
@@ -269,7 +286,10 @@ export const TransactionData = (props) => {
                     newData.length <= 1 ? null : setSortingColumn("FromAc")
                   }
                 >
-                  From-A/c
+                  <div className="sortHeader">
+                    From-A/c
+                    <img src="sort_icon.png" width={20} height={20} alt="alt" />
+                  </div>
                 </th>
                 <th
                   className="th"
@@ -277,7 +297,10 @@ export const TransactionData = (props) => {
                     newData.length <= 1 ? null : setSortingColumn("ToAc")
                   }
                 >
-                  To-A/c
+                  <div className="sortHeader">
+                    To-A/c
+                    <img src="sort_icon.png" width={20} height={20} alt="alt" />
+                  </div>
                 </th>
                 <th
                   className="th"
@@ -287,7 +310,10 @@ export const TransactionData = (props) => {
                       : setSortingColumn("amount", "number")
                   }
                 >
-                  Amount
+                  <div className="sortHeader">
+                    Amount
+                    <img src="sort_icon.png" width={20} height={20} alt="alt" />
+                  </div>
                 </th>
                 <th className="th">Receipt</th>
                 <th
@@ -296,7 +322,10 @@ export const TransactionData = (props) => {
                     newData.length <= 1 ? null : setSortingColumn("notes")
                   }
                 >
-                  Notes
+                  <div className="sortHeader">
+                    Notes
+                    <img src="sort_icon.png" width={20} height={20} alt="alt" />
+                  </div>
                 </th>
                 <th className="th" colSpan={2}>
                   Action
@@ -322,8 +351,7 @@ export const TransactionData = (props) => {
                       {
                         <img
                           src={tdata.receipt}
-                          width={80}
-                          height={60}
+                          className="receipt"
                           alt="alt"
                         />
                       }
@@ -331,10 +359,10 @@ export const TransactionData = (props) => {
 
                     <td className="td">{tdata.notes}</td>
                     <td className="td">
-                      <Link to={`/view/${tdata.id}`}>View</Link>
+                      <Link to={`${tdata.id}`}>View</Link>
                     </td>
                     <td className="td">
-                      <Link to={`/edit/${tdata.id}`}>Edit</Link>
+                      <Link to={`edit/${tdata.id}`}>Edit</Link>
                     </td>
                   </tr>
                 ))}
@@ -345,19 +373,21 @@ export const TransactionData = (props) => {
           <br></br>
           <br></br>
           <div className="pagindiv">
-            <label>Per page records :-</label>
-            <select
-              type="text"
-              name="group"
-              onChange={(e) => changePageRecCounts(e.target.value)}
-            >
-              <option value={""}>Select page no..!</option>
-              {paginno.map((item, index) => (
-                <option key={index} value={item}>
-                  {item}
-                </option>
-              ))}
-            </select>
+            <label>
+              Per page records :-
+              <select
+                type="text"
+                name="group"
+                onChange={(e) => changePageRecCounts(e.target.value)}
+              >
+                <option value={""}>Select page no..!</option>
+                {paginno.map((item, index) => (
+                  <option key={index} value={item}>
+                    {item}
+                  </option>
+                ))}
+              </select>
+            </label>
           </div>
           <br></br>
           <br></br>

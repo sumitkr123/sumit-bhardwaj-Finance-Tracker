@@ -1,21 +1,8 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./css/login.css";
-import { useAuth } from "../../../providers/authprovider";
-import { useEffect } from "react";
 
 export const Login = () => {
   const navigate = useNavigate();
-
-  let auth = useAuth();
-
-  useEffect(() => {
-    let auth_token = JSON.parse(localStorage.getItem("auth_token"));
-
-    if (auth_token) {
-      navigate("/");
-    }
-    // eslint-disable-next-line
-  }, []);
 
   const login = (e) => {
     e.preventDefault();
@@ -46,10 +33,8 @@ export const Login = () => {
 
       if (flag === 1) {
         auth_data["token"] = randomstr;
-
         localStorage.setItem("auth_token", JSON.stringify(auth_data));
-        auth.setAuth(true);
-        navigate("/");
+        navigate("/transactions");
       } else {
         alert("Email or Password is incorrect..!");
       }
@@ -62,21 +47,28 @@ export const Login = () => {
     <>
       <div className="container">
         <div className="loginform">
-          <h1>Login Page</h1>
+          <div className="logincontent">
+            <h1>Login Page</h1>
 
-          <br></br>
-          <br></br>
-          <form onSubmit={(e) => login(e)}>
-            <div className="inputs">
-              Email :- <input type="text" name="email" required />
-              <br></br>
-              <br></br>
-              Password :- <input type="text" name="password" required />
-            </div>
             <br></br>
+            <br></br>
+            <form onSubmit={(e) => login(e)}>
+              <div className="inputs">
+                Email :- <input type="text" name="email" required />
+                <br></br>
+                <br></br>
+                Password :- <input type="text" name="password" required />
+              </div>
+              <br></br>
 
-            <input type="submit" name="submit" value={"Login"} />
-          </form>
+              <input type="submit" name="submit" value={"Login"} />
+              <br></br>
+              <br></br>
+              <h3>
+                Don't have an account..! <Link to={"/register"}>Sign-up</Link>
+              </h3>
+            </form>
+          </div>
         </div>
       </div>
     </>

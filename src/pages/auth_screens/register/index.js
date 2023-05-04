@@ -1,17 +1,8 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import "./css/register.css";
 
 export const Register = () => {
   const navigate = useNavigate();
-
-  useEffect(() => {
-    let auth_token = JSON.parse(localStorage.getItem("auth_token"));
-
-    if (auth_token) {
-      navigate("/");
-    }
-    // eslint-disable-next-line
-  }, []);
 
   const register = (e) => {
     e.preventDefault();
@@ -60,28 +51,35 @@ export const Register = () => {
   return (
     <>
       <div className="container">
-        <div className="loginform">
-          <h1>Register Page</h1>
+        <div className="registerform">
+          <div className="registercontent">
+            <h1>Register Page</h1>
 
-          <br></br>
-          <br></br>
-          <form onSubmit={(e) => register(e)}>
-            <div className="inputs">
-              Name :- <input type="text" name="name" required />
-              <br></br>
-              <br></br>
-              Phone no. :- <input type="text" name="phone" required />
-              <br></br>
-              <br></br>
-              Email :- <input type="text" name="email" required />
-              <br></br>
-              <br></br>
-              Password :- <input type="text" name="password" required />
-            </div>
             <br></br>
+            <br></br>
+            <form onSubmit={(e) => register(e)}>
+              <div className="inputs">
+                Name :- <input type="text" name="name" required />
+                <br></br>
+                <br></br>
+                Phone no. :- <input type="text" name="phone" required />
+                <br></br>
+                <br></br>
+                Email :- <input type="text" name="email" required />
+                <br></br>
+                <br></br>
+                Password :- <input type="text" name="password" required />
+              </div>
+              <br></br>
 
-            <input type="submit" name="submit" value={"Register"} />
-          </form>
+              <input type="submit" name="submit" value={"Register"} />
+              <br></br>
+              <br></br>
+              <h3>
+                Already have an account..! <Link to={"/login"}>Sign-in</Link>
+              </h3>
+            </form>
+          </div>
         </div>
       </div>
     </>
