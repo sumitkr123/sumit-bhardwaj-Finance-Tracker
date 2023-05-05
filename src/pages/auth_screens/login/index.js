@@ -26,11 +26,7 @@ const validationSchema = {
   },
 };
 
-const FieldWrapper = ({
-  loginForm,
-  setLoginForm,
-  ...rest
-}) => (
+const FieldWrapper = ({ loginForm, setLoginForm, ...rest }) => (
   <FormField
     {...rest}
     {...loginForm}
@@ -57,45 +53,6 @@ export const Login = () => {
       validateFormValues();
     }
   }, [loginForm.values]);
-
-  // const login = (e) => {
-  //   e.preventDefault();
-
-  //   let existingData = JSON.parse(localStorage.getItem("all_users_data"));
-
-  //   if (existingData) {
-  //     let form = e.target;
-  //     let randomstr = "";
-  //     randomstr +=
-  //       form.email.value +
-  //       form.email.value.split("").reverse().join("") +
-  //       form.password.value;
-
-  //     let flag = 0;
-  //     let auth_data = {};
-
-  //     for (let i in existingData) {
-  //       if (
-  //         existingData[i].email === form.email.value &&
-  //         existingData[i].pass === form.password.value
-  //       ) {
-  //         auth_data = existingData[i];
-  //         flag = 1;
-  //         break;
-  //       }
-  //     }
-
-  //     if (flag === 1) {
-  //       auth_data["token"] = randomstr;
-  //       localStorage.setItem("auth_token", JSON.stringify(auth_data));
-  //       navigate("/transactions");
-  //     } else {
-  //       alert("Email or Password is incorrect..!");
-  //     }
-  //   } else {
-  //     navigate("/register");
-  //   }
-  // };
 
   const validateFormValues = () => {
     const tempErrors = { ...loginForm.errors };

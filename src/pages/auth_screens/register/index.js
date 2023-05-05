@@ -70,51 +70,6 @@ export const Register = () => {
     }
   }, [registerForm.values]);
 
-  // const register = (e) => {
-  //   e.preventDefault();
-
-  //   let existingData = JSON.parse(localStorage.getItem("all_users_data"));
-
-  //   let form = e.target;
-
-  //   let user_data = {};
-  //   if (existingData) {
-  //     let flag = 0;
-  //     for (let i in existingData) {
-  //       if (existingData[i].email === form.email.value) {
-  //         flag = 1;
-  //         break;
-  //       }
-  //     }
-
-  //     if (flag === 1) {
-  //       alert("Email already exists..!");
-  //     } else {
-  //       user_data["id"] = existingData[existingData.length - 1].id + 1;
-  //       user_data["name"] = form.name.value;
-  //       user_data["phone"] = form.phone.value;
-  //       user_data["email"] = form.email.value;
-  //       user_data["pass"] = form.password.value;
-
-  //       existingData.push(user_data);
-
-  //       localStorage.setItem("all_users_data", JSON.stringify(existingData));
-
-  //       navigate("/login");
-  //     }
-  //   } else {
-  //     user_data["id"] = 1;
-  //     user_data["name"] = form.name.value;
-  //     user_data["phone"] = form.phone.value;
-  //     user_data["email"] = form.email.value;
-  //     user_data["pass"] = form.password.value;
-
-  //     localStorage.setItem("all_users_data", JSON.stringify([user_data]));
-
-  //     navigate("/login");
-  //   }
-  // };
-
   const validateFormValues = () => {
     const tempErrors = { ...registerForm.errors };
     Object.keys(validationSchema).forEach((field) => {
