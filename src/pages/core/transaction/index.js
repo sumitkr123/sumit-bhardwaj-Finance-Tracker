@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import "../../../assets/styles/transaction.css";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -19,7 +19,7 @@ export const Transaction = () => {
     setUserData(auth_data);
   }, []);
 
-  useMemo(() => {
+  useEffect(() => {
     if (userData !== null && userData !== undefined) {
       if (
         localStorage.getItem(userData.email) !== null &&
