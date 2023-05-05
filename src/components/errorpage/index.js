@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import "./css/error.css";
+import "../../assets/styles/error.css";
 
 export const ErrorPage = (props) => {
   const errorTitle = props.errorTitle;

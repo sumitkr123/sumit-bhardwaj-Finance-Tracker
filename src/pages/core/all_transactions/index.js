@@ -1,9 +1,8 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import { TransactionData } from "./components/transaction_data";
 
-import "../../../App.css";
-import "./css/transaction.css";
+import "../../../assets/styles/transaction.css";
 import { Link, useNavigate } from "react-router-dom";
 import { groupby } from "../../../utils/constants";
 import { getAllTransactions } from "../../../requests/requests";

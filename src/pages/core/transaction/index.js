@@ -1,7 +1,6 @@
 import { useMemo, useState } from "react";
 
-import "../../../App.css";
-import "../all_transactions/css/transaction.css";
+import "../../../assets/styles/transaction.css";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { amountFormatter } from "../../../utils/constants";
 import { getSingleTransaction } from "../../../requests/requests";

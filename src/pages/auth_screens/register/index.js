@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import "./css/register.css";
+import "../../../assets/styles/register.css";
 
 export const Register = () => {
   const navigate = useNavigate();

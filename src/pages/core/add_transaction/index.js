@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
-import "../../../App.css";
-import "./css/form.css";
+import { useEffect, useState } from "react";
+
+import "../../../assets/styles/form.css";
 
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Account } from "./components/accountlist";
