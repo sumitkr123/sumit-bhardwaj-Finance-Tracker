@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 
 import "../../../App.css";
 import "../all_transactions/css/transaction.css";
@@ -14,13 +14,13 @@ export const Transaction = () => {
 
   const [userData, setUserData] = useState({});
 
-  useEffect(() => {
+  useMemo(() => {
     let auth_data = JSON.parse(localStorage.getItem("auth_token"));
 
     setUserData(auth_data);
   }, []);
 
-  useEffect(() => {
+  useMemo(() => {
     if (userData !== null && userData !== undefined) {
       if (
         localStorage.getItem(userData.email) !== null &&
