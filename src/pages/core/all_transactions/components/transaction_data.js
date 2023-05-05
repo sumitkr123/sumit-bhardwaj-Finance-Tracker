@@ -380,7 +380,7 @@ export const TransactionData = (props) => {
                 name="group"
                 onChange={(e) => changePageRecCounts(e.target.value)}
               >
-                <option value={""}>Select page no..!</option>
+                <option value={""}>Select limit..!</option>
                 {paginno.map((item, index) => (
                   <option key={index} value={item}>
                     {item}
