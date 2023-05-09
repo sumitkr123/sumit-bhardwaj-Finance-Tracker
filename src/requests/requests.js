@@ -1,39 +1,38 @@
-export const getAllTransactions = (userkey) => {
-  return JSON.parse(localStorage.getItem(userkey));
+export const getSingleTransaction = (transactions, id) => {
+  return transactions.filter((item) => parseInt(item.id) === parseInt(id));
 };
 
-export const getSingleTransaction = (userkey, id) => {
-  let alldata = getAllTransactions(userkey);
-
-  return alldata.filter((item) => parseInt(item.id) === parseInt(id));
-};
-
-export const saveData = (userkey, formValues, type, existingData, id) => {
+export const saveData = (
+  transactions,
+  setTransactions,
+  type,
+  allvalues,
+  id
+) => {
   if (type === "first") {
-    let pushData = [formValues];
+    let pushData = [allvalues];
     pushData[0]["id"] = 1;
 
-    localStorage.setItem(userkey, JSON.stringify(pushData));
+    setTransactions(pushData);
   } else {
     if (id !== null && id !== undefined && id !== "") {
       const editid = parseInt(id);
 
-      for (let i in existingData) {
-        if (parseInt(existingData[i].id) === editid) {
-          existingData[i] = formValues;
+      for (let i in transactions) {
+        if (parseInt(transactions[i].id) === editid) {
+          transactions[i] = allvalues;
           break;
         }
       }
     } else {
-      let previd = existingData.at(existingData.length - 1).id;
+      let previd = transactions.at(transactions.length - 1).id;
 
-      let pushData = formValues;
+      let pushData = allvalues;
       pushData["id"] = previd + 1;
 
-      existingData.push(pushData);
+      transactions.push(pushData);
     }
 
-    localStorage.setItem(userkey, JSON.stringify(existingData));
+    setTransactions(transactions);
   }
 };
-

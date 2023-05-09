@@ -1,42 +1,30 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 import "../../../assets/styles/transaction.css";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { amountFormatter } from "../../../utils/constants";
+import { useTransactions } from "../../../providers/transaction_provider";
 import { getSingleTransaction } from "../../../requests/requests";
 
 export const Transaction = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [transaction, setTransactions] = useState([]);
+  const { transactions } = useTransactions();
 
-  const [userData, setUserData] = useState({});
-
-  useMemo(() => {
-    let auth_data = JSON.parse(localStorage.getItem("auth_token"));
-
-    setUserData(auth_data);
-  }, []);
+  const [viewtransaction, setViewTransactions] = useState([]);
 
   useEffect(() => {
-    if (userData !== null && userData !== undefined) {
-      if (
-        localStorage.getItem(userData.email) !== null &&
-        localStorage.getItem(userData.email) !== undefined
-      ) {
-        let data = [];
+    if (id !== null && id !== undefined && id !== "") {
+      let newdata = [];
 
-        data = getSingleTransaction(userData.email,id);
+      newdata = getSingleTransaction(transactions, id);
 
-        if (data.length !== 0) {
-          setTransactions(data);
-        } else {
-          navigate("/*");
-        }
-      }
+      setViewTransactions(newdata);
+    } else {
+      navigate("/*");
     }
-  }, [userData]);
+  }, [id, transactions]);
 
   return (
     <div className="container">
@@ -54,7 +42,7 @@ export const Transaction = () => {
           </tr>
         </thead>
         <tbody className="tabcontent">
-          {transaction.map((tdata) => (
+          {viewtransaction.map((tdata) => (
             <tr className="contentrow" key={tdata.id}>
               <td className="td">{tdata.tdate}</td>
               <td className="td">{tdata.monthyear}</td>

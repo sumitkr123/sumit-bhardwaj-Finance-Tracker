@@ -28,6 +28,10 @@ export const TransactionData = (props) => {
   });
 
   useEffect(() => {
+    setNewData(props.transactions);
+  }, [props.transactions]);
+
+  useEffect(() => {
     let totpage = Math.ceil(newData.length / pagination.limit);
 
     let pagelist = [];

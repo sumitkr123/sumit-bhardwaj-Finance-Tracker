@@ -8,29 +8,16 @@ import { MonthYear } from "./components/monthyearlist";
 import monthYears, {
   accountTypes,
   getFile,
+  initialValues,
   today,
   transactionTypes,
   validationSchema,
 } from "../../../utils/constants";
-import {
-  saveData,
-  getAllTransactions,
-  getSingleTransaction,
-} from "../../../requests/requests";
 
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-
-let initialValues = {
-  notes: "",
-  amount: "",
-  FromAc: "",
-  ToAc: "",
-  ttype: "",
-  monthyear: "",
-  tdate: "",
-  receipt: "",
-};
+import { useTransactions } from "../../../providers/transaction_provider";
+import { getSingleTransaction, saveData } from "../../../requests/requests";
 
 export const AddTransaction = () => {
   const {
@@ -50,40 +37,27 @@ export const AddTransaction = () => {
   const [values, setValues] = useState(initialValues);
   const [submit, setSubmit] = useState(false);
 
-  const [userData, setUserData] = useState({});
-
-  useEffect(() => {
-    let auth_data = JSON.parse(localStorage.getItem("auth_token"));
-
-    setUserData(auth_data);
-  }, []);
+  const { transactions, setTransactions } = useTransactions();
 
   useEffect(() => {
     if (id !== undefined && id !== "" && id !== null) {
-      if (userData !== null && userData !== undefined) {
-        if (
-          localStorage.getItem(userData.email) !== null &&
-          localStorage.getItem(userData.email) !== undefined
-        ) {
-          let data = [];
+      let newdata = [...transactions];
 
-          data = getSingleTransaction(userData.email, id);
+      let data = getSingleTransaction(newdata, id);
 
-          if (data.length !== 0) {
-            let newvalues = { ...values };
-            for (let i in data[0]) {
-              newvalues[i] = data[0][i];
+      if (data.length !== 0) {
+        let newvalues = { ...values };
+        for (let i in data[0]) {
+          newvalues[i] = data[0][i];
 
-              setValue(i, data[0][i]);
-            }
-            setValues(newvalues);
-          } else {
-            navigate("/*");
-          }
+          setValue(i, data[0][i]);
         }
+        setValues(newvalues);
+      } else {
+        navigate("/*");
       }
     }
-  }, [userData, id]);
+  }, [id]);
 
   useEffect(() => {
     if (submit === true) {
@@ -99,21 +73,16 @@ export const AddTransaction = () => {
       });
 
       if (errflag !== 1) {
-        if (
-          localStorage.getItem(userData.email) !== null &&
-          localStorage.getItem(userData.email) !== undefined
-        ) {
-          let existingData = getAllTransactions(userData.email);
-
-          saveData(userData.email, allvalues, "create-edit", existingData, id);
+        if (transactions.length === 0 || transactions.length === undefined) {
+          saveData(transactions, setTransactions, "first", allvalues);
         } else {
-          saveData(userData.email, allvalues, "first");
-        }
+          let newdata = [...transactions];
 
+          saveData(newdata, setTransactions, "create-edit", allvalues, id);
+        }
         navigate(`/transactions`);
       }
     }
-    // eslint-disable-next-line
   }, [submit]);
 
   const onSubmit = async (data) => {
