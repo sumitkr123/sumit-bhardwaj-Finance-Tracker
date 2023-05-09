@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "../../../assets/styles/register.css";
 import { useEffect, useState } from "react";
 import { FormField } from "../../../components/FormFields/FormField";
+import { mailRegex, numRegex, phoneRegex } from "../../../utils/constants";
 
 const initialValues = {
   name: "",
@@ -19,10 +20,11 @@ const validationSchema = {
     },
   },
   phone: {
-    label: "Phone",
+    label: "Phone no.",
     type: "phone",
     rules: {
       required: true,
+      matchWithRegex: phoneRegex,
     },
   },
   email: {
@@ -30,6 +32,7 @@ const validationSchema = {
     type: "email",
     rules: {
       required: true,
+      matchWithRegex: mailRegex,
     },
   },
   password: {
@@ -37,7 +40,6 @@ const validationSchema = {
     type: "password",
     rules: {
       required: true,
-      // min: 8,
     },
   },
 };
@@ -59,13 +61,12 @@ export const Register = () => {
 
   const [registerForm, setRegisterForm] = useState({
     values: initialValues,
-    errors: [],
+    errors: {},
+    submit: false,
   });
 
-  const [submit, setSubmit] = useState(false);
-
   useEffect(() => {
-    if (submit === true) {
+    if (registerForm.submit === true) {
       validateFormValues();
     }
   }, [registerForm.values]);
@@ -83,7 +84,7 @@ export const Register = () => {
         }
       }
     });
-    setRegisterForm({ ...registerForm, errors: tempErrors });
+    setRegisterForm((old) => ({ ...old, errors: tempErrors }));
     return tempErrors;
   };
 
@@ -97,10 +98,10 @@ export const Register = () => {
       Object.keys(fieldInfo["rules"])
         .map((ruleType) => {
           switch (ruleType) {
-            case "isExist":
-              return validateExist(
+            case "matchWithRegex":
+              return validateWithRegex(
                 fieldInfo["rules"][ruleType],
-                fieldName,
+                fieldInfo["label"],
                 registerForm.values[fieldName],
                 fieldInfo["type"]
               );
@@ -117,17 +118,15 @@ export const Register = () => {
     );
   };
 
-  const validateExist = (ruleValue, fieldName, fieldValue, fieldType) => {
+  const validateWithRegex = (ruleValue, fieldName, fieldValue, fieldType) => {
     switch (fieldType) {
-      case "file":
+      case "email":
         return (
-          fieldValue.size > ruleValue &&
-          `${fieldName} size cannot exceed ${ruleValue} KB`
+          !fieldValue.match(ruleValue) && `${fieldName} is badly formatted..!`
         );
-      case "number":
+      case "phone":
         return (
-          fieldValue > ruleValue &&
-          `${fieldName} cannot exceed ${ruleValue} INR`
+          !fieldValue.match(ruleValue) && `Please enter valid ${fieldName}..!`
         );
       default:
         // for rest of the fields
@@ -141,7 +140,7 @@ export const Register = () => {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    setSubmit(true);
+    setRegisterForm((old) => ({ ...old, submit: true }));
 
     const newErrors = validateFormValues();
     if (Object.keys(newErrors).length === 0) {

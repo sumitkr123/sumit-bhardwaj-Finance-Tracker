@@ -69,7 +69,7 @@ button:hover,
 
 
 
-.forminputs
+/* .forminputs
  {
     width: 100%;
     padding: 12px 20px;
@@ -93,7 +93,7 @@ input[type=submit] {
 
 input[type=submit]:hover {
     background-color: #45a049;
-}
+} */
 
 .field-errors {
     margin-bottom: 5px;

@@ -43,13 +43,12 @@ export const Login = () => {
 
   const [loginForm, setLoginForm] = useState({
     values: initialValues,
-    errors: [],
+    errors: {},
+    submit: false,
   });
 
-  const [submit, setSubmit] = useState(false);
-
   useEffect(() => {
-    if (submit === true) {
+    if (loginForm.submit === true) {
       validateFormValues();
     }
   }, [loginForm.values]);
@@ -67,7 +66,7 @@ export const Login = () => {
         }
       }
     });
-    setLoginForm({ ...loginForm, errors: tempErrors });
+    setLoginForm((old) => ({ ...old, errors: tempErrors }));
     return tempErrors;
   };
 
@@ -102,30 +101,30 @@ export const Login = () => {
   };
 
   const validateExist = (ruleValue, fieldName, fieldValue, fieldType) => {
-    switch (fieldType) {
-      case "file":
-        return (
-          fieldValue.size > ruleValue &&
-          `${fieldName} size cannot exceed ${ruleValue} KB`
-        );
-      case "number":
-        return (
-          fieldValue > ruleValue &&
-          `${fieldName} cannot exceed ${ruleValue} INR`
-        );
-      default:
-        // for rest of the fields
-        return (
-          fieldValue.length > ruleValue &&
-          `${fieldName} cannot exceed ${ruleValue} in length`
-        );
-    }
+    // switch (fieldType) {
+    //   case "file":
+    //     return (
+    //       fieldValue.size > ruleValue &&
+    //       `${fieldName} size cannot exceed ${ruleValue} KB`
+    //     );
+    //   case "number":
+    //     return (
+    //       fieldValue > ruleValue &&
+    //       `${fieldName} cannot exceed ${ruleValue} INR`
+    //     );
+    //   default:
+    //     // for rest of the fields
+    //     return (
+    //       fieldValue.length > ruleValue &&
+    //       `${fieldName} cannot exceed ${ruleValu e} in length`
+    //     );
+    // }
   };
 
   const onSubmit = (e) => {
     e.preventDefault();
 
-    setSubmit(true);
+    setLoginForm((old) => ({ ...old, submit: true }));
 
     const newErrors = validateFormValues();
     if (Object.keys(newErrors).length === 0) {
@@ -186,6 +185,7 @@ export const Login = () => {
                   name="email"
                   {...fieldPropsCommon}
                 />
+                <br />
                 <FieldWrapper
                   type="text"
                   label="Password"
