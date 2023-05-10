@@ -7,6 +7,7 @@ import {
   paginno,
   amountFormatter,
 } from "../../../../utils/constants";
+import { useTransactions } from "../../../../providers/transaction_provider";
 
 export const TransactionData = (props) => {
   //Getting Data From Main component and doing sorting and pagination here..!
@@ -20,15 +21,18 @@ export const TransactionData = (props) => {
   });
 
   const [pagination, setPagination] = useState({
-    showPage: 2,
+    showPage: 3,
     totalpage: 0,
     limit: fixedimit,
     pageno: 1,
     pages: [],
   });
 
+  const [transactions, setTransactions] = useTransactions();
+
   useEffect(() => {
-    setNewData(props.transactions);
+    let newtransactiondata = [...props.transactions];
+    setNewData(newtransactiondata);
   }, [props.transactions]);
 
   useEffect(() => {
@@ -42,6 +46,7 @@ export const TransactionData = (props) => {
 
     setPagination({
       ...pagination,
+      pageno: 1,
       totalpage: totpage,
       pages: pagelist,
     });
@@ -225,9 +230,24 @@ export const TransactionData = (props) => {
 
       setNewData(abc);
     } else {
-      setNewData(props.transactions);
+      setNewData(newData);
     }
   }
+
+  const deleteSingleTransaction = (id) => {
+    let localnew = [...newData];
+    let contextlocal = [...transactions];
+
+    let filtered1 = localnew.filter(
+      (item) => parseInt(item.id) !== parseInt(id)
+    );
+    let filtered2 = contextlocal.filter(
+      (item) => parseInt(item.id) !== parseInt(id)
+    );
+
+    setNewData(filtered1);
+    setTransactions(filtered2);
+  };
 
   return (
     <>
@@ -331,7 +351,7 @@ export const TransactionData = (props) => {
                     <img src="sort_icon.png" width={20} height={20} alt="alt" />
                   </div>
                 </th>
-                <th className="th" colSpan={2}>
+                <th className="th" colSpan={3}>
                   Action
                 </th>
               </tr>
@@ -367,6 +387,13 @@ export const TransactionData = (props) => {
                     </td>
                     <td className="td">
                       <Link to={`edit/${tdata.id}`}>Edit</Link>
+                    </td>
+                    <td className="td">
+                      <i
+                        className="fa fa-trash"
+                        style={{ cursor: "pointer" }}
+                        onClick={() => deleteSingleTransaction(tdata.id)}
+                      ></i>
                     </td>
                   </tr>
                 ))}

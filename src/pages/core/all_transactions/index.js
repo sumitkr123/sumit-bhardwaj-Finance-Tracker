@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { TransactionData } from "./components/transaction_data";
 
@@ -9,11 +9,15 @@ import { ErrorPage } from "../../../components/errorpage";
 import { useTransactions } from "../../../providers/transaction_provider";
 
 export const AllData = () => {
-  const { transactions } = useTransactions();
+  const [transactions, setTransactions] = useTransactions();
 
   const [newtransactions, setNewTransactions] = useState([]);
 
   const [groupedData, setGroupedData] = useState([]);
+
+  const [isGrouped, setIsGrouped] = useState(false);
+
+  const [groupVal, setGroupVal] = useState("");
 
   const navigate = useNavigate();
 
@@ -29,23 +33,48 @@ export const AllData = () => {
     }
   };
 
-  function groupdata(event) {
-    let temp = [...newtransactions];
+  useEffect(() => {
+    if (isGrouped === true) {
+      groupdata(groupVal);
+    }
+  }, [transactions]);
+
+  const groupdata = (event) => {
+    setIsGrouped(true);
+    let temp = [...transactions];
 
     let result = {};
 
-    if (event.target.value) {
-      temp.forEach((item) => {
-        const value = item[event.target.value];
+    if (event.target) {
+      if (event.target.value) {
+        setGroupVal(event.target.value);
 
-        result[value] = result[value] ?? [];
-        result[value].push(item);
-      });
-      setGroupedData([result]);
+        temp.forEach((item) => {
+          const value = item[event.target.value];
+
+          result[value] = result[value] ?? [];
+          result[value].push(item);
+        });
+        setGroupedData([result]);
+      } else {
+        setIsGrouped(false);
+        setGroupedData([]);
+      }
     } else {
-      setGroupedData([]);
+      if (event) {
+        temp.forEach((item) => {
+          const value = item[event];
+
+          result[value] = result[value] ?? [];
+          result[value].push(item);
+        });
+        setGroupedData([result]);
+      } else {
+        setIsGrouped(false);
+        setGroupedData([]);
+      }
     }
-  }
+  };
 
   if (newtransactions.length === 0) {
     return (

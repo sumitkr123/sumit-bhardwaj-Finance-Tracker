@@ -37,7 +37,7 @@ export const AddTransaction = () => {
   const [values, setValues] = useState(initialValues);
   const [submit, setSubmit] = useState(false);
 
-  const { transactions, setTransactions } = useTransactions();
+  const [transactions, setTransactions] = useTransactions();
 
   useEffect(() => {
     if (id !== undefined && id !== "" && id !== null) {

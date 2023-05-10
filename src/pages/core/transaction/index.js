@@ -10,7 +10,7 @@ export const Transaction = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const { transactions } = useTransactions();
+  const [ transactions ] = useTransactions();
 
   const [viewtransaction, setViewTransactions] = useState([]);
 

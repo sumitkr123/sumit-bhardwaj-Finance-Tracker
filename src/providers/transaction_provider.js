@@ -7,10 +7,10 @@ export const useTransactions = () => {
 };
 
 export const TransactionProvider = ({ children }) => {
-  const [transactions, setTransactions] = useState([]);
+  const [transactions, setTransactions] = useState(defaultTransactions);
 
   return (
-    <TransactionContext.Provider value={{ transactions, setTransactions }}>
+    <TransactionContext.Provider value={[transactions, setTransactions]}>
       {children}
     </TransactionContext.Provider>
   );
