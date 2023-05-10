@@ -76,6 +76,16 @@ export const AllData = () => {
     }
   };
 
+  const deleteSingleTransaction = (id) => {
+    let contextlocal = [...transactions];
+
+    let filtered2 = contextlocal.filter(
+      (item) => parseInt(item.id) !== parseInt(id)
+    );
+
+    setTransactions(filtered2);
+  };
+
   if (newtransactions.length === 0) {
     return (
       <ErrorPage
@@ -124,7 +134,10 @@ export const AllData = () => {
                     <br></br>
                     <br></br>
                     <h1>{value}</h1>
-                    <TransactionData transactions={groupedData[0][value]} />
+                    <TransactionData
+                      transactions={groupedData[0][value]}
+                      delete={deleteSingleTransaction}
+                    />
                     <br></br>
                     <br></br>
                   </div>
@@ -132,7 +145,10 @@ export const AllData = () => {
             )
           : newtransactions.length !== 0 && (
               <>
-                <TransactionData transactions={newtransactions} />
+                <TransactionData
+                  transactions={newtransactions}
+                  delete={deleteSingleTransaction}
+                />
                 <br></br>
                 <br></br>
               </>

@@ -7,12 +7,13 @@ import {
   paginno,
   amountFormatter,
 } from "../../../../utils/constants";
-import { useTransactions } from "../../../../providers/transaction_provider";
 
 export const TransactionData = (props) => {
   //Getting Data From Main component and doing sorting and pagination here..!
 
   const [newData, setNewData] = useState(props.transactions);
+
+  const deleteSingleTransaction = props.delete;
 
   const [sorting, setSorting] = useState({
     sortingColumnName: "",
@@ -27,8 +28,6 @@ export const TransactionData = (props) => {
     pageno: 1,
     pages: [],
   });
-
-  const [transactions, setTransactions] = useTransactions();
 
   useEffect(() => {
     let newtransactiondata = [...props.transactions];
@@ -230,24 +229,9 @@ export const TransactionData = (props) => {
 
       setNewData(abc);
     } else {
-      setNewData(newData);
+      setNewData(props.transactions);
     }
   }
-
-  const deleteSingleTransaction = (id) => {
-    let localnew = [...newData];
-    let contextlocal = [...transactions];
-
-    let filtered1 = localnew.filter(
-      (item) => parseInt(item.id) !== parseInt(id)
-    );
-    let filtered2 = contextlocal.filter(
-      (item) => parseInt(item.id) !== parseInt(id)
-    );
-
-    setNewData(filtered1);
-    setTransactions(filtered2);
-  };
 
   return (
     <>
