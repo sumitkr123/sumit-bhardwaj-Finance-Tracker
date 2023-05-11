@@ -198,7 +198,7 @@ export const TransactionData = (props) => {
       setPagination({
         ...pagination,
         pageno: 1,
-        limit: 2,
+        limit: fixedimit,
       });
     }
   }
