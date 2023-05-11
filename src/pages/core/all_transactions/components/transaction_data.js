@@ -6,6 +6,7 @@ import {
   month,
   paginno,
   amountFormatter,
+  fixedShowPageCount,
 } from "../../../../utils/constants";
 
 export const TransactionData = (props) => {
@@ -22,7 +23,7 @@ export const TransactionData = (props) => {
   });
 
   const [pagination, setPagination] = useState({
-    showPage: 3,
+    showPage: fixedShowPageCount,
     totalpage: 0,
     limit: fixedimit,
     pageno: 1,

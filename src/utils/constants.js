@@ -50,6 +50,8 @@ export default monthYears;
 
 export const fixedimit = 2;
 
+export const fixedShowPageCount = 3;
+
 export const currency = {
   rupee: <span>&#8377;</span>,
   dollar: <span>&#36;</span>,
