@@ -34,7 +34,7 @@ export const AllData = () => {
   };
 
   useEffect(() => {
-    if (isGrouped === true) {
+    if (isGrouped === true && groupVal !== "") {
       groupdata(groupVal);
     }
   }, [transactions]);
@@ -58,6 +58,7 @@ export const AllData = () => {
         setGroupedData([result]);
       } else {
         setIsGrouped(false);
+        setGroupVal("");
         setGroupedData([]);
       }
     } else {
@@ -71,6 +72,7 @@ export const AllData = () => {
         setGroupedData([result]);
       } else {
         setIsGrouped(false);
+        setGroupVal("");
         setGroupedData([]);
       }
     }
