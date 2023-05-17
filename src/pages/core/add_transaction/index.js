@@ -20,8 +20,12 @@ import * as yup from "yup";
 
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useTransactions } from "../../../providers/transaction_provider";
-import { getSingleTransaction, saveData } from "../../../requests/requests";
+
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addTransaction,
+  editTransaction,
+} from "../../../redux/ducks/transaction_slice";
 
 function isValidFileType(fileName) {
   return fileName && supportedImg.includes(fileName.split(".").pop());
@@ -123,13 +127,16 @@ export const AddTransaction = () => {
   const [values, setValues] = useState(initialValues);
   const [submit, setSubmit] = useState(false);
 
-  const [transactions, setTransactions] = useTransactions();
+  const transactions = useSelector((state) => {
+    return state.transactions;
+  });
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (id !== undefined && id !== "" && id !== null) {
-      let newdata = [...transactions];
-
-      let data = getSingleTransaction(newdata, id);
+      let data = transactions.filter(
+        (item) => parseInt(item.id) === parseInt(id)
+      );
 
       if (data.length !== 0) {
         let newvalues = { ...values };
@@ -159,13 +166,12 @@ export const AddTransaction = () => {
       });
 
       if (errflag !== 1) {
-        if (transactions.length === 0 || transactions.length === undefined) {
-          saveData(transactions, setTransactions, "first", allvalues);
+        if (id !== null && id !== undefined && id !== "") {
+          dispatch(editTransaction({ edit: allvalues, id: id }));
         } else {
-          let newdata = [...transactions];
-
-          saveData(newdata, setTransactions, "create-edit", allvalues, id);
+          dispatch(addTransaction(allvalues));
         }
+
         navigate(`/transactions`);
       }
     }

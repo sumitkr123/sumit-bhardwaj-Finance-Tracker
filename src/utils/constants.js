@@ -275,6 +275,58 @@ export const defaultTransactions = [
   },
 ];
 
+export const defaultUsers = [
+  {
+    id: 1,
+    name: "Sumit Bhardwaj",
+    phone: "1234567890",
+    email: "ak@gmail.com",
+    pass: "Ak@123456",
+  },
+  {
+    id: 2,
+    name: "Akash Bhardwaj",
+    phone: "1234567891",
+    email: "aks@gmail.com",
+    pass: "Ak@123456",
+  },
+  {
+    id: 3,
+    name: "Amit Bhardwaj",
+    phone: "8796451223",
+    email: "amit@gmail.com",
+    pass: "Ak@123456",
+  },
+  {
+    id: 4,
+    name: "Akshal",
+    phone: "8796451223",
+    email: "akb85308@gmail.com",
+    pass: "Ak@123456",
+  },
+  {
+    id: 5,
+    name: "Narendra Singh",
+    phone: "1234567890",
+    email: "sk@gmail.com",
+    pass: "Ak@123456",
+  },
+  {
+    id: 6,
+    name: "Sam Kumar",
+    phone: "8796451222",
+    email: "sam@gmail.com",
+    pass: "Ak@123456",
+  },
+  {
+    id: 7,
+    name: "Samir Kumar",
+    phone: "8796451230",
+    email: "samir@gmail.com",
+    pass: "Ak@123456",
+  },
+];
+
 export const initialValues = {
   notes: "",
   amount: "",
@@ -285,3 +337,12 @@ export const initialValues = {
   tdate: "",
   receipt: "",
 };
+
+let date = new Date();
+const minutes = 60;
+const seconds = 60;
+const milliseconds = 1000;
+
+date.setTime(date.getTime() + minutes * seconds * milliseconds);
+
+export const cookieExpireTime = date;

@@ -3,13 +3,15 @@ import { useEffect, useMemo, useState } from "react";
 import { TransactionData } from "./components/transaction_data";
 
 import "../../../assets/styles/transaction.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { groupby } from "../../../utils/constants";
 import { ErrorPage } from "../../../components/errorpage";
-import { useTransactions } from "../../../providers/transaction_provider";
+
+import { useSelector } from "react-redux";
+import { Cookies } from "react-cookie";
 
 export const AllData = () => {
-  const [transactions, setTransactions] = useTransactions();
+  const transactions = useSelector((state) => state.transactions);
 
   const [newtransactions, setNewTransactions] = useState([]);
 
@@ -19,19 +21,11 @@ export const AllData = () => {
 
   const [groupVal, setGroupVal] = useState("");
 
-  const navigate = useNavigate();
+  const cookie = new Cookies();
 
   useMemo(() => {
     setNewTransactions(transactions);
   }, [transactions]);
-
-  const logout = () => {
-    let logoutstatus = window.confirm("Are you sure you want to logout..!");
-    if (logoutstatus) {
-      localStorage.removeItem("auth_token");
-      navigate("/login");
-    }
-  };
 
   useEffect(() => {
     if (isGrouped === true && groupVal !== "") {
@@ -78,14 +72,12 @@ export const AllData = () => {
     }
   };
 
-  const deleteSingleTransaction = (id) => {
-    let contextlocal = [...transactions];
-
-    let filtered2 = contextlocal.filter(
-      (item) => parseInt(item.id) !== parseInt(id)
-    );
-
-    setTransactions(filtered2);
+  const logout = () => {
+    let logoutstatus = window.confirm("Are you sure you want to logout..!");
+    if (logoutstatus) {
+      cookie.remove("auth_token", { path: "/" });
+      window.location.reload();
+    }
   };
 
   if (newtransactions.length === 0) {
@@ -108,7 +100,7 @@ export const AllData = () => {
             <label>
               Group by :-
               <select type="text" name="group" onChange={(e) => groupdata(e)}>
-                <option value={""}>Select any column</option>
+                <option value={""}>None</option>
                 {groupby.map((item, index) => (
                   <option key={index} value={Object.keys(item)}>
                     {Object.values(item)}
@@ -133,29 +125,28 @@ export const AllData = () => {
               (value) =>
                 value !== "undefined" && (
                   <div key={value}>
-                    <br></br>
-                    <br></br>
-                    <h1>{value}</h1>
-                    <TransactionData
-                      transactions={groupedData[0][value]}
-                      delete={deleteSingleTransaction}
-                    />
-                    <br></br>
-                    <br></br>
+                    <div className="wholeTabWithEverything">
+                      <br></br>
+                      <br></br>
+                      <h1>{value}</h1>
+                      <TransactionData transactions={groupedData[0][value]} />
+
+                      <br></br>
+                      <br></br>
+                    </div>
                   </div>
                 )
             )
           : newtransactions.length !== 0 && (
-              <>
-                <TransactionData
-                  transactions={newtransactions}
-                  delete={deleteSingleTransaction}
-                />
+              <div className="wholeTabWithEverything">
+                <TransactionData transactions={newtransactions} />
+
                 <br></br>
                 <br></br>
-              </>
+              </div>
             )}
         <br />
+
         <Link to={`create`}>Add Transactions</Link>
       </div>
     </>

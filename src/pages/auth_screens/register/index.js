@@ -9,9 +9,12 @@ import {
   passwordRegex,
   phoneRegex,
 } from "../../../utils/constants";
+import { useDispatch, useSelector } from "react-redux";
+import { addUser } from "../../../redux/ducks/users_slice";
 
 export const Register = () => {
-  let existingData = JSON.parse(localStorage.getItem("all_users_data"));
+  const users = useSelector((state) => state.users);
+  const dispatch = useDispatch();
 
   const validationSchema = yup.object().shape({
     name: yup
@@ -35,8 +38,8 @@ export const Register = () => {
         test(value, ctx) {
           let flag = 0;
 
-          for (let i in existingData) {
-            if (existingData[i].email === value) {
+          for (let i in users) {
+            if (users[i].email === value) {
               flag = 1;
               break;
             }
@@ -71,30 +74,8 @@ export const Register = () => {
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
-    let user_data = {};
-    if (existingData) {
-      user_data["id"] = existingData[existingData.length - 1].id + 1;
-      user_data["name"] = data.name;
-      user_data["phone"] = data.phone;
-      user_data["email"] = data.email;
-      user_data["pass"] = data.password;
-
-      existingData.push(user_data);
-
-      localStorage.setItem("all_users_data", JSON.stringify(existingData));
-
-      navigate("/login");
-    } else {
-      user_data["id"] = 1;
-      user_data["name"] = data.name;
-      user_data["phone"] = data.phone;
-      user_data["email"] = data.email;
-      user_data["pass"] = data.password;
-
-      localStorage.setItem("all_users_data", JSON.stringify([user_data]));
-
-      navigate("/login");
-    }
+    dispatch(addUser(data));
+    navigate(`/login`);
   };
 
   return (

@@ -3,11 +3,13 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-
+import { useSelector } from "react-redux";
+import { useCookies } from "react-cookie";
+import { cookieExpireTime } from "../../../utils/constants";
 
 export const Login = () => {
-  let existingData = JSON.parse(localStorage.getItem("all_users_data"));
-  
+  let users = useSelector((state) => state.users);
+
   const validationSchema = yup.object().shape({
     email: yup
       .string()
@@ -23,8 +25,8 @@ export const Login = () => {
           } else {
             let flag = 0;
 
-            for (let i in existingData) {
-              if (existingData[i].email === value) {
+            for (let i in users) {
+              if (users[i].email === value) {
                 flag = 1;
                 break;
               }
@@ -53,10 +55,10 @@ export const Login = () => {
           } else {
             let flag = 0;
 
-            for (let i in existingData) {
+            for (let i in users) {
               if (
-                existingData[i].email === this.parent.email &&
-                existingData[i].pass === value
+                users[i].email === this.parent.email &&
+                users[i].pass === value
               ) {
                 flag = 1;
                 break;
@@ -85,32 +87,28 @@ export const Login = () => {
 
   const navigate = useNavigate();
 
+  const [cookies, setCookie] = useCookies(["auth_token"]);
+
   const onSubmit = async (data) => {
     let randomstr = "";
     randomstr +=
       data.email + data.email.split("").reverse().join("") + data.password;
 
-    let flag = 0;
-    let auth_data = {};
+    let auth_data = users.filter(
+      (item) => item.email === data.email && item.pass === data.password
+    );
 
-    for (let i in existingData) {
-      if (
-        existingData[i].email === data.email &&
-        existingData[i].pass === data.password
-      ) {
-        auth_data = existingData[i];
-        flag = 1;
-        break;
-      }
-    }
+    const obj = { ...auth_data[0] };
+    obj.token = randomstr;
 
-    if (flag === 1) {
-      auth_data["token"] = randomstr;
-      localStorage.setItem("auth_token", JSON.stringify(auth_data));
-      navigate("/transactions");
-    } else {
-      alert("Email or Password is incorrect..!");
-    }
+    auth_data = { ...obj };
+
+    setCookie("auth_token", auth_data, {
+      path: "/",
+      expires: cookieExpireTime,
+    });
+
+    navigate("/transactions");
   };
 
   return (

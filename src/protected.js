@@ -1,10 +1,12 @@
+import { Cookies } from "react-cookie";
 import { Navigate } from "react-router-dom";
 
 export const Protected = (props) => {
   const Component = props.component;
   const isPublic = props.public;
 
-  let auth_token = JSON.parse(localStorage.getItem("auth_token"));
+  const cookie = new Cookies();
+  let auth_token = cookie.get("auth_token");
 
   if (isPublic) {
     if (!auth_token) {

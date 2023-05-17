@@ -1,13 +1,17 @@
 import { RouterProvider } from "react-router-dom";
 
-import { routes } from "./routes/routes";
 import "./assets/styles/common.css";
-import { TransactionProvider } from "./providers/transaction_provider";
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
+import { CookiesProvider } from "react-cookie";
+import { routes } from "./routes/routes";
 
 export default function App() {
   return (
-    <TransactionProvider>
-      <RouterProvider router={routes}></RouterProvider>
-    </TransactionProvider>
+    <CookiesProvider>
+      <Provider store={store}>
+        <RouterProvider router={routes}></RouterProvider>
+      </Provider>
+    </CookiesProvider>
   );
 }

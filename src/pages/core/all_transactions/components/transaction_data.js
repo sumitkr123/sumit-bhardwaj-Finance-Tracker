@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Pagination } from "./pagination";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   fixedimit,
   month,
@@ -8,13 +8,14 @@ import {
   amountFormatter,
   fixedShowPageCount,
 } from "../../../../utils/constants";
+import { useDispatch } from "react-redux";
+import { deleteTransaction } from "../../../../redux/ducks/transaction_slice";
+import { TableHeader } from "./tableHeader";
 
 export const TransactionData = (props) => {
-  //Getting Data From Main component and doing sorting and pagination here..!
+  //Getting Data From Main component and doing sorting and pagination and searching here..!
 
   const [newData, setNewData] = useState(props.transactions);
-
-  const deleteSingleTransaction = props.delete;
 
   const [sorting, setSorting] = useState({
     sortingColumnName: "",
@@ -30,12 +31,14 @@ export const TransactionData = (props) => {
     pages: [],
   });
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
     let newtransactiondata = [...props.transactions];
     setNewData(newtransactiondata);
   }, [props.transactions]);
 
-  useEffect(() => {
+  useMemo(() => {
     let totpage = Math.ceil(newData.length / pagination.limit);
 
     let pagelist = [];
@@ -50,6 +53,7 @@ export const TransactionData = (props) => {
       totalpage: totpage,
       pages: pagelist,
     });
+
     // eslint-disable-next-line
   }, [newData, pagination.limit]);
 
@@ -234,6 +238,44 @@ export const TransactionData = (props) => {
     }
   }
 
+  const dataWithSerialNo = useMemo(() => {
+    return [...newData].map((item, index) => {
+      let newItem = { ...item };
+      newItem.serialNo = index + 1;
+      return newItem;
+    });
+  }, [newData]);
+
+  const firstVal = useMemo(() => {
+    return (
+      dataWithSerialNo[0] &&
+      dataWithSerialNo
+        .slice(
+          (pagination.pageno - 1) * pagination.limit,
+          pagination.pageno * pagination.limit
+        )
+        .at(0).serialNo
+    );
+  }, [pagination]);
+
+  const secondVal = useMemo(() => {
+    return [...dataWithSerialNo].slice(0, pagination.pageno * pagination.limit)
+      .length;
+  }, [pagination]);
+
+  const thirdVal = useMemo(() => {
+    return dataWithSerialNo.length;
+  }, [dataWithSerialNo]);
+
+  const deleteRecord = (id) => {
+    let deleteStatus = window.confirm(
+      "Are you sure you want to delete this Record..!"
+    );
+    if (deleteStatus) {
+      dispatch(deleteTransaction(id));
+    }
+  };
+
   return (
     <>
       <div className="searchdiv">
@@ -260,10 +302,11 @@ export const TransactionData = (props) => {
                       : setSortingColumn("tdate", "date")
                   }
                 >
-                  <div className="sortHeader">
-                    Transaction-Date
-                    <img src="sort_icon.png" width={20} height={20} alt="alt" />
-                  </div>
+                  <TableHeader
+                    tabHeader={`Transaction-Date`}
+                    col={`tdate`}
+                    sorting={sorting}
+                  />
                 </th>
                 <th
                   className="th"
@@ -273,10 +316,11 @@ export const TransactionData = (props) => {
                       : setSortingColumn("monthyear", "monthyear")
                   }
                 >
-                  <div className="sortHeader">
-                    Month-Year
-                    <img src="sort_icon.png" width={20} height={20} alt="alt" />
-                  </div>
+                  <TableHeader
+                    tabHeader={`Month-Year`}
+                    col={`monthyear`}
+                    sorting={sorting}
+                  />
                 </th>
                 <th
                   className="th"
@@ -284,10 +328,11 @@ export const TransactionData = (props) => {
                     newData.length <= 1 ? null : setSortingColumn("ttype")
                   }
                 >
-                  <div className="sortHeader">
-                    Transaction-Type
-                    <img src="sort_icon.png" width={20} height={20} alt="alt" />
-                  </div>
+                  <TableHeader
+                    tabHeader={`Transaction-Type`}
+                    col={`ttype`}
+                    sorting={sorting}
+                  />
                 </th>
                 <th
                   className="th"
@@ -295,10 +340,11 @@ export const TransactionData = (props) => {
                     newData.length <= 1 ? null : setSortingColumn("FromAc")
                   }
                 >
-                  <div className="sortHeader">
-                    From-A/c
-                    <img src="sort_icon.png" width={20} height={20} alt="alt" />
-                  </div>
+                  <TableHeader
+                    tabHeader={`From-A/c`}
+                    col={`FromAc`}
+                    sorting={sorting}
+                  />
                 </th>
                 <th
                   className="th"
@@ -306,10 +352,11 @@ export const TransactionData = (props) => {
                     newData.length <= 1 ? null : setSortingColumn("ToAc")
                   }
                 >
-                  <div className="sortHeader">
-                    To-A/c
-                    <img src="sort_icon.png" width={20} height={20} alt="alt" />
-                  </div>
+                  <TableHeader
+                    tabHeader={`To-A/c`}
+                    col={`ToAc`}
+                    sorting={sorting}
+                  />
                 </th>
                 <th
                   className="th"
@@ -319,10 +366,11 @@ export const TransactionData = (props) => {
                       : setSortingColumn("amount", "number")
                   }
                 >
-                  <div className="sortHeader">
-                    Amount
-                    <img src="sort_icon.png" width={20} height={20} alt="alt" />
-                  </div>
+                  <TableHeader
+                    tabHeader={`Amount`}
+                    col={`amount`}
+                    sorting={sorting}
+                  />
                 </th>
                 <th className="th">Receipt</th>
                 <th
@@ -331,10 +379,11 @@ export const TransactionData = (props) => {
                     newData.length <= 1 ? null : setSortingColumn("notes")
                   }
                 >
-                  <div className="sortHeader">
-                    Notes
-                    <img src="sort_icon.png" width={20} height={20} alt="alt" />
-                  </div>
+                  <TableHeader
+                    tabHeader={`Notes`}
+                    col={`notes`}
+                    sorting={sorting}
+                  />
                 </th>
                 <th className="th" colSpan={3}>
                   Action
@@ -377,7 +426,7 @@ export const TransactionData = (props) => {
                       <i
                         className="fa fa-trash"
                         style={{ cursor: "pointer" }}
-                        onClick={() => deleteSingleTransaction(tdata.id)}
+                        onClick={() => deleteRecord(tdata.id)}
                       ></i>
                     </td>
                   </tr>
@@ -385,24 +434,38 @@ export const TransactionData = (props) => {
             </tbody>
           </table>
           <br></br>
-          <Pagination pagination={pagination} changepageno={changepageno} />
+          <div className="bottomPartOfTab">
+            {firstVal && secondVal && thirdVal && (
+              <p>
+                Showing &nbsp;
+                {firstVal}
+                &nbsp; to &nbsp;
+                {secondVal}
+                &nbsp; of {thirdVal} entries
+              </p>
+            )}
+
+            <Pagination pagination={pagination} changepageno={changepageno} />
+          </div>
           <br></br>
           <br></br>
           <div className="pagindiv">
             <label>
-              Per page records :-
+              Show &nbsp;
               <select
                 type="text"
                 name="group"
+                style={{ width: "50px" }}
+                defaultValue={pagination.limit}
                 onChange={(e) => changePageRecCounts(e.target.value)}
               >
-                <option value={""}>Select limit..!</option>
                 {paginno.map((item, index) => (
                   <option key={index} value={item}>
                     {item}
                   </option>
                 ))}
               </select>
+              &nbsp; entries
             </label>
           </div>
           <br></br>

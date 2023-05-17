@@ -3,14 +3,13 @@ import { useEffect, useState } from "react";
 import "../../../assets/styles/transaction.css";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { amountFormatter } from "../../../utils/constants";
-import { useTransactions } from "../../../providers/transaction_provider";
-import { getSingleTransaction } from "../../../requests/requests";
+import { useSelector } from "react-redux";
 
 export const Transaction = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [ transactions ] = useTransactions();
+  const transactions = useSelector((state) => state.transactions);
 
   const [viewtransaction, setViewTransactions] = useState([]);
 
@@ -18,7 +17,9 @@ export const Transaction = () => {
     if (id !== null && id !== undefined && id !== "") {
       let newdata = [];
 
-      newdata = getSingleTransaction(transactions, id);
+      newdata = transactions.filter(
+        (item) => parseInt(item.id) === parseInt(id)
+      );
 
       setViewTransactions(newdata);
     } else {
