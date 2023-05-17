@@ -7,32 +7,105 @@ import { Account } from "./components/accountlist";
 import { MonthYear } from "./components/monthyearlist";
 import monthYears, {
   accountTypes,
+  fixedLengthValue,
   getFile,
+  initialValues,
+  mb1,
+  supportedImg,
   today,
   transactionTypes,
-  validationSchema,
 } from "../../../utils/constants";
-import {
-  saveData,
-  getAllTransactions,
-  getSingleTransaction,
-} from "../../../requests/requests";
+
+import * as yup from "yup";
 
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useTransactions } from "../../../providers/transaction_provider";
+import { getSingleTransaction, saveData } from "../../../requests/requests";
 
-let initialValues = {
-  notes: "",
-  amount: "",
-  FromAc: "",
-  ToAc: "",
-  ttype: "",
-  monthyear: "",
-  tdate: "",
-  receipt: "",
-};
+function isValidFileType(fileName) {
+  return fileName && supportedImg.includes(fileName.split(".").pop());
+}
 
 export const AddTransaction = () => {
+  const validationSchema = yup.object().shape({
+    notes: yup
+      .string()
+      .trim()
+      .required(`**Notes can't be empty..!`)
+      .max(fixedLengthValue),
+    tdate: yup.string().required(`**Date can't be empty..!`).max(today),
+    receipt: yup.mixed().test({
+      name: "isValidReceipt",
+      skipAbsent: true,
+      test(value, cto) {
+        if (value === null || value === undefined || value === "") {
+          return cto.createError({
+            message: "**Receipt can't be empty..!",
+          });
+        } else {
+          if (value[0] === undefined) {
+            return cto.createError({
+              message: "**Receipt can't be empty..!",
+            });
+          }
+          if (value[0].name !== undefined) {
+            if (!isValidFileType(value[0].name)) {
+              return cto.createError({
+                message: "**Receipt format is not valid..!",
+              });
+            }
+            if (!(value[0].size <= mb1)) {
+              return cto.createError({ message: "**Receipt size exceeds..!" });
+            }
+          }
+        }
+        return true;
+      },
+    }),
+    amount: yup
+      .number()
+      .required()
+      .typeError("**Amount can't be empty..!")
+      .min(1, "**Amount should be greater than 0"),
+    FromAc: yup.string().test({
+      name: "FromAc",
+      skipAbsent: true,
+      test(value, ctx) {
+        if (value === "") {
+          return ctx.createError({
+            message: `**From A/c can't be empty..!`,
+          });
+        }
+        if (value === this.parent.ToAc) {
+          return ctx.createError({
+            message: `**From A/c and To A/c are same..!`,
+          });
+        }
+        return true;
+      },
+    }),
+    ToAc: yup.string().test({
+      name: "ToAc",
+      skipAbsent: true,
+      test(value, ctx) {
+        if (value === "") {
+          return ctx.createError({
+            message: `**To A/c can't be empty..!`,
+          });
+        }
+        if (value === this.parent.FromAc) {
+          return ctx.createError({
+            message: `**To A/c and From A/c are same..!`,
+          });
+        }
+        return true;
+      },
+    }),
+    ttype: yup.string().required(`**Transaction type can't be empty..!`),
+    monthyear: yup.string().required(`**Month year can't be empty..!`),
+  });
+
   const {
     register,
     handleSubmit,
@@ -50,40 +123,27 @@ export const AddTransaction = () => {
   const [values, setValues] = useState(initialValues);
   const [submit, setSubmit] = useState(false);
 
-  const [userData, setUserData] = useState({});
-
-  useEffect(() => {
-    let auth_data = JSON.parse(localStorage.getItem("auth_token"));
-
-    setUserData(auth_data);
-  }, []);
+  const [transactions, setTransactions] = useTransactions();
 
   useEffect(() => {
     if (id !== undefined && id !== "" && id !== null) {
-      if (userData !== null && userData !== undefined) {
-        if (
-          localStorage.getItem(userData.email) !== null &&
-          localStorage.getItem(userData.email) !== undefined
-        ) {
-          let data = [];
+      let newdata = [...transactions];
 
-          data = getSingleTransaction(userData.email, id);
+      let data = getSingleTransaction(newdata, id);
 
-          if (data.length !== 0) {
-            let newvalues = { ...values };
-            for (let i in data[0]) {
-              newvalues[i] = data[0][i];
+      if (data.length !== 0) {
+        let newvalues = { ...values };
+        for (let i in data[0]) {
+          newvalues[i] = data[0][i];
 
-              setValue(i, data[0][i]);
-            }
-            setValues(newvalues);
-          } else {
-            navigate("/*");
-          }
+          setValue(i, data[0][i]);
         }
+        setValues(newvalues);
+      } else {
+        navigate("/*");
       }
     }
-  }, [userData, id]);
+  }, [id]);
 
   useEffect(() => {
     if (submit === true) {
@@ -99,21 +159,16 @@ export const AddTransaction = () => {
       });
 
       if (errflag !== 1) {
-        if (
-          localStorage.getItem(userData.email) !== null &&
-          localStorage.getItem(userData.email) !== undefined
-        ) {
-          let existingData = getAllTransactions(userData.email);
-
-          saveData(userData.email, allvalues, "create-edit", existingData, id);
+        if (transactions.length === 0 || transactions.length === undefined) {
+          saveData(transactions, setTransactions, "first", allvalues);
         } else {
-          saveData(userData.email, allvalues, "first");
-        }
+          let newdata = [...transactions];
 
+          saveData(newdata, setTransactions, "create-edit", allvalues, id);
+        }
         navigate(`/transactions`);
       }
     }
-    // eslint-disable-next-line
   }, [submit]);
 
   const onSubmit = async (data) => {
