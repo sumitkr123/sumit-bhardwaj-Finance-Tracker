@@ -1,29 +1,43 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import { TransactionData } from "./components/transaction_data";
 
 import "../../../assets/styles/transaction.css";
 import { Link, useNavigate } from "react-router-dom";
 import { groupby } from "../../../utils/constants";
+import { getAllTransactions } from "../../../requests/requests";
 import { ErrorPage } from "../../../components/errorpage";
-import { useTransactions } from "../../../providers/transaction_provider";
 
 export const AllData = () => {
-  const [transactions, setTransactions] = useTransactions();
-
-  const [newtransactions, setNewTransactions] = useState([]);
+  // eslint-disable-next-line
+  const [initTransactions, setInitTransactions] = useState([]);
+  const [transactions, setTransactions] = useState([]);
 
   const [groupedData, setGroupedData] = useState([]);
 
-  const [isGrouped, setIsGrouped] = useState(false);
-
-  const [groupVal, setGroupVal] = useState("");
+  const [userData, setUserData] = useState({});
 
   const navigate = useNavigate();
 
   useMemo(() => {
-    setNewTransactions(transactions);
-  }, [transactions]);
+    let auth_data = JSON.parse(localStorage.getItem("auth_token"));
+
+    setUserData(auth_data);
+  }, []);
+
+  useMemo(() => {
+    if (userData !== undefined && userData !== null) {
+      if (
+        localStorage.getItem(userData.email) !== null &&
+        localStorage.getItem(userData.email) !== undefined
+      ) {
+        let existingData = getAllTransactions(userData.email);
+
+        setTransactions(existingData);
+        setInitTransactions(existingData);
+      }
+    }
+  }, [userData]);
 
   const logout = () => {
     let logoutstatus = window.confirm("Are you sure you want to logout..!");
@@ -33,62 +47,25 @@ export const AllData = () => {
     }
   };
 
-  useEffect(() => {
-    if (isGrouped === true && groupVal !== "") {
-      groupdata(groupVal);
-    }
-  }, [transactions]);
-
-  const groupdata = (event) => {
-    setIsGrouped(true);
+  function groupdata(event) {
     let temp = [...transactions];
 
     let result = {};
 
-    if (event.target) {
-      if (event.target.value) {
-        setGroupVal(event.target.value);
+    if (event.target.value) {
+      temp.forEach((item) => {
+        const value = item[event.target.value];
 
-        temp.forEach((item) => {
-          const value = item[event.target.value];
-
-          result[value] = result[value] ?? [];
-          result[value].push(item);
-        });
-        setGroupedData([result]);
-      } else {
-        setIsGrouped(false);
-        setGroupVal("");
-        setGroupedData([]);
-      }
+        result[value] = result[value] ?? [];
+        result[value].push(item);
+      });
+      setGroupedData([result]);
     } else {
-      if (event) {
-        temp.forEach((item) => {
-          const value = item[event];
-
-          result[value] = result[value] ?? [];
-          result[value].push(item);
-        });
-        setGroupedData([result]);
-      } else {
-        setIsGrouped(false);
-        setGroupVal("");
-        setGroupedData([]);
-      }
+      setGroupedData([]);
     }
-  };
+  }
 
-  const deleteSingleTransaction = (id) => {
-    let contextlocal = [...transactions];
-
-    let filtered2 = contextlocal.filter(
-      (item) => parseInt(item.id) !== parseInt(id)
-    );
-
-    setTransactions(filtered2);
-  };
-
-  if (newtransactions.length === 0) {
+  if (transactions.length === 0) {
     return (
       <ErrorPage
         errorTitle={"Oops Data Not Found..!"}
@@ -136,21 +113,15 @@ export const AllData = () => {
                     <br></br>
                     <br></br>
                     <h1>{value}</h1>
-                    <TransactionData
-                      transactions={groupedData[0][value]}
-                      delete={deleteSingleTransaction}
-                    />
+                    <TransactionData transactions={groupedData[0][value]} />
                     <br></br>
                     <br></br>
                   </div>
                 )
             )
-          : newtransactions.length !== 0 && (
+          : transactions.length !== 0 && (
               <>
-                <TransactionData
-                  transactions={newtransactions}
-                  delete={deleteSingleTransaction}
-                />
+                <TransactionData transactions={transactions} />
                 <br></br>
                 <br></br>
               </>

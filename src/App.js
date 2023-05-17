@@ -1,13 +1,8 @@
 import { RouterProvider } from "react-router-dom";
 
 import { routes } from "./routes/routes";
-import "./assets/styles/common.css";
-import { TransactionProvider } from "./providers/transaction_provider";
+import "./assets/styles/common.css"
 
 export default function App() {
-  return (
-    <TransactionProvider>
-      <RouterProvider router={routes}></RouterProvider>
-    </TransactionProvider>
-  );
+  return <RouterProvider router={routes}></RouterProvider>;
 }

@@ -49,5 +49,3 @@ export const routes = createBrowserRouter(
     </Route>
   )
 );
-
-

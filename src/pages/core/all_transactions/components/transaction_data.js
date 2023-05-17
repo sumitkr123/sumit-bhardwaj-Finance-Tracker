@@ -6,15 +6,12 @@ import {
   month,
   paginno,
   amountFormatter,
-  fixedShowPageCount,
 } from "../../../../utils/constants";
 
 export const TransactionData = (props) => {
   //Getting Data From Main component and doing sorting and pagination here..!
 
   const [newData, setNewData] = useState(props.transactions);
-
-  const deleteSingleTransaction = props.delete;
 
   const [sorting, setSorting] = useState({
     sortingColumnName: "",
@@ -23,17 +20,12 @@ export const TransactionData = (props) => {
   });
 
   const [pagination, setPagination] = useState({
-    showPage: fixedShowPageCount,
+    showPage: 2,
     totalpage: 0,
     limit: fixedimit,
     pageno: 1,
     pages: [],
   });
-
-  useEffect(() => {
-    let newtransactiondata = [...props.transactions];
-    setNewData(newtransactiondata);
-  }, [props.transactions]);
 
   useEffect(() => {
     let totpage = Math.ceil(newData.length / pagination.limit);
@@ -46,7 +38,6 @@ export const TransactionData = (props) => {
 
     setPagination({
       ...pagination,
-      pageno: 1,
       totalpage: totpage,
       pages: pagelist,
     });
@@ -198,7 +189,7 @@ export const TransactionData = (props) => {
       setPagination({
         ...pagination,
         pageno: 1,
-        limit: fixedimit,
+        limit: 2,
       });
     }
   }
@@ -336,7 +327,7 @@ export const TransactionData = (props) => {
                     <img src="sort_icon.png" width={20} height={20} alt="alt" />
                   </div>
                 </th>
-                <th className="th" colSpan={3}>
+                <th className="th" colSpan={2}>
                   Action
                 </th>
               </tr>
@@ -372,13 +363,6 @@ export const TransactionData = (props) => {
                     </td>
                     <td className="td">
                       <Link to={`edit/${tdata.id}`}>Edit</Link>
-                    </td>
-                    <td className="td">
-                      <i
-                        className="fa fa-trash"
-                        style={{ cursor: "pointer" }}
-                        onClick={() => deleteSingleTransaction(tdata.id)}
-                      ></i>
                     </td>
                   </tr>
                 ))}
