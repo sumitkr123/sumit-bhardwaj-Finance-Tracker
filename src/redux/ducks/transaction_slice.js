@@ -33,7 +33,7 @@ export const transactionSlice = createSlice({
       const editid = parseInt(action.payload.id);
 
       let newdata = [...state];
-      newdata.findIndex();
+
       return newdata.map((item) =>
         parseInt(item.id) === parseInt(editid)
           ? (item = action.payload.edit)

@@ -123,6 +123,7 @@
 .bottomPartOfTab {
   margin-top: 3%;
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
 }
@@ -141,6 +142,7 @@
     rgba(0, 0, 0, 0.3) 0px 1px 3px 2px;
   border-radius: 10px;
   margin: 20px 0px;
+  height: 80%;
 }
 
 .sortColor {
@@ -149,4 +151,10 @@
 
 .soring {
   color: #7fc0ff;
+}
+
+.makeDivHoriZontalScroll {
+  width: auto;
+  overflow-x: auto;
+  overflow-y: hidden;
 }

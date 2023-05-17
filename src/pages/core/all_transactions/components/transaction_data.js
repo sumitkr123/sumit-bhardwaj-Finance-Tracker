@@ -291,150 +291,153 @@ export const TransactionData = (props) => {
         <>
           <br></br>
           <br></br>
-          <table className="table">
-            <thead className="header">
-              <tr className="headerrow">
-                <th
-                  className="th"
-                  onClick={() =>
-                    newData.length <= 1
-                      ? null
-                      : setSortingColumn("tdate", "date")
-                  }
-                >
-                  <TableHeader
-                    tabHeader={`Transaction-Date`}
-                    col={`tdate`}
-                    sorting={sorting}
-                  />
-                </th>
-                <th
-                  className="th"
-                  onClick={() =>
-                    newData.length <= 1
-                      ? null
-                      : setSortingColumn("monthyear", "monthyear")
-                  }
-                >
-                  <TableHeader
-                    tabHeader={`Month-Year`}
-                    col={`monthyear`}
-                    sorting={sorting}
-                  />
-                </th>
-                <th
-                  className="th"
-                  onClick={() =>
-                    newData.length <= 1 ? null : setSortingColumn("ttype")
-                  }
-                >
-                  <TableHeader
-                    tabHeader={`Transaction-Type`}
-                    col={`ttype`}
-                    sorting={sorting}
-                  />
-                </th>
-                <th
-                  className="th"
-                  onClick={() =>
-                    newData.length <= 1 ? null : setSortingColumn("FromAc")
-                  }
-                >
-                  <TableHeader
-                    tabHeader={`From-A/c`}
-                    col={`FromAc`}
-                    sorting={sorting}
-                  />
-                </th>
-                <th
-                  className="th"
-                  onClick={() =>
-                    newData.length <= 1 ? null : setSortingColumn("ToAc")
-                  }
-                >
-                  <TableHeader
-                    tabHeader={`To-A/c`}
-                    col={`ToAc`}
-                    sorting={sorting}
-                  />
-                </th>
-                <th
-                  className="th"
-                  onClick={() =>
-                    newData.length <= 1
-                      ? null
-                      : setSortingColumn("amount", "number")
-                  }
-                >
-                  <TableHeader
-                    tabHeader={`Amount`}
-                    col={`amount`}
-                    sorting={sorting}
-                  />
-                </th>
-                <th className="th">Receipt</th>
-                <th
-                  className="th"
-                  onClick={() =>
-                    newData.length <= 1 ? null : setSortingColumn("notes")
-                  }
-                >
-                  <TableHeader
-                    tabHeader={`Notes`}
-                    col={`notes`}
-                    sorting={sorting}
-                  />
-                </th>
-                <th className="th" colSpan={3}>
-                  Action
-                </th>
-              </tr>
-            </thead>
-            <tbody className="tabcontent">
-              {newData
-                .slice(
-                  (pagination.pageno - 1) * pagination.limit,
-                  pagination.pageno * pagination.limit
-                )
-                .map((tdata) => (
-                  <tr className="contentrow" key={tdata.id}>
-                    <td className="td">{tdata.tdate}</td>
-                    <td className="td">{tdata.monthyear}</td>
-                    <td className="td">{tdata.ttype}</td>
-                    <td className="td">{tdata.FromAc}</td>
-                    <td className="td">{tdata.ToAc}</td>
-                    <td className="td">{amountFormatter(tdata.amount)}</td>
+          <div className="makeDivHoriZontalScroll">
+            <table className="table">
+              <thead className="header">
+                <tr className="headerrow">
+                  <th
+                    className="th"
+                    onClick={() =>
+                      newData.length <= 1
+                        ? null
+                        : setSortingColumn("tdate", "date")
+                    }
+                  >
+                    <TableHeader
+                      tabHeader={`Transaction-Date`}
+                      col={`tdate`}
+                      sorting={sorting}
+                    />
+                  </th>
+                  <th
+                    className="th"
+                    onClick={() =>
+                      newData.length <= 1
+                        ? null
+                        : setSortingColumn("monthyear", "monthyear")
+                    }
+                  >
+                    <TableHeader
+                      tabHeader={`Month-Year`}
+                      col={`monthyear`}
+                      sorting={sorting}
+                    />
+                  </th>
+                  <th
+                    className="th"
+                    onClick={() =>
+                      newData.length <= 1 ? null : setSortingColumn("ttype")
+                    }
+                  >
+                    <TableHeader
+                      tabHeader={`Transaction-Type`}
+                      col={`ttype`}
+                      sorting={sorting}
+                    />
+                  </th>
+                  <th
+                    className="th"
+                    onClick={() =>
+                      newData.length <= 1 ? null : setSortingColumn("FromAc")
+                    }
+                  >
+                    <TableHeader
+                      tabHeader={`From-A/c`}
+                      col={`FromAc`}
+                      sorting={sorting}
+                    />
+                  </th>
+                  <th
+                    className="th"
+                    onClick={() =>
+                      newData.length <= 1 ? null : setSortingColumn("ToAc")
+                    }
+                  >
+                    <TableHeader
+                      tabHeader={`To-A/c`}
+                      col={`ToAc`}
+                      sorting={sorting}
+                    />
+                  </th>
+                  <th
+                    className="th"
+                    onClick={() =>
+                      newData.length <= 1
+                        ? null
+                        : setSortingColumn("amount", "number")
+                    }
+                  >
+                    <TableHeader
+                      tabHeader={`Amount`}
+                      col={`amount`}
+                      sorting={sorting}
+                    />
+                  </th>
+                  <th className="th">Receipt</th>
+                  <th
+                    className="th"
+                    onClick={() =>
+                      newData.length <= 1 ? null : setSortingColumn("notes")
+                    }
+                  >
+                    <TableHeader
+                      tabHeader={`Notes`}
+                      col={`notes`}
+                      sorting={sorting}
+                    />
+                  </th>
+                  <th className="th" colSpan={3}>
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="tabcontent">
+                {newData
+                  .slice(
+                    (pagination.pageno - 1) * pagination.limit,
+                    pagination.pageno * pagination.limit
+                  )
+                  .map((tdata) => (
+                    <tr className="contentrow" key={tdata.id}>
+                      <td className="td">{tdata.tdate}</td>
+                      <td className="td">{tdata.monthyear}</td>
+                      <td className="td">{tdata.ttype}</td>
+                      <td className="td">{tdata.FromAc}</td>
+                      <td className="td">{tdata.ToAc}</td>
+                      <td className="td">{amountFormatter(tdata.amount)}</td>
 
-                    <td className="td">
-                      {
-                        <img
-                          src={tdata.receipt}
-                          className="receipt"
-                          alt="alt"
-                        />
-                      }
-                    </td>
+                      <td className="td">
+                        {
+                          <img
+                            src={tdata.receipt}
+                            className="receipt"
+                            alt="alt"
+                          />
+                        }
+                      </td>
 
-                    <td className="td">{tdata.notes}</td>
-                    <td className="td">
-                      <Link to={`${tdata.id}`}>View</Link>
-                    </td>
-                    <td className="td">
-                      <Link to={`edit/${tdata.id}`}>Edit</Link>
-                    </td>
-                    <td className="td">
-                      <i
-                        className="fa fa-trash"
-                        style={{ cursor: "pointer" }}
-                        onClick={() => deleteRecord(tdata.id)}
-                      ></i>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
+                      <td className="td">{tdata.notes}</td>
+                      <td className="td">
+                        <Link to={`${tdata.id}`}>View</Link>
+                      </td>
+                      <td className="td">
+                        <Link to={`edit/${tdata.id}`}>Edit</Link>
+                      </td>
+                      <td className="td">
+                        <i
+                          className="fa fa-trash"
+                          style={{ cursor: "pointer" }}
+                          onClick={() => deleteRecord(tdata.id)}
+                        ></i>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+
           <br></br>
-          <div className="bottomPartOfTab">
+          <div className="bottomPartOfTab makeDivHoriZontalScroll">
             {firstVal && secondVal && thirdVal && (
               <p>
                 Showing &nbsp;
