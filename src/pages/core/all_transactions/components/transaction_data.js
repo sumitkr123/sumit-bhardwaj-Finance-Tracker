@@ -7,6 +7,7 @@ import {
   paginno,
   amountFormatter,
   fixedShowPageCount,
+  TransactionTabHeaders,
 } from "../../../../utils/constants";
 import { useDispatch } from "react-redux";
 import { deleteTransaction } from "../../../../redux/ducks/transaction_slice";
@@ -295,97 +296,23 @@ export const TransactionData = (props) => {
             <table className="table">
               <thead className="header">
                 <tr className="headerrow">
-                  <th
-                    className="th"
-                    onClick={() =>
-                      newData.length <= 1
-                        ? null
-                        : setSortingColumn("tdate", "date")
-                    }
-                  >
-                    <TableHeader
-                      tabHeader={`Transaction-Date`}
-                      col={`tdate`}
-                      sorting={sorting}
-                    />
-                  </th>
-                  <th
-                    className="th"
-                    onClick={() =>
-                      newData.length <= 1
-                        ? null
-                        : setSortingColumn("monthyear", "monthyear")
-                    }
-                  >
-                    <TableHeader
-                      tabHeader={`Month-Year`}
-                      col={`monthyear`}
-                      sorting={sorting}
-                    />
-                  </th>
-                  <th
-                    className="th"
-                    onClick={() =>
-                      newData.length <= 1 ? null : setSortingColumn("ttype")
-                    }
-                  >
-                    <TableHeader
-                      tabHeader={`Transaction-Type`}
-                      col={`ttype`}
-                      sorting={sorting}
-                    />
-                  </th>
-                  <th
-                    className="th"
-                    onClick={() =>
-                      newData.length <= 1 ? null : setSortingColumn("FromAc")
-                    }
-                  >
-                    <TableHeader
-                      tabHeader={`From-A/c`}
-                      col={`FromAc`}
-                      sorting={sorting}
-                    />
-                  </th>
-                  <th
-                    className="th"
-                    onClick={() =>
-                      newData.length <= 1 ? null : setSortingColumn("ToAc")
-                    }
-                  >
-                    <TableHeader
-                      tabHeader={`To-A/c`}
-                      col={`ToAc`}
-                      sorting={sorting}
-                    />
-                  </th>
-                  <th
-                    className="th"
-                    onClick={() =>
-                      newData.length <= 1
-                        ? null
-                        : setSortingColumn("amount", "number")
-                    }
-                  >
-                    <TableHeader
-                      tabHeader={`Amount`}
-                      col={`amount`}
-                      sorting={sorting}
-                    />
-                  </th>
-                  <th className="th">Receipt</th>
-                  <th
-                    className="th"
-                    onClick={() =>
-                      newData.length <= 1 ? null : setSortingColumn("notes")
-                    }
-                  >
-                    <TableHeader
-                      tabHeader={`Notes`}
-                      col={`notes`}
-                      sorting={sorting}
-                    />
-                  </th>
+                  {Object.keys(TransactionTabHeaders).map((keyCol) => {
+                    return TransactionTabHeaders[keyCol].isSortable === true ? (
+                      <TableHeader
+                        tabHeader={TransactionTabHeaders[keyCol].name}
+                        col={keyCol}
+                        sorting={sorting}
+                        setSortingColumn={setSortingColumn}
+                        type={TransactionTabHeaders[keyCol].type}
+                        newData={newData}
+                      />
+                    ) : (
+                      <th className="th">
+                        {TransactionTabHeaders[keyCol].name}
+                      </th>
+                    );
+                  })}
+
                   <th className="th" colSpan={3}>
                     Action
                   </th>

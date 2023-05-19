@@ -346,3 +346,14 @@ const milliseconds = 1000;
 date.setTime(date.getTime() + minutes * seconds * milliseconds);
 
 export const cookieExpireTime = date;
+
+export const TransactionTabHeaders = {
+  tdate: { name: "Transaction-Date", isSortable: true, type: "date" },
+  monthyear: { name: "Month-year", isSortable: true, type: "monthyear" },
+  ttype: { name: "Transaction-Type", isSortable: true },
+  FromAc: { name: "From-A/c", isSortable: true },
+  ToAc: { name: "To-A/c", isSortable: true },
+  amount: { name: "Amount", isSortable: true, type: "number" },
+  receipt: { name: "Receipt", isSortable: false },
+  notes: { name: "Notes", isSortable: true },
+};

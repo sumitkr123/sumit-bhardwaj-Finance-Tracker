@@ -17,8 +17,6 @@ export const AllData = () => {
 
   const [groupedData, setGroupedData] = useState([]);
 
-  const [isGrouped, setIsGrouped] = useState(false);
-
   const [groupVal, setGroupVal] = useState("");
 
   const cookie = new Cookies();
@@ -28,49 +26,18 @@ export const AllData = () => {
   }, [transactions]);
 
   useEffect(() => {
-    if (isGrouped === true && groupVal !== "") {
-      groupdata(groupVal);
-    }
-  }, [transactions]);
-
-  const groupdata = (event) => {
-    setIsGrouped(true);
     let temp = [...transactions];
 
     let result = {};
 
-    if (event.target) {
-      if (event.target.value) {
-        setGroupVal(event.target.value);
+    temp.forEach((item) => {
+      const value = item[groupVal];
 
-        temp.forEach((item) => {
-          const value = item[event.target.value];
-
-          result[value] = result[value] ?? [];
-          result[value].push(item);
-        });
-        setGroupedData([result]);
-      } else {
-        setIsGrouped(false);
-        setGroupVal("");
-        setGroupedData([]);
-      }
-    } else {
-      if (event) {
-        temp.forEach((item) => {
-          const value = item[event];
-
-          result[value] = result[value] ?? [];
-          result[value].push(item);
-        });
-        setGroupedData([result]);
-      } else {
-        setIsGrouped(false);
-        setGroupVal("");
-        setGroupedData([]);
-      }
-    }
-  };
+      result[value] = result[value] ?? [];
+      result[value].push(item);
+    });
+    setGroupedData([result]);
+  }, [groupVal, transactions]);
 
   const logout = () => {
     let logoutstatus = window.confirm("Are you sure you want to logout..!");
@@ -99,7 +66,11 @@ export const AllData = () => {
           <div className="groupdiv">
             <label>
               Group by :-
-              <select type="text" name="group" onChange={(e) => groupdata(e)}>
+              <select
+                type="text"
+                name="group"
+                onChange={(e) => setGroupVal(e.target.value)}
+              >
                 <option value={""}>None</option>
                 {groupby.map((item, index) => (
                   <option key={index} value={Object.keys(item)}>
@@ -120,7 +91,7 @@ export const AllData = () => {
         <br></br>
         <br></br>
 
-        {groupedData.length !== 0
+        {groupedData.length !== 0 && groupVal
           ? Object.keys(groupedData[0]).map(
               (value) =>
                 value !== "undefined" && (
