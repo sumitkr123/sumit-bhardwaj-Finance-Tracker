@@ -2,8 +2,12 @@ import { useEffect, useState } from "react";
 
 import "../../../assets/styles/transaction.css";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { amountFormatter } from "../../../utils/constants";
+import {
+  TransactionTabHeaders,
+  amountFormatter,
+} from "../../../utils/constants";
 import { useSelector } from "react-redux";
+import { ErrorPage } from "../../../components/errorpage";
 
 export const Transaction = () => {
   const { id } = useParams();
@@ -27,19 +31,28 @@ export const Transaction = () => {
     }
   }, [id, transactions]);
 
+  if (viewtransaction.length === 0) {
+    return (
+      <ErrorPage
+        errorTitle={"Oops Data Not Found..!"}
+        errorSubTitle={"Go Add Some Data..!"}
+        redirect={"/transactions/create"}
+      />
+    );
+  }
+
   return (
     <div className="container">
       <table className="table">
         <thead className="header">
           <tr className="headerrow">
-            <th className="th">Transaction-Date</th>
-            <th className="th">Month-Year</th>
-            <th className="th">Transaction-Type</th>
-            <th className="th">From-A/c</th>
-            <th className="th">To-A/c</th>
-            <th className="th">Amount</th>
-            <th className="th">Receipt</th>
-            <th className="th">Notes</th>
+            {Object.keys(TransactionTabHeaders).map((keyCol) => {
+              return (
+                <th className="th" key={keyCol}>
+                  {TransactionTabHeaders[keyCol].name}
+                </th>
+              );
+            })}
           </tr>
         </thead>
         <tbody className="tabcontent">
