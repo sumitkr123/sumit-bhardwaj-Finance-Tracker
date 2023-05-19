@@ -4,7 +4,7 @@ import "./assets/styles/common.css";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
 import { CookiesProvider } from "react-cookie";
-import { routes } from "./routes/routes";
+import { routes } from "./routes/routing";
 
 export default function App() {
   return (

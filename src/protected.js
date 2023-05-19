@@ -3,22 +3,22 @@ import { Navigate } from "react-router-dom";
 
 export const Protected = (props) => {
   const Component = props.component;
-  const isPublic = props.public;
+  const isProtected = props.protected;
 
   const cookie = new Cookies();
   let auth_token = cookie.get("auth_token");
 
-  if (isPublic) {
-    if (!auth_token) {
-      return Component;
-    } else {
-      return <Navigate to={"/transactions"} />;
-    }
-  } else {
+  if (isProtected) {
     if (auth_token) {
       return Component;
     } else {
-      return <Navigate to="/login" />;
+      return <Navigate to={"/login"} />;
+    }
+  } else {
+    if (auth_token) {
+      return <Navigate to={"/transactions"} />;
+    } else {
+      return Component;
     }
   }
 };

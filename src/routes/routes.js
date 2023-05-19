@@ -1,10 +1,4 @@
-import {
-  Navigate,
-  Route,
-  createBrowserRouter,
-  createRoutesFromElements,
-} from "react-router-dom";
-import { Protected } from "../protected";
+import { Navigate } from "react-router-dom";
 import { Login } from "../pages/auth_screens/login";
 import { Register } from "../pages/auth_screens/register";
 import { AllData } from "../pages/core/all_transactions";
@@ -18,55 +12,40 @@ export const routeList = {
     { path: "", element: <Navigate to={"/transactions"} /> },
     {
       path: "login",
-      element: <Protected public={true} component={<Login />} />,
+      element: <Login />,
+      protected: false,
     },
     {
       path: "register",
-      element: <Protected public={true} component={<Register />} />,
+      element: <Register />,
+      protected: false,
     },
     {
       path: "transactions",
       element: [
-        { path: "", element: <Protected component={<AllData />} /> },
-        { path: ":id", element: <Protected component={<Transaction />} /> },
+        {
+          path: "",
+          element: <AllData />,
+          protected: true,
+        },
+
+        {
+          path: ":id",
+          element: <Transaction />,
+          protected: true,
+        },
         {
           path: "create",
-          element: <Protected component={<AddTransaction />} />,
+          element: <AddTransaction />,
+          protected: true,
         },
         {
           path: "edit/:id",
-          element: <Protected component={<AddTransaction />} />,
+          element: <AddTransaction />,
+          protected: true,
         },
       ],
     },
     { path: "/*", element: <ErrorPage /> },
   ],
 };
-
-const routeMapper = (item) => {
-  if (Array.isArray(item.element)) {
-    return (
-      <Route key={item} path={item.path}>
-        {item.element.map((newItem) => {
-          if (Array.isArray(newItem.element)) {
-            return routeMapper(newItem);
-          } else {
-            return (
-              <Route
-                key={newItem}
-                path={newItem.path}
-                element={newItem.element}
-              ></Route>
-            );
-          }
-        })}
-      </Route>
-    );
-  } else {
-    return <Route path={item.path} element={item.element}></Route>;
-  }
-};
-
-const newRoutes = routeMapper(routeList);
-
-export const routes = createBrowserRouter(createRoutesFromElements(newRoutes));

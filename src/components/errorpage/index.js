@@ -2,9 +2,13 @@ import { Link } from "react-router-dom";
 import "../../assets/styles/error.css";
 
 export const ErrorPage = (props) => {
+  const error = props.error;
+  const resetErrorBoundary = props.resetErrorBoundary;
+
   const errorTitle = props.errorTitle;
   const errorSubTitle = props.errorSubTitle;
   const redirect = props.redirect;
+
   return (
     <div className="page_404">
       <div className="row">
@@ -23,6 +27,12 @@ export const ErrorPage = (props) => {
               <p>
                 {errorSubTitle || `the page you are looking for not avaible!`}
               </p>
+
+              {resetErrorBoundary && (
+                <button className="link_404" onClick={resetErrorBoundary}>
+                  Try again
+                </button>
+              )}
 
               <Link to={redirect || `/`} className="link_404">
                 Go to Home
