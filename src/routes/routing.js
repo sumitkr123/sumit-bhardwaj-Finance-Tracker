@@ -44,7 +44,7 @@ const routeMapper = (item) => {
                     )}
                   </ErrorBoundary>
                 }
-              ></Route>
+              />
             );
         }
       })}
