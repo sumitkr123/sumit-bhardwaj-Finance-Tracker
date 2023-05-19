@@ -10,13 +10,14 @@ import { Protected } from "../protected";
 import { routeList } from "./routes";
 
 const routeMapper = (item) => {
-  if (Array.isArray(item.element)) {
-    return (
-      <Route key={item} path={item.path}>
-        {item.element.map((newItem) => {
-          if (Array.isArray(newItem.element)) {
+  return (
+    <Route key={item} path={item.path}>
+      {item.element.map((newItem) => {
+        switch (Array.isArray(newItem.element)) {
+          case true:
             return routeMapper(newItem);
-          } else {
+
+          default:
             return (
               <Route
                 key={newItem}
@@ -45,13 +46,10 @@ const routeMapper = (item) => {
                 }
               ></Route>
             );
-          }
-        })}
-      </Route>
-    );
-  } else {
-    return <Route path={item.path} element={item.element}></Route>;
-  }
+        }
+      })}
+    </Route>
+  );
 };
 
 const newRoutes = routeMapper(routeList);
