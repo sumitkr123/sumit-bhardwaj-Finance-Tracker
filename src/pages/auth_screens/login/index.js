@@ -10,7 +10,7 @@ import { cookieExpireTime } from "../../../utils/constants";
 export const Login = () => {
   let users = useSelector((state) => state.users);
 
-  const validationSchema = yup.object().shape({
+  const loginValidationSchema = yup.object().shape({
     email: yup
       .string()
       .trim()
@@ -81,7 +81,7 @@ export const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(validationSchema),
+    resolver: yupResolver(loginValidationSchema),
     mode: "all",
   });
 

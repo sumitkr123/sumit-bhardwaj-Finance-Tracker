@@ -108,6 +108,10 @@ export const amountFormatter = (amount, type) => {
   return newstr;
 };
 
+export const isValidFileType = (fileName) => {
+  return fileName && supportedImg.includes(fileName.split(".").pop());
+};
+
 export async function getFile(file) {
   fileReader.readAsDataURL(file);
 

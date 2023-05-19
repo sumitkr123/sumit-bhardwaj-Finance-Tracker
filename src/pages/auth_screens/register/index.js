@@ -3,20 +3,21 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { addUser } from "../../../redux/ducks/users_slice";
+
 import {
   mailRegex,
   nameRegex,
   passwordRegex,
   phoneRegex,
 } from "../../../utils/constants";
-import { useDispatch, useSelector } from "react-redux";
-import { addUser } from "../../../redux/ducks/users_slice";
 
 export const Register = () => {
   const users = useSelector((state) => state.users);
   const dispatch = useDispatch();
 
-  const validationSchema = yup.object().shape({
+  const registrationValidationSchema = yup.object().shape({
     name: yup
       .string()
       .trim()
@@ -67,7 +68,7 @@ export const Register = () => {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(validationSchema),
+    resolver: yupResolver(registrationValidationSchema),
     mode: "all",
   });
 
