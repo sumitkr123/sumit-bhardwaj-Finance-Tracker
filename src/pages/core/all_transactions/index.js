@@ -25,7 +25,7 @@ export const AllData = () => {
     setNewTransactions(transactions);
   }, [transactions]);
 
-  useEffect(() => {
+  useMemo(() => {
     let temp = [...transactions];
 
     let result = {};
