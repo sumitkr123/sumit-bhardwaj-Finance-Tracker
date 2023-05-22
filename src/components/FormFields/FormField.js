@@ -17,14 +17,14 @@ export const FormField = (props) => {
 
 const Field = ({
   name,
+  label,
   type,
   otherType,
-  options,
   max,
-  label,
+  options,
+  operations,
   formValues,
   register,
-  operations,
 }) => {
   let fieldBlock = <></>;
 
