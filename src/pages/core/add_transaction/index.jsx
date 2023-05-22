@@ -4,7 +4,11 @@ import "../../../assets/styles/form.css";
 
 import { Link, useNavigate, useParams } from "react-router-dom";
 
-import { dynamicForm, getFile, initialValues } from "../../../utils/constants";
+import {
+  dynamicTransactionForm,
+  getFile,
+  initialValues,
+} from "../../../utils/constants";
 
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -111,14 +115,14 @@ export const AddTransaction = () => {
     <div className="container">
       <div className="formdiv">
         <form className="form" onSubmit={handleSubmit(onSubmit)}>
-          {Object.keys(dynamicForm).map((input) =>
-            dynamicForm[input].type === "file" ? (
+          {Object.keys(dynamicTransactionForm).map((input) =>
+            dynamicTransactionForm[input].type === "file" ? (
               <FormField
                 key={input}
                 formValues={values}
                 errors={errors}
                 register={register}
-                {...dynamicForm[input]}
+                {...dynamicTransactionForm[input]}
                 operations={{
                   getFile: getFile,
                   removeFile: removeFile,
@@ -131,7 +135,7 @@ export const AddTransaction = () => {
                 formValues={values}
                 errors={errors}
                 register={register}
-                {...dynamicForm[input]}
+                {...dynamicTransactionForm[input]}
               />
             )
           )}

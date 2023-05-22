@@ -362,7 +362,7 @@ export const TransactionTabHeaders = {
   notes: { name: "Notes", isSortable: true },
 };
 
-export const dynamicForm = {
+export const dynamicTransactionForm = {
   tdate: {
     name: "tdate",
     label: "Transaction date",
@@ -408,5 +408,54 @@ export const dynamicForm = {
     label: "Receipt",
     type: "file",
     otherType: "image",
+  },
+};
+
+export const dynamicLoginForm = {
+  email: {
+    name: "email",
+    label: "Email",
+    type: "email",
+  },
+  password: {
+    name: "password",
+    label: "Password",
+    type: "password",
+  },
+};
+
+export const dynamicRegisterForm = {
+  name: {
+    name: "name",
+    label: "Name",
+    type: "text",
+  },
+  phone: {
+    name: "phone",
+    label: "Phone",
+    type: "number",
+  },
+  email: {
+    name: "email",
+    label: "Email",
+    type: "email",
+  },
+  password: {
+    name: "password",
+    label: "Password",
+    type: "password",
+    rules: (
+      <p style={{ color: "red" }}>
+        **Please enter strong password..!
+        <br />
+        **First-letter should be capital character,
+        <br />
+        **After that 1 or more characters,
+        <br />
+        **And than should contain 1 character from [@,$,.] ,
+        <br />
+        **And than numbers or alphabetic characters..!
+      </p>
+    ),
   },
 };

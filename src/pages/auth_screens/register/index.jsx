@@ -7,11 +7,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../../../redux/ducks/users_slice";
 
 import {
+  dynamicRegisterForm,
   mailRegex,
   nameRegex,
   passwordRegex,
   phoneRegex,
 } from "../../../utils/constants";
+import { FormField } from "../../../components/FormFields/FormField";
 
 export const Register = () => {
   const users = useSelector((state) => state.users);
@@ -84,61 +86,21 @@ export const Register = () => {
       <div className="formdiv">
         <form className="form" onSubmit={handleSubmit(onSubmit)}>
           <h2>Register form</h2>
-          <br></br>
-          <br></br>
-          <label>Name :-</label>
-          <input type="text" className="forminputs" {...register("name")} />
-          {errors.name && (
-            <p style={{ color: "red" }}>{errors.name?.message}</p>
-          )}
-          <br />
-          <br />
-          <label>Phone :-</label>
-          <input type="number" className="forminputs" {...register("phone")} />
-          {errors.phone && (
-            <p style={{ color: "red" }}>{errors.phone?.message}</p>
-          )}
-          <br />
-          <br />
-          <label>Email :-</label>
-          <input type="email" className="forminputs" {...register("email")} />
-          {errors.email && (
-            <p style={{ color: "red" }}>{errors.email?.message}</p>
-          )}
-          <br />
-          <br />
-          <label>Password :-</label>
-          <input
-            type="password"
-            className="forminputs"
-            {...register("password")}
-          />
-          {errors.password && (
-            <p style={{ color: "red" }}>{errors.password?.message}</p>
-          )}
-          <br />
-          <br />
-          {errors.password && (
-            <p style={{ color: "red" }}>
-              **Please enter strong password..!
-              <br />
-              **First-letter should be capital character,
-              <br />
-              **After that 1 or more characters,
-              <br />
-              **And than should contain 1 character from [@,$,.] ,
-              <br />
-              **And than numbers or alphabetic characters..!
-            </p>
-          )}
-          <br />
-          <br />
+          {Object.keys(dynamicRegisterForm).map((input) => (
+            <FormField
+              key={input}
+              errors={errors}
+              register={register}
+              {...dynamicRegisterForm[input]}
+            />
+          ))}
           <div className="actions">
             <input type="submit" name="submit" value={"Submit"} />
           </div>
-          <br />
-          <br />
-          Already have an Account..? <Link to={`/login`}>Sign in</Link>
+
+          <p>
+            Already have an Account..? <Link to={`/login`}>Sign in</Link>
+          </p>
         </form>
       </div>
     </div>

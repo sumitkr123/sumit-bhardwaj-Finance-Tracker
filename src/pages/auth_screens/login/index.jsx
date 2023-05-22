@@ -5,10 +5,11 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useCookies } from "react-cookie";
-import { cookieExpireTime } from "../../../utils/constants";
+import { cookieExpireTime, dynamicLoginForm } from "../../../utils/constants";
+import { FormField } from "../../../components/FormFields/FormField";
 
 export const Login = () => {
-  let users = useSelector((state) => state.users);
+  const users = useSelector((state) => state.users);
 
   const loginValidationSchema = yup.object().shape({
     email: yup
@@ -116,32 +117,21 @@ export const Login = () => {
       <div className="formdiv">
         <form className="form" onSubmit={handleSubmit(onSubmit)}>
           <h2>Login form</h2>
-          <br></br>
-          <br></br>
-          <label>Email :-</label>
-          <input type="email" className="forminputs" {...register("email")} />
-          {errors.email && (
-            <p style={{ color: "red" }}>{errors.email?.message}</p>
-          )}
-          <br />
-          <br />
-          <label>Password :-</label>
-          <input
-            type="password"
-            className="forminputs"
-            {...register("password")}
-          />
-          {errors.password && (
-            <p style={{ color: "red" }}>{errors.password?.message}</p>
-          )}
-          <br />
-          <br />
+          {Object.keys(dynamicLoginForm).map((input) => (
+            <FormField
+              key={input}
+              errors={errors}
+              register={register}
+              {...dynamicLoginForm[input]}
+            />
+          ))}
           <div className="actions">
             <input type="submit" name="submit" value={"Submit"} />
           </div>
-          <br />
-          <br />
-          Don't have an Account..? <Link to={`/register`}>Sign up</Link>
+
+          <p>
+            Don't have an Account..? <Link to={`/register`}>Sign up</Link>
+          </p>
         </form>
       </div>
     </div>

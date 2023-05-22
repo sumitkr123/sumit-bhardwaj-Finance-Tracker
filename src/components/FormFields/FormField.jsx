@@ -4,7 +4,16 @@ export const FormField = (props) => {
   let errorBlock = <></>;
 
   if (errors[name]) {
-    errorBlock = <p style={{ color: "red" }}>{errors[name]?.message}</p>;
+    name === "password" && props.rules
+      ? (errorBlock = (
+          <>
+            <p style={{ color: "red" }}>{errors[name]?.message}</p>
+            <br />
+            <br />
+            {props.rules}
+          </>
+        ))
+      : (errorBlock = <p style={{ color: "red" }}>{errors[name]?.message}</p>);
   }
 
   return (
@@ -146,6 +155,17 @@ const Field = ({
           );
           break;
       }
+      break;
+    case "password":
+      fieldBlock = (
+        <input
+          className="forminputs"
+          type="password"
+          id={name}
+          name={name}
+          {...(register ? register(name) : null)}
+        />
+      );
       break;
     default:
       fieldBlock = (
