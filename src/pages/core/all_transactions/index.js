@@ -91,27 +91,29 @@ export const AllData = () => {
 
       <div className="sections">
         <section className="tabsection">
-          <div className="container">
-            {groupedData.length !== 0 && groupVal
-              ? Object.keys(groupedData[0]).map(
-                  (value) =>
-                    value !== "undefined" && (
-                      <div key={value}>
-                        <div className="wholeTabWithEverything">
-                          <h1>{value}</h1>
-                          <TransactionData
-                            transactions={groupedData[0][value]}
-                          />
-                        </div>
+          {groupedData.length !== 0 && groupVal
+            ? Object.keys(groupedData[0]).map(
+                (value) =>
+                  value && (
+                    <div key={value} className="container">
+                      <div className="wholeTabWithEverything">
+                        <h1>{value}</h1>
+                        <TransactionData transactions={groupedData[0][value]} />
                       </div>
-                    )
-                )
-              : newtransactions.length !== 0 && (
+                    </div>
+                  )
+              )
+            : newtransactions.length !== 0 && (
+                <div className="container">
                   <div className="wholeTabWithEverything">
                     <TransactionData transactions={newtransactions} />
                   </div>
-                )}
+                </div>
+              )}
+        </section>
 
+        <section className="navSection">
+          <div className="container">
             <Link to={`create`}>Add Transactions</Link>
           </div>
         </section>
