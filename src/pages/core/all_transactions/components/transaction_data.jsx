@@ -186,21 +186,11 @@ export const TransactionData = (props) => {
   }
 
   function changePageRecCounts(counts) {
-    let rec = parseInt(counts);
-
-    if (rec >= paginno[0]) {
-      setPagination({
-        ...pagination,
-        pageno: 1,
-        limit: rec,
-      });
-    } else {
-      setPagination({
-        ...pagination,
-        pageno: 1,
-        limit: fixedimit,
-      });
-    }
+    setPagination({
+      ...pagination,
+      pageno: 1,
+      limit: parseInt(counts) || fixedimit,
+    });
   }
 
   function searchData(event) {
@@ -327,41 +317,45 @@ export const TransactionData = (props) => {
                       (pagination.pageno - 1) * pagination.limit,
                       pagination.pageno * pagination.limit
                     )
-                    .map((tdata) => (
-                      <tr className="contentrow" key={tdata.id}>
-                        <td className="td">{tdata.tdate}</td>
-                        <td className="td">{tdata.monthyear}</td>
-                        <td className="td">{tdata.ttype}</td>
-                        <td className="td">{tdata.FromAc}</td>
-                        <td className="td">{tdata.ToAc}</td>
-                        <td className="td">{amountFormatter(tdata.amount)}</td>
+                    .map((tdata) => {
+                      return (
+                        <tr className="contentrow" key={tdata.id}>
+                          <td className="td">{tdata.tdate}</td>
+                          <td className="td">{tdata.monthyear}</td>
+                          <td className="td">{tdata.ttype}</td>
+                          <td className="td">{tdata.FromAc}</td>
+                          <td className="td">{tdata.ToAc}</td>
+                          <td className="td">
+                            {amountFormatter(tdata.amount)}
+                          </td>
 
-                        <td className="td">
-                          {
-                            <img
-                              src={tdata.receipt}
-                              className="receipt"
-                              alt="alt"
-                            />
-                          }
-                        </td>
+                          <td className="td">
+                            {
+                              <img
+                                src={tdata.receipt}
+                                className="receipt"
+                                alt="alt"
+                              />
+                            }
+                          </td>
 
-                        <td className="td">{tdata.notes}</td>
-                        <td className="td">
-                          <Link to={`${tdata.id}`}>View</Link>
-                        </td>
-                        <td className="td">
-                          <Link to={`edit/${tdata.id}`}>Edit</Link>
-                        </td>
-                        <td className="td">
-                          <i
-                            className="fa fa-trash"
-                            style={{ cursor: "pointer" }}
-                            onClick={() => deleteRecord(tdata.id)}
-                          ></i>
-                        </td>
-                      </tr>
-                    ))}
+                          <td className="td">{tdata.notes}</td>
+                          <td className="td">
+                            <Link to={`${tdata.id}`}>View</Link>
+                          </td>
+                          <td className="td">
+                            <Link to={`edit/${tdata.id}`}>Edit</Link>
+                          </td>
+                          <td className="td">
+                            <i
+                              className="fa fa-trash"
+                              style={{ cursor: "pointer" }}
+                              onClick={() => deleteRecord(tdata.id)}
+                            ></i>
+                          </td>
+                        </tr>
+                      );
+                    })}
                 </tbody>
               </table>
             </div>
