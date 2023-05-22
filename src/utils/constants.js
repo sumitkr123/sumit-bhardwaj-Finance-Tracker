@@ -361,3 +361,52 @@ export const TransactionTabHeaders = {
   receipt: { name: "Receipt", isSortable: false },
   notes: { name: "Notes", isSortable: true },
 };
+
+export const dynamicForm = {
+  tdate: {
+    name: "tdate",
+    label: "Transaction date",
+    type: "date",
+    max: today.toISOString().split("T")[0],
+  },
+  notes: {
+    name: "notes",
+    label: "Notes",
+    type: "textarea",
+  },
+  amount: {
+    name: "amount",
+    label: "Amount",
+    type: "number",
+  },
+  FromAc: {
+    name: "FromAc",
+    label: "From A/c",
+    type: "select",
+    options: accountTypes,
+  },
+  ToAc: {
+    name: "ToAc",
+    label: "To A/c",
+    type: "select",
+    options: accountTypes,
+  },
+  ttype: {
+    name: "ttype",
+    label: "Transaction type",
+    type: "select",
+    options: transactionTypes,
+  },
+  monthyear: {
+    name: "monthyear",
+    label: "Month year",
+    type: "select",
+    options: monthYears,
+  },
+  receipt: {
+    name: "receipt",
+    label: "Receipt",
+    type: "file",
+    otherType: "image",
+  },
+};

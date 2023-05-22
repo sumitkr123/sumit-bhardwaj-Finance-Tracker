@@ -4,13 +4,7 @@ import "../../../assets/styles/form.css";
 
 import { Link, useNavigate, useParams } from "react-router-dom";
 
-import monthYears, {
-  accountTypes,
-  getFile,
-  initialValues,
-  today,
-  transactionTypes,
-} from "../../../utils/constants";
+import { dynamicForm, getFile, initialValues } from "../../../utils/constants";
 
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -113,73 +107,34 @@ export const AddTransaction = () => {
     setValue("receipt", "");
   };
 
-  const dynamicForm = {
-    tdate: {
-      name: "tdate",
-      label: "Transaction date",
-      type: "date",
-      max: today.toISOString().split("T")[0],
-    },
-    notes: {
-      name: "notes",
-      label: "Notes",
-      type: "textarea",
-    },
-    amount: {
-      name: "amount",
-      label: "Amount",
-      type: "number",
-    },
-    FromAc: {
-      name: "FromAc",
-      label: "From A/c",
-      type: "select",
-      options: accountTypes,
-    },
-    ToAc: {
-      name: "ToAc",
-      label: "To A/c",
-      type: "select",
-      options: accountTypes,
-    },
-    ttype: {
-      name: "ttype",
-      label: "Transaction type",
-      type: "select",
-      options: transactionTypes,
-    },
-    monthyear: {
-      name: "monthyear",
-      label: "Month year",
-      type: "select",
-      options: monthYears,
-    },
-    receipt: {
-      name: "receipt",
-      label: "Receipt",
-      type: "file",
-      otherType: "image",
-      operations: {
-        getFile: getFile,
-        removeFile: removeFile,
-        setValues: setValues,
-      },
-    },
-  };
-
   return (
     <div className="container">
       <div className="formdiv">
         <form className="form" onSubmit={handleSubmit(onSubmit)}>
-          {Object.keys(dynamicForm).map((input) => (
-            <FormField
-              key={input}
-              formValues={values}
-              errors={errors}
-              register={register}
-              {...dynamicForm[input]}
-            />
-          ))}
+          {Object.keys(dynamicForm).map((input) =>
+            dynamicForm[input].type === "file" ? (
+              <FormField
+                key={input}
+                formValues={values}
+                errors={errors}
+                register={register}
+                {...dynamicForm[input]}
+                operations={{
+                  getFile: getFile,
+                  removeFile: removeFile,
+                  setValues: setValues,
+                }}
+              />
+            ) : (
+              <FormField
+                key={input}
+                formValues={values}
+                errors={errors}
+                register={register}
+                {...dynamicForm[input]}
+              />
+            )
+          )}
 
           <div className="actions">
             <input type="submit" name="submit" value={"Submit"} />
