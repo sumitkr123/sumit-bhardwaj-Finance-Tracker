@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Pagination } from "./pagination";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   fixedimit,
   month,
@@ -31,6 +31,8 @@ export const TransactionData = (props) => {
     pageno: 1,
     pages: [],
   });
+
+  const searchRef = useRef("");
 
   const dispatch = useDispatch();
 
@@ -282,126 +284,130 @@ export const TransactionData = (props) => {
       <div className="searchdiv">
         <label>
           Search :-
-          <input type="text" name="search" onChange={(e) => searchData(e)} />
+          <input
+            type="text"
+            ref={searchRef}
+            name="search"
+            onChange={(e) => searchData(e)}
+          />
         </label>
       </div>
-      <br></br>
-      <br></br>
 
-      {newData.length !== 0 && (
-        <>
-          <br></br>
-          <br></br>
-          <div className="makeDivHoriZontalScroll">
-            <table className="table">
-              <thead className="header">
-                <tr className="headerrow">
-                  {Object.keys(TransactionTabHeaders).map((keyCol) => {
-                    return TransactionTabHeaders[keyCol].isSortable === true ? (
-                      <TableHeader
-                        key={keyCol}
-                        tabHeader={TransactionTabHeaders[keyCol].name}
-                        col={keyCol}
-                        sorting={sorting}
-                        setSortingColumn={setSortingColumn}
-                        type={TransactionTabHeaders[keyCol].type}
-                        newData={newData}
-                      />
-                    ) : (
-                      <th className="th" key={keyCol}>
-                        {TransactionTabHeaders[keyCol].name}
-                      </th>
-                    );
-                  })}
+      {searchRef.current.value && newData.length === 0 ? (
+        <div className="searchNotFound">
+          <h2>Oops..! no search results found..!</h2>
+        </div>
+      ) : (
+        newData.length !== 0 && (
+          <>
+            <div className="makeDivHoriZontalScroll">
+              <table className="table">
+                <thead className="header">
+                  <tr className="headerrow">
+                    {Object.keys(TransactionTabHeaders).map((keyCol) => {
+                      return TransactionTabHeaders[keyCol].isSortable ===
+                        true ? (
+                        <TableHeader
+                          key={keyCol}
+                          tabHeader={TransactionTabHeaders[keyCol].name}
+                          col={keyCol}
+                          sorting={sorting}
+                          setSortingColumn={setSortingColumn}
+                          type={TransactionTabHeaders[keyCol].type}
+                          newData={newData}
+                        />
+                      ) : (
+                        <th className="th" key={keyCol}>
+                          {TransactionTabHeaders[keyCol].name}
+                        </th>
+                      );
+                    })}
 
-                  <th className="th" colSpan={3}>
-                    Action
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="tabcontent">
-                {newData
-                  .slice(
-                    (pagination.pageno - 1) * pagination.limit,
-                    pagination.pageno * pagination.limit
-                  )
-                  .map((tdata) => (
-                    <tr className="contentrow" key={tdata.id}>
-                      <td className="td">{tdata.tdate}</td>
-                      <td className="td">{tdata.monthyear}</td>
-                      <td className="td">{tdata.ttype}</td>
-                      <td className="td">{tdata.FromAc}</td>
-                      <td className="td">{tdata.ToAc}</td>
-                      <td className="td">{amountFormatter(tdata.amount)}</td>
+                    <th className="th" colSpan={3}>
+                      Action
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="tabcontent">
+                  {newData
+                    .slice(
+                      (pagination.pageno - 1) * pagination.limit,
+                      pagination.pageno * pagination.limit
+                    )
+                    .map((tdata) => (
+                      <tr className="contentrow" key={tdata.id}>
+                        <td className="td">{tdata.tdate}</td>
+                        <td className="td">{tdata.monthyear}</td>
+                        <td className="td">{tdata.ttype}</td>
+                        <td className="td">{tdata.FromAc}</td>
+                        <td className="td">{tdata.ToAc}</td>
+                        <td className="td">{amountFormatter(tdata.amount)}</td>
 
-                      <td className="td">
-                        {
-                          <img
-                            src={tdata.receipt}
-                            className="receipt"
-                            alt="alt"
-                          />
-                        }
-                      </td>
+                        <td className="td">
+                          {
+                            <img
+                              src={tdata.receipt}
+                              className="receipt"
+                              alt="alt"
+                            />
+                          }
+                        </td>
 
-                      <td className="td">{tdata.notes}</td>
-                      <td className="td">
-                        <Link to={`${tdata.id}`}>View</Link>
-                      </td>
-                      <td className="td">
-                        <Link to={`edit/${tdata.id}`}>Edit</Link>
-                      </td>
-                      <td className="td">
-                        <i
-                          className="fa fa-trash"
-                          style={{ cursor: "pointer" }}
-                          onClick={() => deleteRecord(tdata.id)}
-                        ></i>
-                      </td>
-                    </tr>
+                        <td className="td">{tdata.notes}</td>
+                        <td className="td">
+                          <Link to={`${tdata.id}`}>View</Link>
+                        </td>
+                        <td className="td">
+                          <Link to={`edit/${tdata.id}`}>Edit</Link>
+                        </td>
+                        <td className="td">
+                          <i
+                            className="fa fa-trash"
+                            style={{ cursor: "pointer" }}
+                            onClick={() => deleteRecord(tdata.id)}
+                          ></i>
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="bottomPartOfTab makeDivHoriZontalScroll">
+              {firstVal && secondVal && thirdVal && (
+                <p>
+                  Showing &nbsp;
+                  {firstVal}
+                  &nbsp; to &nbsp;
+                  {secondVal}
+                  &nbsp; of {thirdVal} entries
+                </p>
+              )}
+
+              <Pagination pagination={pagination} changepageno={changepageno} />
+            </div>
+
+            <div className="pagindiv">
+              <label>
+                Show &nbsp;
+                <select
+                  type="text"
+                  name="group"
+                  style={{ width: "50px" }}
+                  defaultValue={pagination.limit}
+                  onChange={(e) => changePageRecCounts(e.target.value)}
+                >
+                  {paginno.map((item, index) => (
+                    <option key={index} value={item}>
+                      {item}
+                    </option>
                   ))}
-              </tbody>
-            </table>
-          </div>
-
-          <br></br>
-          <div className="bottomPartOfTab makeDivHoriZontalScroll">
-            {firstVal && secondVal && thirdVal && (
-              <p>
-                Showing &nbsp;
-                {firstVal}
-                &nbsp; to &nbsp;
-                {secondVal}
-                &nbsp; of {thirdVal} entries
-              </p>
-            )}
-
-            <Pagination pagination={pagination} changepageno={changepageno} />
-          </div>
-          <br></br>
-          <br></br>
-          <div className="pagindiv">
-            <label>
-              Show &nbsp;
-              <select
-                type="text"
-                name="group"
-                style={{ width: "50px" }}
-                defaultValue={pagination.limit}
-                onChange={(e) => changePageRecCounts(e.target.value)}
-              >
-                {paginno.map((item, index) => (
-                  <option key={index} value={item}>
-                    {item}
-                  </option>
-                ))}
-              </select>
-              &nbsp; entries
-            </label>
-          </div>
-          <br></br>
-          <br></br>
-        </>
+                </select>
+                &nbsp; entries
+              </label>
+            </div>
+          </>
+        )
       )}
     </>
   );

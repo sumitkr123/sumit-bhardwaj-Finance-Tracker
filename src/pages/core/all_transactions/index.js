@@ -59,66 +59,62 @@ export const AllData = () => {
 
   return (
     <>
-      <div className="container">
-        <br></br>
-        <br></br>
-        <div className="headerdiv">
-          <div className="groupdiv">
-            <label>
-              Group by :-
-              <select
-                type="text"
-                name="group"
-                onChange={(e) => setGroupVal(e.target.value)}
-              >
-                <option value={""}>None</option>
-                {groupby.map((item, index) => (
-                  <option key={index} value={Object.keys(item)}>
-                    {Object.values(item)}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
+      <header className="header">
+        <div className="container">
+          <div className="headerdiv">
+            <div className="groupdiv">
+              <label>
+                Group by :-
+                <select
+                  type="text"
+                  name="group"
+                  onChange={(e) => setGroupVal(e.target.value)}
+                >
+                  <option value={""}>None</option>
+                  {groupby.map((item, index) => (
+                    <option key={index} value={Object.keys(item)}>
+                      {Object.values(item)}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
 
-          <div className="logoutdiv">
-            <button type="button" className="logout" onClick={() => logout()}>
-              Logout
-            </button>
+            <div className="logoutdiv">
+              <button type="button" className="logout" onClick={() => logout()}>
+                Logout
+              </button>
+            </div>
           </div>
         </div>
+      </header>
 
-        <br></br>
-        <br></br>
-
-        {groupedData.length !== 0 && groupVal
-          ? Object.keys(groupedData[0]).map(
-              (value) =>
-                value !== "undefined" && (
-                  <div key={value}>
-                    <div className="wholeTabWithEverything">
-                      <br></br>
-                      <br></br>
-                      <h1>{value}</h1>
-                      <TransactionData transactions={groupedData[0][value]} />
-
-                      <br></br>
-                      <br></br>
-                    </div>
-                  </div>
+      <div className="sections">
+        <section className="tabsection">
+          <div className="container">
+            {groupedData.length !== 0 && groupVal
+              ? Object.keys(groupedData[0]).map(
+                  (value) =>
+                    value !== "undefined" && (
+                      <div key={value}>
+                        <div className="wholeTabWithEverything">
+                          <h1>{value}</h1>
+                          <TransactionData
+                            transactions={groupedData[0][value]}
+                          />
+                        </div>
+                      </div>
+                    )
                 )
-            )
-          : newtransactions.length !== 0 && (
-              <div className="wholeTabWithEverything">
-                <TransactionData transactions={newtransactions} />
+              : newtransactions.length !== 0 && (
+                  <div className="wholeTabWithEverything">
+                    <TransactionData transactions={newtransactions} />
+                  </div>
+                )}
 
-                <br></br>
-                <br></br>
-              </div>
-            )}
-        <br />
-
-        <Link to={`create`}>Add Transactions</Link>
+            <Link to={`create`}>Add Transactions</Link>
+          </div>
+        </section>
       </div>
     </>
   );
