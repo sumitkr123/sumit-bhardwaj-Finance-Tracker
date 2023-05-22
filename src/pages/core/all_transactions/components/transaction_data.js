@@ -185,17 +185,10 @@ export const TransactionData = (props) => {
     });
   }
 
-  function changepageno(pageno) {
-    setPagination({
-      ...pagination,
-      pageno: pageno,
-    });
-  }
-
   function changePageRecCounts(counts) {
     let rec = parseInt(counts);
 
-    if (rec >= 1) {
+    if (rec >= paginno[0]) {
       setPagination({
         ...pagination,
         pageno: 1,
@@ -384,7 +377,15 @@ export const TransactionData = (props) => {
                 </p>
               )}
 
-              <Pagination pagination={pagination} changepageno={changepageno} />
+              <Pagination
+                pagination={pagination}
+                changepageno={(pageno) => {
+                  setPagination({
+                    ...pagination,
+                    pageno: pageno,
+                  });
+                }}
+              />
             </div>
 
             <div className="pagindiv">

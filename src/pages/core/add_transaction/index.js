@@ -3,8 +3,7 @@ import { useEffect, useState } from "react";
 import "../../../assets/styles/form.css";
 
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Account } from "./components/accountlist";
-import { MonthYear } from "./components/monthyearlist";
+
 import monthYears, {
   accountTypes,
   getFile,
@@ -22,6 +21,7 @@ import {
   editTransaction,
 } from "../../../redux/ducks/transaction_slice";
 import { transactionValidationSchema } from "../../../validations/schema";
+import { FormField } from "../../../components/FormFields/FormField";
 
 export const AddTransaction = () => {
   const {
@@ -113,116 +113,73 @@ export const AddTransaction = () => {
     setValue("receipt", "");
   };
 
+  const dynamicForm = {
+    tdate: {
+      name: "tdate",
+      label: "Transaction date",
+      type: "date",
+      max: today.toISOString().split("T")[0],
+    },
+    notes: {
+      name: "notes",
+      label: "Notes",
+      type: "textarea",
+    },
+    amount: {
+      name: "amount",
+      label: "Amount",
+      type: "number",
+    },
+    FromAc: {
+      name: "FromAc",
+      label: "From A/c",
+      type: "select",
+      options: accountTypes,
+    },
+    ToAc: {
+      name: "ToAc",
+      label: "To A/c",
+      type: "select",
+      options: accountTypes,
+    },
+    ttype: {
+      name: "ttype",
+      label: "Transaction type",
+      type: "select",
+      options: transactionTypes,
+    },
+    monthyear: {
+      name: "monthyear",
+      label: "Month year",
+      type: "select",
+      options: monthYears,
+    },
+    receipt: {
+      name: "receipt",
+      label: "Receipt",
+      type: "file",
+      otherType: "image",
+      operations: {
+        getFile: getFile,
+        removeFile: removeFile,
+        setValues: setValues,
+      },
+    },
+  };
+
   return (
     <div className="container">
       <div className="formdiv">
         <form className="form" onSubmit={handleSubmit(onSubmit)}>
-          <label>Transaction date :-</label>
-
-          <input
-            type="date"
-            className="forminputs"
-            max={today.toISOString().split("T")[0]}
-            {...register("tdate")}
-          />
-          {errors.tdate && (
-            <p style={{ color: "red" }}>{errors.tdate?.message}</p>
-          )}
-
-          <br />
-          <br />
-
-          <label>Notes :-</label>
-          <textarea {...register("notes")} className="forminputs" />
-          {errors.notes && (
-            <p style={{ color: "red" }}>{errors.notes?.message}</p>
-          )}
-
-          <br />
-          <br />
-
-          <label>Amount :-</label>
-          <input type="number" className="forminputs" {...register("amount")} />
-          {errors.amount && (
-            <p style={{ color: "red" }}>{errors.amount?.message}</p>
-          )}
-          <br />
-          <br />
-
-          <label>From A/c :-</label>
-          <select {...register("FromAc")} className="forminputs">
-            <option value={""}>Select FromAc</option>
-            <Account accountTypes={accountTypes} />
-          </select>
-          {errors.FromAc && (
-            <p style={{ color: "red" }}>{errors.FromAc?.message}</p>
-          )}
-          <br />
-          <br />
-
-          <label>To A/c :-</label>
-          <select {...register("ToAc")} className="forminputs">
-            <option value={""}>Select ToAc</option>
-            <Account accountTypes={accountTypes} />
-          </select>
-          {errors.ToAc && (
-            <p style={{ color: "red" }}>{errors.ToAc?.message}</p>
-          )}
-          <br />
-          <br />
-
-          <label>Transaction type :-</label>
-          <select {...register("ttype")} className="forminputs">
-            <option value={""}>Select transaction type</option>
-            {transactionTypes.map((item, i) => (
-              <option key={i} value={item}>
-                {item}
-              </option>
-            ))}
-          </select>
-          {errors.ttype && (
-            <p style={{ color: "red" }}>{errors.ttype?.message}</p>
-          )}
-          <br />
-          <br />
-
-          <label>Month Year :-</label>
-          <select {...register("monthyear")} className="forminputs">
-            <MonthYear monthYears={monthYears} />
-          </select>
-          {errors.monthyear && (
-            <p style={{ color: "red" }}>{errors.monthyear?.message}</p>
-          )}
-          <br />
-          <br />
-
-          <label>Receipt :-</label>
-
-          {values.receipt === "" ? (
-            <input
-              type="file"
-              className="forminputs"
-              {...register("receipt", {
-                onChange: async (e) => {
-                  let file = await getFile(e.target.files[0]);
-
-                  setValues({ ...values, receipt: file });
-                },
-              })}
+          {Object.keys(dynamicForm).map((input) => (
+            <FormField
+              key={input}
+              formValues={values}
+              errors={errors}
+              register={register}
+              {...dynamicForm[input]}
             />
-          ) : (
-            <div>
-              <div className="cross" onClick={() => removeFile()}>
-                X
-              </div>
-              <img width={80} height={60} src={`${values.receipt}`} alt="alt" />
-            </div>
-          )}
-          {errors.receipt && (
-            <p style={{ color: "red" }}>{errors.receipt?.message}</p>
-          )}
-          <br />
-          <br />
+          ))}
 
           <div className="actions">
             <input type="submit" name="submit" value={"Submit"} />
