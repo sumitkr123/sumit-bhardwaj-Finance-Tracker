@@ -11,18 +11,19 @@ import { Cookies } from "react-cookie";
 import { useAppSelector } from "../../../redux/ducks/hooks";
 import {
   Transaction,
-  TransactionKeys,
   typeDefTransaction,
 } from "../../../redux/ducks/transaction_slice";
+
+type typeGroup = {
+  [key: string]: Transaction[];
+};
 
 export const AllData = () => {
   const transactions = useAppSelector((state) => state.transactions);
 
-  const [newtransactions, setNewTransactions] = useState<typeDefTransaction>(
-    []
-  );
+  const [newtransactions, setNewTransactions] = useState<Transaction[]>([]);
 
-  const [groupedData, setGroupedData] = useState<typeDefTransaction>([]);
+  const [groupedData, setGroupedData] = useState<Transaction[]>([]);
 
   const [groupVal, setGroupVal] = useState("");
 

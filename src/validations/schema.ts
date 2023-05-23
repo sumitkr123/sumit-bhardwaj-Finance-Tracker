@@ -3,7 +3,6 @@ import {
   fixedLengthValue,
   isValidFileType,
   mb1,
-  today,
 } from "../utils/constants";
 
 export const transactionValidationSchema = yup.object().shape({

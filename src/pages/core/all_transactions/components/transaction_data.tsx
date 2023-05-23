@@ -25,7 +25,11 @@ type typePagination = {
   pages: number[];
 };
 
-export const TransactionData = (props: any) => {
+type typeTransaction = {
+  transactions: typeDefTransaction;
+};
+
+export const TransactionData = (props: typeTransaction) => {
   //Getting Data From Main component and doing sorting and pagination and searching here..!
 
   const [newData, setNewData] = useState(props.transactions);
@@ -228,12 +232,10 @@ export const TransactionData = (props: any) => {
   const firstVal = useMemo(() => {
     return (
       dataWithSerialNo[0] &&
-      dataWithSerialNo
-        .slice(
-          (pagination.pageno - 1) * pagination.limit,
-          pagination.pageno * pagination.limit
-        )
-        .at(0).serialNo
+      dataWithSerialNo.slice(
+        (pagination.pageno - 1) * pagination.limit,
+        pagination.pageno * pagination.limit
+      )[0].serialNo
     );
   }, [pagination]);
 
