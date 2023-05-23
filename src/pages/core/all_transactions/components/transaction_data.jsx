@@ -177,6 +177,7 @@ export const TransactionData = (props) => {
     let temp = [...props.transactions];
 
     let searchvalue = event.target.value;
+    searchRef.current.value = searchvalue;
 
     if (
       searchvalue !== null &&
@@ -230,8 +231,8 @@ export const TransactionData = (props) => {
   }, [pagination]);
 
   const thirdVal = useMemo(() => {
-    return props.transactions.length;
-  }, [props.transactions]);
+    return dataWithSerialNo.length;
+  }, [dataWithSerialNo]);
 
   const deleteRecord = (id) => {
     let deleteStatus = window.confirm(
@@ -241,6 +242,16 @@ export const TransactionData = (props) => {
       dispatch(deleteTransaction(id));
     }
   };
+
+  const filteredBlock = useMemo(() => {
+    return (
+      searchRef.current.value && (
+        <span>
+          (filtered from &nbsp;{props.transactions.length}&nbsp; total entries)
+        </span>
+      )
+    );
+  }, [searchRef.current.value]);
 
   return (
     <>
@@ -256,9 +267,10 @@ export const TransactionData = (props) => {
         </label>
       </div>
 
-      {searchRef.current.valueOf && newData.length === 0 ? (
+      {searchRef.current.value && newData.length === 0 ? (
         <div className="searchNotFound">
           <h2>Oops..! no search results found..!</h2>
+          {filteredBlock}
         </div>
       ) : (
         newData.length !== 0 && (
@@ -337,6 +349,8 @@ export const TransactionData = (props) => {
                   &nbsp; of {thirdVal} entries
                 </p>
               )}
+
+              {filteredBlock}
 
               <Pagination
                 pagination={pagination}
