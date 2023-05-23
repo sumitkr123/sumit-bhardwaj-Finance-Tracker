@@ -1,17 +1,17 @@
 import { TransactionTabHeaders, amountFormatter } from "../../utils/constants";
 
 export const TableData = (props) => {
-  const tdata = props.tdata;
+  const tcelldata = props.tcelldata;
   const headers = props.headers;
 
   return (
     <td className="td">
       {TransactionTabHeaders[headers].type === "amount" ? (
-        amountFormatter(tdata[headers])
+        amountFormatter(tcelldata)
       ) : TransactionTabHeaders[headers].type === "image" ? (
-        <img src={tdata[headers]} className="receipt" alt="alt" />
+        <img src={tcelldata} className="receipt" alt="alt" />
       ) : (
-        tdata[headers]
+        tcelldata
       )}
     </td>
   );

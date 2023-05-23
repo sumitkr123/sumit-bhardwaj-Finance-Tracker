@@ -314,7 +314,7 @@ export const TransactionData = (props) => {
                           (headers, index) => (
                             <TableData
                               key={headers + index + tdata.id}
-                              tdata={tdata}
+                              tcelldata={tdata[headers]}
                               headers={headers}
                             />
                           )
