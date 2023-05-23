@@ -2,12 +2,10 @@ import { useEffect, useState } from "react";
 
 import "../../../assets/styles/transaction.css";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import {
-  TransactionTabHeaders,
-  amountFormatter,
-} from "../../../utils/constants";
+import { TransactionTabHeaders } from "../../../utils/constants";
 import { useSelector } from "react-redux";
 import { ErrorPage } from "../../../components/errorpage";
+import { TableData } from "../../../components/table/tableData";
 
 export const Transaction = () => {
   const { id } = useParams();
@@ -58,18 +56,14 @@ export const Transaction = () => {
         <tbody className="tabcontent">
           {viewtransaction.map((tdata) => (
             <tr className="contentrow" key={tdata.id}>
-              <td className="td">{tdata.tdate}</td>
-              <td className="td">{tdata.monthyear}</td>
-              <td className="td">{tdata.ttype}</td>
-              <td className="td">{tdata.FromAc}</td>
-              <td className="td">{tdata.ToAc}</td>
-              <td className="td">{amountFormatter(tdata.amount)}</td>
-
-              <td className="td">
-                {<img src={tdata.receipt} width={80} height={60} alt="alt" />}
-              </td>
-
-              <td className="td">{tdata.notes}</td>
+              {Object.keys(TransactionTabHeaders).map((headers, index) => (
+                <TableData
+                  key={headers + index + tdata.id}
+                  TransactionTabHeaders={TransactionTabHeaders}
+                  tdata={tdata}
+                  headers={headers}
+                />
+              ))}
             </tr>
           ))}
         </tbody>

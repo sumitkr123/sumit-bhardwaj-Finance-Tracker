@@ -5,13 +5,13 @@ import {
   fixedimit,
   month,
   paginno,
-  amountFormatter,
   fixedShowPageCount,
   TransactionTabHeaders,
 } from "../../../../utils/constants";
 import { useDispatch } from "react-redux";
 import { deleteTransaction } from "../../../../redux/ducks/transaction_slice";
 import { TableHeader } from "./tableHeader";
+import { TableData } from "../../../../components/table/tableData";
 
 export const TransactionData = (props) => {
   //Getting Data From Main component and doing sorting and pagination and searching here..!
@@ -60,101 +60,81 @@ export const TransactionData = (props) => {
     // eslint-disable-next-line
   }, [newData, pagination.limit]);
 
+  const doSort = (getAllTransactions) => {
+    getAllTransactions.sort((a, b) => {
+      switch (sorting.columnValueType) {
+        case "number":
+          return sorting.sortingOrder === "asc"
+            ? parseInt(a[sorting.sortingColumnName]) >
+              parseInt(b[sorting.sortingColumnName])
+              ? 1
+              : -1
+            : parseInt(a[sorting.sortingColumnName]) <
+              parseInt(b[sorting.sortingColumnName])
+            ? 1
+            : -1;
+
+        case "monthyear":
+          let fmonth = a[sorting.sortingColumnName].split(" ")[0];
+          let smonth = b[sorting.sortingColumnName].split(" ")[0];
+
+          let fyear = parseInt(a[sorting.sortingColumnName].split(" ")[1]);
+          let syear = parseInt(b[sorting.sortingColumnName].split(" ")[1]);
+
+          return sorting.sortingOrder === "asc"
+            ? month.indexOf(fmonth) > month.indexOf(smonth) && fyear >= syear
+              ? 1
+              : -1
+            : month.indexOf(fmonth) < month.indexOf(smonth) && fyear <= syear
+            ? 1
+            : -1;
+
+        case "date":
+          let fdate = new Date(a[sorting.sortingColumnName]);
+          let sdate = new Date(b[sorting.sortingColumnName]);
+
+          return sorting.sortingOrder === "asc"
+            ? fdate > sdate
+              ? 1
+              : -1
+            : fdate < sdate
+            ? 1
+            : -1;
+
+        default:
+          return sorting.sortingOrder === "asc"
+            ? a[sorting.sortingColumnName] > b[sorting.sortingColumnName]
+              ? 1
+              : -1
+            : a[sorting.sortingColumnName] < b[sorting.sortingColumnName]
+            ? 1
+            : -1;
+      }
+    });
+  };
+
   useEffect(() => {
     let getAllTransactions = [...newData];
 
-    if (sorting.sortingOrder === "asc") {
-      getAllTransactions.sort((a, b) => {
-        if (sorting.columnValueType === "number") {
-          if (
-            parseInt(a[sorting.sortingColumnName]) >
-            parseInt(b[sorting.sortingColumnName])
-          ) {
-            return 1;
-          } else {
-            return -1;
-          }
-        } else if (sorting.columnValueType === "monthyear") {
-          let fmonth = a[sorting.sortingColumnName].split(" ")[0];
-          let smonth = b[sorting.sortingColumnName].split(" ")[0];
+    switch (sorting.sortingOrder) {
+      case "asc":
+        doSort(getAllTransactions);
+        break;
 
-          let fyear = parseInt(a[sorting.sortingColumnName].split(" ")[1]);
-          let syear = parseInt(b[sorting.sortingColumnName].split(" ")[1]);
+      case "desc":
+        doSort(getAllTransactions);
+        break;
 
-          if (month.indexOf(fmonth) > month.indexOf(smonth) && fyear >= syear) {
-            return 1;
-          } else {
-            return -1;
-          }
-        } else if (sorting.columnValueType === "date") {
-          let fdate = new Date(a[sorting.sortingColumnName]);
-          let sdate = new Date(b[sorting.sortingColumnName]);
-
-          if (fdate > sdate) {
-            return 1;
-          } else {
-            return -1;
-          }
-        } else {
-          if (a[sorting.sortingColumnName] > b[sorting.sortingColumnName]) {
-            return 1;
-          } else {
-            return -1;
-          }
-        }
-      });
-    }
-    if (sorting.sortingOrder === "desc") {
-      getAllTransactions.sort((a, b) => {
-        if (sorting.columnValueType === "number") {
-          if (
-            parseInt(a[sorting.sortingColumnName]) <
-            parseInt(b[sorting.sortingColumnName])
-          ) {
-            return 1;
-          } else {
-            return -1;
-          }
-        } else if (sorting.columnValueType === "monthyear") {
-          let fmonth = a[sorting.sortingColumnName].split(" ")[0];
-          let smonth = b[sorting.sortingColumnName].split(" ")[0];
-
-          let fyear = parseInt(a[sorting.sortingColumnName].split(" ")[1]);
-          let syear = parseInt(b[sorting.sortingColumnName].split(" ")[1]);
-
-          if (month.indexOf(fmonth) < month.indexOf(smonth) && fyear <= syear) {
-            return 1;
-          } else {
-            return -1;
-          }
-        } else if (sorting.columnValueType === "date") {
-          let fdate = new Date(a[sorting.sortingColumnName]);
-          let sdate = new Date(b[sorting.sortingColumnName]);
-
-          if (fdate < sdate) {
-            return 1;
-          } else {
-            return -1;
-          }
-        } else {
-          if (a[sorting.sortingColumnName] < b[sorting.sortingColumnName]) {
-            return 1;
-          } else {
-            return -1;
-          }
-        }
-      });
-    }
-    if (sorting.sortingOrder === "") {
-      getAllTransactions = props.transactions;
+      default:
+        getAllTransactions = props.transactions;
+        break;
     }
 
     setNewData(getAllTransactions);
-
     // eslint-disable-next-line
   }, [sorting]);
 
-  function setSortingColumn(column, type) {
+  const setSortingColumn = (column, type) => {
     let a = "";
     if (sorting.sortingColumnName === column) {
       switch (sorting.sortingOrder) {
@@ -183,17 +163,17 @@ export const TransactionData = (props) => {
       ...pagination,
       pageno: 1,
     });
-  }
+  };
 
-  function changePageRecCounts(counts) {
+  const changePageRecCounts = (counts) => {
     setPagination({
       ...pagination,
       pageno: 1,
       limit: parseInt(counts) || fixedimit,
     });
-  }
+  };
 
-  function searchData(event) {
+  const searchData = (event) => {
     let temp = [...props.transactions];
 
     let searchvalue = event.target.value;
@@ -222,7 +202,7 @@ export const TransactionData = (props) => {
     } else {
       setNewData(props.transactions);
     }
-  }
+  };
 
   const dataWithSerialNo = useMemo(() => {
     return [...newData].map((item, index) => {
@@ -276,7 +256,7 @@ export const TransactionData = (props) => {
         </label>
       </div>
 
-      {searchRef.current.value && newData.length === 0 ? (
+      {searchRef.current.valueOf && newData.length === 0 ? (
         <div className="searchNotFound">
           <h2>Oops..! no search results found..!</h2>
         </div>
@@ -296,7 +276,7 @@ export const TransactionData = (props) => {
                           col={keyCol}
                           sorting={sorting}
                           setSortingColumn={setSortingColumn}
-                          type={TransactionTabHeaders[keyCol].type}
+                          type={TransactionTabHeaders[keyCol].sortType}
                           newData={newData}
                         />
                       ) : (
@@ -317,45 +297,34 @@ export const TransactionData = (props) => {
                       (pagination.pageno - 1) * pagination.limit,
                       pagination.pageno * pagination.limit
                     )
-                    .map((tdata) => {
-                      return (
-                        <tr className="contentrow" key={tdata.id}>
-                          <td className="td">{tdata.tdate}</td>
-                          <td className="td">{tdata.monthyear}</td>
-                          <td className="td">{tdata.ttype}</td>
-                          <td className="td">{tdata.FromAc}</td>
-                          <td className="td">{tdata.ToAc}</td>
-                          <td className="td">
-                            {amountFormatter(tdata.amount)}
-                          </td>
+                    .map((tdata) => (
+                      <tr className="contentrow" key={tdata.id}>
+                        {Object.keys(TransactionTabHeaders).map(
+                          (headers, index) => (
+                            <TableData
+                              key={headers + index + tdata.id}
+                              TransactionTabHeaders={TransactionTabHeaders}
+                              tdata={tdata}
+                              headers={headers}
+                            />
+                          )
+                        )}
 
-                          <td className="td">
-                            {
-                              <img
-                                src={tdata.receipt}
-                                className="receipt"
-                                alt="alt"
-                              />
-                            }
-                          </td>
-
-                          <td className="td">{tdata.notes}</td>
-                          <td className="td">
-                            <Link to={`${tdata.id}`}>View</Link>
-                          </td>
-                          <td className="td">
-                            <Link to={`edit/${tdata.id}`}>Edit</Link>
-                          </td>
-                          <td className="td">
-                            <i
-                              className="fa fa-trash"
-                              style={{ cursor: "pointer" }}
-                              onClick={() => deleteRecord(tdata.id)}
-                            ></i>
-                          </td>
-                        </tr>
-                      );
-                    })}
+                        <td className="td">
+                          <Link to={`${tdata.id}`}>View</Link>
+                        </td>
+                        <td className="td">
+                          <Link to={`edit/${tdata.id}`}>Edit</Link>
+                        </td>
+                        <td className="td">
+                          <i
+                            className="fa fa-trash"
+                            style={{ cursor: "pointer" }}
+                            onClick={() => deleteRecord(tdata.id)}
+                          ></i>
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>
