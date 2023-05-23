@@ -66,7 +66,6 @@ export const AllData = () => {
               <label>
                 Group by :-
                 <select
-                  type="text"
                   name="group"
                   onChange={(e) => setGroupVal(e.target.value)}
                 >
