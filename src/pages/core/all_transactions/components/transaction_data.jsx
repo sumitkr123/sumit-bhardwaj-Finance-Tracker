@@ -230,8 +230,8 @@ export const TransactionData = (props) => {
   }, [pagination]);
 
   const thirdVal = useMemo(() => {
-    return dataWithSerialNo.length;
-  }, [dataWithSerialNo]);
+    return props.transactions.length;
+  }, [props.transactions]);
 
   const deleteRecord = (id) => {
     let deleteStatus = window.confirm(
