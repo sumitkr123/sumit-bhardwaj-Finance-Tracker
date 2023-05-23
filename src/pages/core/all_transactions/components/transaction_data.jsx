@@ -267,9 +267,8 @@ export const TransactionData = (props) => {
               <table className="table">
                 <thead className="header">
                   <tr className="headerrow">
-                    {Object.keys(TransactionTabHeaders).map((keyCol) => {
-                      return TransactionTabHeaders[keyCol].isSortable ===
-                        true ? (
+                    {Object.keys(TransactionTabHeaders).map((keyCol) =>
+                      TransactionTabHeaders[keyCol].isSortable === true ? (
                         <TableHeader
                           key={keyCol}
                           tabHeader={TransactionTabHeaders[keyCol].name}
@@ -283,8 +282,8 @@ export const TransactionData = (props) => {
                         <th className="th" key={keyCol}>
                           {TransactionTabHeaders[keyCol].name}
                         </th>
-                      );
-                    })}
+                      )
+                    )}
 
                     <th className="th" colSpan={3}>
                       Action
