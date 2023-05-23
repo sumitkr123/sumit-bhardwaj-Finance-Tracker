@@ -1,0 +1,178 @@
+/* Transaction CSS */
+
+.table {
+  width: 100%;
+  margin-top: 5%;
+}
+
+.defpadding {
+  padding: 10px;
+}
+
+.th {
+  border-bottom: 1px solid black;
+  padding: 10px;
+}
+
+.td {
+  border-bottom: 1px solid black;
+  padding: 10px;
+  text-align: center;
+}
+
+.pages {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.page {
+  width: fit-content;
+  text-align: center;
+  border-radius: 20% 10%;
+  background-color: #7fc0ff;
+  opacity: 80%;
+  padding: 10px;
+  margin: 10px;
+  cursor: pointer;
+}
+
+.page:hover {
+  transform: rotate(10deg);
+}
+
+.pages :first-child {
+  margin-left: 0;
+}
+
+.pages :last-child {
+  margin-right: 0;
+}
+
+.groupdiv {
+  width: fit-content;
+  background-color: #7fc0ff;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.searchdiv {
+  width: fit-content;
+  background-color: #7fc0ff;
+  border-radius: 10px;
+  padding: 20px;
+  align-self: flex-end;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .animate1page {
+    /* animation: page-spin infinite 1s linear; */
+    background-color: #2f98ff;
+    /* transform: scale(1.5); */
+  }
+}
+
+/* @keyframes page-spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  } */
+
+.pagindiv {
+  width: fit-content;
+  background-color: #7fc0ff;
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 3%;
+}
+
+.header {
+  margin-top: 30px;
+}
+
+.headerdiv {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logout {
+  padding: 11px 20px;
+  background-color: #7fc0ff;
+  border-radius: 20px;
+  color: black;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.logout:hover {
+  background-color: beige;
+}
+
+.receipt {
+  width: 100px;
+  height: 80px;
+}
+
+.sortHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.bottomPartOfTab {
+  margin-top: 1%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.contentrow:nth-child(odd) {
+  background-color: rgba(128, 128, 128, 0.2);
+}
+
+.contentrow:nth-child(even):hover {
+  background-color: rgba(128, 128, 128, 0.2);
+}
+
+.wholeTabWithEverything {
+  padding: 20px 20px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px 2px;
+  border-radius: 10px;
+  height: 80%;
+  margin: 5% 0%;
+  display: flex;
+  flex-direction: column;
+}
+
+.sortColor {
+  margin: 0;
+}
+
+.soring {
+  color: #7fc0ff;
+}
+
+.makeDivHoriZontalScroll {
+  width: auto;
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin: 2% 0%;
+}
+
+.searchNotFound {
+  padding: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.inputDiv {
+  margin: 10% 0;
+}

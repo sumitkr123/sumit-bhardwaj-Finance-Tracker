@@ -1,26 +1,17 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { RouterProvider } from "react-router-dom";
 
-function App() {
+import "./assets/styles/common.css";
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
+import { CookiesProvider } from "react-cookie";
+import { routes } from "./routes/routing";
+
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <CookiesProvider>
+      <Provider store={store}>
+        <RouterProvider router={routes}></RouterProvider>
+      </Provider>
+    </CookiesProvider>
   );
 }
-
-export default App;
