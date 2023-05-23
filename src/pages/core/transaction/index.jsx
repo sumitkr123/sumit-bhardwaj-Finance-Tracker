@@ -59,7 +59,6 @@ export const Transaction = () => {
               {Object.keys(TransactionTabHeaders).map((headers, index) => (
                 <TableData
                   key={headers + index + tdata.id}
-                  TransactionTabHeaders={TransactionTabHeaders}
                   tdata={tdata}
                   headers={headers}
                 />

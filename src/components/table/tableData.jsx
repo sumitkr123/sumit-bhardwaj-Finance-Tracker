@@ -1,7 +1,6 @@
-import { amountFormatter } from "../../utils/constants";
+import { TransactionTabHeaders, amountFormatter } from "../../utils/constants";
 
 export const TableData = (props) => {
-  const TransactionTabHeaders = props.TransactionTabHeaders;
   const tdata = props.tdata;
   const headers = props.headers;
 
