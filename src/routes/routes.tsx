@@ -2,7 +2,7 @@ import { Navigate } from "react-router-dom";
 import { Login } from "../pages/auth_screens/login";
 import { Register } from "../pages/auth_screens/register";
 import { AllData } from "../pages/core/all_transactions";
-import { Transaction } from "../pages/core/transaction";
+import { ViewTransaction } from "../pages/core/transaction";
 import { AddTransaction } from "../pages/core/add_transaction";
 import { ErrorPage } from "../components/errorpage";
 
@@ -40,7 +40,7 @@ export const routeList: TypeRoutes = {
 
         {
           path: ":id",
-          element: <Transaction />,
+          element: <ViewTransaction />,
           protected: true,
         },
         {

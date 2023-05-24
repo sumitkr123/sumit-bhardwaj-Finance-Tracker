@@ -4,7 +4,7 @@ export const FormField = (props: any) => {
   let errorBlock = <></>;
 
   if (errors[name]) {
-    name === "password" && props.rules
+    name === "pass" && props.rules
       ? (errorBlock = (
           <>
             <p style={{ color: "red" }}>{errors[name]?.message}</p>

@@ -6,15 +6,15 @@ import { TransactionTabHeaders } from "../../../utils/constants";
 import { ErrorPage } from "../../../components/errorpage";
 import { TableData } from "../../../components/table/tableData";
 import { useAppSelector } from "../../../redux/ducks/hooks";
-import { typeDefTransaction } from "../../../redux/ducks/transaction_slice";
+import { Transaction } from "../../../models/transactionModel";
 
-export const Transaction = () => {
+export const ViewTransaction = (): JSX.Element => {
   const { id } = useParams();
   const navigate = useNavigate();
 
   const transactions = useAppSelector((state) => state.transactions);
 
-  const [viewtransaction, setViewTransactions] = useState<typeDefTransaction>([]);
+  const [viewtransaction, setViewTransactions] = useState<Transaction[]>([]);
 
   useEffect(() => {
     if (id !== null && id !== undefined && id !== "") {
@@ -53,7 +53,7 @@ export const Transaction = () => {
           </tr>
         </thead>
         <tbody className="tabcontent">
-          {viewtransaction.map((tdata) => (
+          {viewtransaction.map((tdata: Transaction) => (
             <tr className="contentrow" key={tdata.id}>
               {Object.keys(TransactionTabHeaders).map((headers, index) => (
                 <TableData

@@ -1,22 +1,8 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-
-export interface TransactionKeys {
-  [key: string]: any;
-}
-
-export interface Transaction extends TransactionKeys {
-  id: number;
-  tdate: string;
-  notes: string;
-  amount: number;
-  FromAc: string;
-  ToAc: string;
-  ttype: string;
-  monthyear: string;
-  receipt: string;
-}
-
-export type typeDefTransaction = Transaction[];
+import {
+  EditTransactionPayloadType,
+  Transaction,
+} from "../../models/transactionModel";
 
 const defaultTransactions = [
   {
@@ -177,20 +163,20 @@ const defaultTransactions = [
   },
 ];
 
-const initialState: typeDefTransaction = defaultTransactions;
+const initialState: Transaction[] = defaultTransactions;
 
 export const transactionSlice = createSlice({
   name: "transactions",
   initialState,
   reducers: {
-    addTransaction: (state, action: PayloadAction<any>) => {
+    addTransaction: (state, action: PayloadAction<Transaction>) => {
       if (state.length !== 0 && state.length !== undefined) {
         let newdata = [...state];
 
         let previd = newdata[newdata.length - 1].id;
 
         let pushData = action.payload;
-        pushData["id"] = previd + 1;
+        pushData["id"] = previd && previd + 1;
 
         newdata.push(pushData);
 
@@ -205,8 +191,11 @@ export const transactionSlice = createSlice({
         return newdata;
       }
     },
-    editTransaction: (state, action: PayloadAction<any>) => {
-      const editid = parseInt(action.payload.id);
+    editTransaction: (
+      state,
+      action: PayloadAction<EditTransactionPayloadType>
+    ) => {
+      const editid = action.payload.id;
 
       let newdata = [...state];
 
@@ -214,8 +203,8 @@ export const transactionSlice = createSlice({
         item.id === editid ? (item = action.payload.edit) : item
       );
     },
-    deleteTransaction: (state, action) => {
-      const delId = parseInt(action.payload);
+    deleteTransaction: (state, action: PayloadAction<number>) => {
+      const delId = action.payload;
 
       let newdata = [...state];
 

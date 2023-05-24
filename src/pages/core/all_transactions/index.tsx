@@ -9,7 +9,7 @@ import { ErrorPage } from "../../../components/errorpage";
 
 import { Cookies } from "react-cookie";
 import { useAppSelector } from "../../../redux/ducks/hooks";
-import { Transaction } from "../../../redux/ducks/transaction_slice";
+import { Transaction } from "../../../models/transactionModel";
 
 type Group1Type = {
   [key: string]: Transaction[];
@@ -17,7 +17,7 @@ type Group1Type = {
 
 type GroupType = [Group1Type];
 
-export const AllData = () => {
+export const AllData = (): JSX.Element => {
   const transactions = useAppSelector((state) => state.transactions);
 
   const [newtransactions, setNewTransactions] = useState<Transaction[]>([]);

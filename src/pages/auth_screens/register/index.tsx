@@ -13,12 +13,16 @@ import {
   phoneRegex,
 } from "../../../utils/constants";
 import { FormField } from "../../../components/FormFields/FormField";
+import { RootState } from "../../../redux/store";
 
-type typeRegister = {
-  [key: string]: any;
+type typeRegistrationValidationSchema = {
+  name: string;
+  phone: string;
+  email: string;
+  pass: string;
 };
 
-export const dynamicRegisterForm: typeRegister = {
+export const dynamicRegisterForm: { [key: string]: object } = {
   name: {
     name: "name",
     label: "Name",
@@ -34,8 +38,8 @@ export const dynamicRegisterForm: typeRegister = {
     label: "Email",
     type: "email",
   },
-  password: {
-    name: "password",
+  pass: {
+    name: "pass",
     label: "Password",
     type: "password",
     rules: (
@@ -54,55 +58,56 @@ export const dynamicRegisterForm: typeRegister = {
   },
 };
 
-export const Register = () => {
-  const users = useSelector((state: any) => state.users);
+export const Register = (): JSX.Element => {
+  const users = useSelector((state: RootState) => state.users);
   const dispatch = useDispatch();
 
-  const registrationValidationSchema = yup.object().shape({
-    name: yup
-      .string()
-      .trim()
-      .required(`**Name can't be empty..!`)
-      .matches(nameRegex, { message: `**Please enter valid name..!` }),
-    phone: yup
-      .string()
-      .trim()
-      .required(`**Phone no. can't be empty..!`)
-      .matches(phoneRegex, { message: `**Please enter valid number..!` }),
-    email: yup
-      .string()
-      .trim()
-      .required(`**Email can't be empty..!`)
-      .matches(mailRegex, { message: `**Please enter valid email..!` })
-      .test({
-        name: "email",
-        skipAbsent: true,
-        test(value, ctx) {
-          let flag = 0;
+  const registrationValidationSchema: yup.ObjectSchema<typeRegistrationValidationSchema> =
+    yup.object().shape({
+      name: yup
+        .string()
+        .trim()
+        .required(`**Name can't be empty..!`)
+        .matches(nameRegex, { message: `**Please enter valid name..!` }),
+      phone: yup
+        .string()
+        .trim()
+        .required(`**Phone no. can't be empty..!`)
+        .matches(phoneRegex, { message: `**Please enter valid number..!` }),
+      email: yup
+        .string()
+        .trim()
+        .required(`**Email can't be empty..!`)
+        .matches(mailRegex, { message: `**Please enter valid email..!` })
+        .test({
+          name: "email",
+          skipAbsent: true,
+          test(value, ctx) {
+            let flag = 0;
 
-          for (let i in users) {
-            if (users[i].email === value) {
-              flag = 1;
-              break;
+            for (let i in users) {
+              if (users[i].email === value) {
+                flag = 1;
+                break;
+              }
             }
-          }
 
-          if (flag == 1) {
-            return ctx.createError({
-              message: `**Email already exists..!`,
-            });
-          }
+            if (flag == 1) {
+              return ctx.createError({
+                message: `**Email already exists..!`,
+              });
+            }
 
-          return true;
-        },
-      }),
-    password: yup
-      .string()
-      .trim()
-      .required(`**Password can't be empty..!`)
-      .min(8, `**Please enter password of at-least 8 characters..!`)
-      .matches(passwordRegex, `**Please enter valid password..!`),
-  });
+            return true;
+          },
+        }),
+      pass: yup
+        .string()
+        .trim()
+        .required(`**Password can't be empty..!`)
+        .min(8, `**Please enter password of at-least 8 characters..!`)
+        .matches(passwordRegex, `**Please enter valid password..!`),
+    });
 
   const {
     register,
@@ -117,6 +122,7 @@ export const Register = () => {
 
   const onSubmit = async (data: any) => {
     dispatch(addUser(data));
+
     navigate(`/login`);
   };
 

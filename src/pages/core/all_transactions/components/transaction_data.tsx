@@ -9,15 +9,12 @@ import {
   TransactionTabHeaders,
 } from "../../../../utils/constants";
 import { useDispatch } from "react-redux";
-import {
-  Transaction,
-  deleteTransaction,
-  typeDefTransaction,
-} from "../../../../redux/ducks/transaction_slice";
+import { deleteTransaction } from "../../../../redux/ducks/transaction_slice";
 import { TableHeader } from "./tableHeader";
 import { TableData } from "../../../../components/table/tableData";
+import { Transaction } from "../../../../models/transactionModel";
 
-type typePagination = {
+export type typePagination = {
   showPage: number;
   totalpage: number;
   limit: number;
@@ -26,10 +23,10 @@ type typePagination = {
 };
 
 type typeTransaction = {
-  transactions: typeDefTransaction;
+  transactions: Transaction[];
 };
 
-export const TransactionData = (props: typeTransaction) => {
+export const TransactionData = (props: typeTransaction): JSX.Element => {
   //Getting Data From Main component and doing sorting and pagination and searching here..!
 
   const [newData, setNewData] = useState(props.transactions);
@@ -76,7 +73,7 @@ export const TransactionData = (props: typeTransaction) => {
     // eslint-disable-next-line
   }, [newData, pagination.limit]);
 
-  const doSort = (getAllTransactions: typeDefTransaction) => {
+  const doSort = (getAllTransactions: Transaction[]) => {
     getAllTransactions.sort((a, b) => {
       switch (sorting.columnValueType) {
         case "number":
@@ -339,7 +336,7 @@ export const TransactionData = (props: typeTransaction) => {
                           <i
                             className="fa fa-trash"
                             style={{ cursor: "pointer" }}
-                            onClick={() => deleteRecord(tdata.id)}
+                            onClick={() => deleteRecord(tdata.id!)}
                           ></i>
                         </td>
                       </tr>

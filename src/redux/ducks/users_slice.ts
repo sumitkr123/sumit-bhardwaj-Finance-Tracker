@@ -1,11 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { User } from "../../models/userModel";
 
-interface typeUser {
-  [key: string]: any;
-}
-type typeDefUsers = typeUser[];
-
-const defaultUsers: typeDefUsers = [
+const defaultUsers = [
   {
     id: 1,
     name: "Sumit Bhardwaj",
@@ -57,36 +53,29 @@ const defaultUsers: typeDefUsers = [
   },
 ];
 
-const initialState = defaultUsers;
+const initialState: User[] = defaultUsers;
 
 export const userSlice = createSlice({
   name: "users",
   initialState,
   reducers: {
-    addUser: (state, action: PayloadAction<any>) => {
+    addUser: (state, action: PayloadAction<User>) => {
       const data = action.payload;
 
-      let user_data: typeUser = {};
       let newdata = [...state];
 
-      if (newdata) {
-        user_data["id"] = state[state.length - 1].id + 1;
-        user_data["name"] = data.name;
-        user_data["phone"] = data.phone;
-        user_data["email"] = data.email;
-        user_data["pass"] = data.password;
+      if (state.length !== 0 && state.length !== undefined) {
+        data["id"] = state[state.length - 1].id! + 1;
 
-        newdata.push(user_data);
+        newdata.push(data);
 
         return newdata;
       } else {
-        user_data["id"] = 1;
-        user_data["name"] = data.name;
-        user_data["phone"] = data.phone;
-        user_data["email"] = data.email;
-        user_data["pass"] = data.password;
+        data["id"] = 1;
 
-        return [newdata];
+        newdata.push(data);
+
+        return newdata;
       }
     },
   },

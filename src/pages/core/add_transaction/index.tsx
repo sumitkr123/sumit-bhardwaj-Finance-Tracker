@@ -1,10 +1,14 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import "../../../assets/styles/form.css";
 
 import { Link, useNavigate, useParams } from "react-router-dom";
 
-import { dynamicTransactionForm, getFile } from "../../../utils/constants";
+import {
+  dynamicTransactionForm,
+  getFile,
+  TransactionFormInitialValues,
+} from "../../../utils/constants";
 
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -17,23 +21,9 @@ import { transactionValidationSchema } from "../../../validations/schema";
 import { FormField } from "../../../components/FormFields/FormField";
 import { useAppDispatch, useAppSelector } from "../../../redux/ducks/hooks";
 import { RootState } from "../../../redux/store";
+import { Transaction } from "../../../models/transactionModel";
 
-type typeInitialValue = {
-  [key: string]: any;
-};
-
-const initialValues: typeInitialValue = {
-  notes: "",
-  amount: "",
-  FromAc: "",
-  ToAc: "",
-  ttype: "",
-  monthyear: "",
-  tdate: "",
-  receipt: "",
-};
-
-export const AddTransaction = () => {
+export const AddTransaction = (): JSX.Element => {
   const {
     register,
     handleSubmit,
@@ -48,8 +38,10 @@ export const AddTransaction = () => {
 
   const navigate = useNavigate();
 
-  const [values, setValues] = useState(initialValues);
-  const [submit, setSubmit] = useState(false);
+  const [values, setValues] = useState<Transaction>(
+    TransactionFormInitialValues
+  );
+  const [submit, setSubmit] = useState<boolean>(false);
 
   const transactions = useAppSelector((state: RootState) => {
     return state.transactions;
@@ -59,7 +51,7 @@ export const AddTransaction = () => {
   useEffect(() => {
     if (id !== undefined && id !== "" && id !== null) {
       let data = transactions.filter(
-        (item: any) => parseInt(item.id) === parseInt(id)
+        (item: Transaction) => item.id === parseInt(id)
       );
 
       if (data.length !== 0) {
@@ -82,8 +74,8 @@ export const AddTransaction = () => {
 
       let errflag = 0;
 
-      Object.values(allvalues).forEach((item) => {
-        if (item === "" || item === null || item === undefined) {
+      Object.values(allvalues).forEach((item: Transaction) => {
+        if (item === null || item === undefined) {
           errflag = 1;
           return;
         }
@@ -91,7 +83,7 @@ export const AddTransaction = () => {
 
       if (errflag !== 1) {
         if (id !== null && id !== undefined && id !== "") {
-          dispatch(editTransaction({ edit: allvalues, id: id }));
+          dispatch(editTransaction({ edit: allvalues, id: parseInt(id) }));
         } else {
           dispatch(addTransaction(allvalues));
         }
@@ -101,18 +93,20 @@ export const AddTransaction = () => {
     }
   }, [submit]);
 
-  const onSubmit = async (data: typeInitialValue) => {
+  const onSubmit = useCallback(async (data: any) => {
     if (typeof data.receipt !== "string") {
       let file = await getFile(data.receipt[0]);
 
-      data.receipt = file;
+      if (typeof file === "string") {
+        data.receipt = file;
+      }
     }
 
     let newdata = { ...values };
     newdata = data;
     setSubmit(true);
     setValues(newdata);
-  };
+  }, []);
 
   const removeFile = () => {
     let newvalues = { ...values };

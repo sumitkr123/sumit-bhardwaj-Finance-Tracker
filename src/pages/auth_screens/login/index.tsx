@@ -25,7 +25,7 @@ const dynamicLoginForm: typeLogin = {
   },
 };
 
-export const Login = () => {
+export const Login = (): JSX.Element => {
   const users = useSelector((state: any) => state.users);
 
   const loginValidationSchema = yup.object().shape({

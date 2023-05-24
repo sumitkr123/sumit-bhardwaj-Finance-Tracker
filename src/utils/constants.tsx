@@ -211,3 +211,15 @@ export const dynamicTransactionForm: typeTransactionForm = {
     otherType: "image",
   },
 };
+
+export const TransactionFormInitialValues = {
+  notes: "",
+  amount: "",
+  FromAc: "",
+  ToAc: "",
+  ttype: "",
+  monthyear: "",
+  tdate: "",
+  receipt: "",
+  id: 0,
+};

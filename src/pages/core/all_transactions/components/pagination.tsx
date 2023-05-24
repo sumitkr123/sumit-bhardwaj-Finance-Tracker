@@ -1,4 +1,11 @@
-export const Pagination = (props: any) => {
+import { typePagination } from "./transaction_data";
+
+type PaginationProps = {
+  pagination: typePagination;
+  changepageno: (pageno: number) => void;
+};
+
+export const Pagination = (props: PaginationProps): JSX.Element => {
   const pagination = props.pagination;
   const changepageno = props.changepageno;
 
