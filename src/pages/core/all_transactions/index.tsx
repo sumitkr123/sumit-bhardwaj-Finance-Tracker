@@ -9,23 +9,22 @@ import { ErrorPage } from "../../../components/errorpage";
 
 import { Cookies } from "react-cookie";
 import { useAppSelector } from "../../../redux/ducks/hooks";
-import {
-  Transaction,
-  typeDefTransaction,
-} from "../../../redux/ducks/transaction_slice";
+import { Transaction } from "../../../redux/ducks/transaction_slice";
 
-type typeGroup = {
+type Group1Type = {
   [key: string]: Transaction[];
 };
+
+type GroupType = [Group1Type];
 
 export const AllData = () => {
   const transactions = useAppSelector((state) => state.transactions);
 
   const [newtransactions, setNewTransactions] = useState<Transaction[]>([]);
 
-  const [groupedData, setGroupedData] = useState<Transaction[]>([]);
+  const [groupedData, setGroupedData] = useState<GroupType>([{}]);
 
-  const [groupVal, setGroupVal] = useState("");
+  const [groupVal, setGroupVal] = useState<string>("");
 
   const cookie = new Cookies();
 
@@ -36,14 +35,16 @@ export const AllData = () => {
   useMemo(() => {
     let temp = [...transactions];
 
-    let result: any = {};
+    let result: Group1Type = {};
 
-    temp.forEach((item) => {
-      const value = item[groupVal];
+    if (groupVal) {
+      temp.forEach((item) => {
+        const value = item[groupVal];
 
-      result[value] = result[value] ?? [];
-      result[value].push(item);
-    });
+        result[value] = result[value] ?? [];
+        result[value].push(item);
+      });
+    }
     setGroupedData([result]);
   }, [groupVal, transactions]);
 
@@ -98,7 +99,9 @@ export const AllData = () => {
 
       <div className="sections">
         <section className="tabsection">
-          {groupedData.length !== 0 && groupVal
+          {groupedData[0] &&
+          groupVal &&
+          Object.keys(groupedData[0]).length !== 0
             ? Object.keys(groupedData[0]).map(
                 (value) =>
                   value && (

@@ -6,15 +6,19 @@ import { Transaction } from "../pages/core/transaction";
 import { AddTransaction } from "../pages/core/add_transaction";
 import { ErrorPage } from "../components/errorpage";
 
-export type typeRoutes = {
+export type TypeRoutes = {
   path: string;
-  element: Array<object>;
+  element: Array<TypeRoutes> | JSX.Element;
+  protected?: boolean;
 };
 
-export const routeList: typeRoutes = {
+export const routeList: TypeRoutes = {
   path: "/",
   element: [
-    { path: "", element: <Navigate to={"/transactions"} /> },
+    {
+      path: "",
+      element: <Navigate to={"/transactions"} />,
+    },
     {
       path: "login",
       element: <Login />,

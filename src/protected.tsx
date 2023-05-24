@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom";
 
 type ProtectedProps = {
   component: JSX.Element;
-  isProtectedRoute: boolean;
+  isProtectedRoute: boolean | string;
 };
 
 export const Protected = ({ component, isProtectedRoute }: ProtectedProps) => {
@@ -13,17 +13,21 @@ export const Protected = ({ component, isProtectedRoute }: ProtectedProps) => {
   const cookie = new Cookies();
   let auth_token = cookie.get("auth_token");
 
+  let fieldblock = <></>;
+
   if (isProtected) {
     if (auth_token) {
-      return Component;
+      fieldblock = Component;
     } else {
-      return <Navigate to={"/login"} />;
+      fieldblock = <Navigate to={"/login"} />;
     }
   } else {
     if (auth_token) {
-      return <Navigate to={"/transactions"} />;
+      fieldblock = <Navigate to={"/transactions"} />;
     } else {
-      return Component;
+      fieldblock = Component;
     }
   }
+
+  return fieldblock;
 };

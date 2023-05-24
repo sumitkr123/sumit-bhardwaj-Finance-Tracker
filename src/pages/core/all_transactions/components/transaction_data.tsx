@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Pagination } from "./pagination";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   fixedimit,
   month,
@@ -48,7 +48,7 @@ export const TransactionData = (props: typeTransaction) => {
     pages: [],
   });
 
-  const searchRef = useRef<any>("");
+  const [searchValue, setSearchValue] = useState<string>("");
 
   const dispatch = useDispatch();
 
@@ -193,7 +193,7 @@ export const TransactionData = (props: typeTransaction) => {
     let temp = [...props.transactions];
 
     let searchvalue = event.target.value;
-    searchRef.current.value = searchvalue;
+    setSearchValue(searchvalue);
 
     if (
       searchvalue !== null &&
@@ -259,29 +259,24 @@ export const TransactionData = (props: typeTransaction) => {
 
   const filteredBlock = useMemo(() => {
     return (
-      searchRef.current.value && (
+      searchValue && (
         <span>
           (filtered from &nbsp;{props.transactions.length}&nbsp; total entries)
         </span>
       )
     );
-  }, [searchRef.current.value]);
+  }, [searchValue]);
 
   return (
     <>
       <div className="searchdiv">
         <label>
           Search :-
-          <input
-            type="text"
-            ref={searchRef}
-            name="search"
-            onChange={(e) => searchData(e)}
-          />
+          <input type="text" name="search" onChange={(e) => searchData(e)} />
         </label>
       </div>
 
-      {searchRef.current.value && newData.length === 0 ? (
+      {searchValue && newData.length === 0 ? (
         <div className="searchNotFound">
           <h2>Oops..! no search results found..!</h2>
           {filteredBlock}

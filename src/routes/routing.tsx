@@ -7,47 +7,51 @@ import {
 import { ErrorBoundary } from "react-error-boundary";
 import { ErrorPage } from "../components/errorpage";
 import { Protected } from "../protected";
-import { routeList, typeRoutes } from "./routes";
+import { routeList, TypeRoutes } from "./routes";
 
-const routeMapper = (item: typeRoutes) => {
+const routeMapper = (item: TypeRoutes) => {
   return (
     <Route key={item.path} path={item.path}>
-      {item.element.map((newItem: any) => {
-        switch (Array.isArray(newItem.element)) {
-          case true:
-            return routeMapper(newItem);
+      {Array.isArray(item.element) &&
+        item.element.map((newItem: TypeRoutes) => {
+          switch (Array.isArray(newItem.element)) {
+            case true:
+              return routeMapper(newItem);
 
-          default:
-            return (
-              <Route
-                key={newItem}
-                path={newItem.path}
-                element={
-                  <ErrorBoundary
-                    FallbackComponent={({ error, resetErrorBoundary }) => (
-                      <ErrorPage
-                        error={error}
-                        resetErrorBoundary={resetErrorBoundary}
-                        errorTitle={"Oops...! There are some issues..!"}
-                        errorSubTitle={error.message}
-                        redirect={"/"}
-                      />
-                    )}
-                  >
-                    {newItem.path !== "/*" ? (
-                      <Protected
-                        isProtectedRoute={newItem.protected}
-                        component={newItem.element}
-                      />
-                    ) : (
-                      newItem.element
-                    )}
-                  </ErrorBoundary>
-                }
-              />
-            );
-        }
-      })}
+            default:
+              return (
+                <Route
+                  key={newItem.path}
+                  path={newItem.path}
+                  element={
+                    <ErrorBoundary
+                      FallbackComponent={({ error, resetErrorBoundary }) => (
+                        <ErrorPage
+                          error={error}
+                          resetErrorBoundary={resetErrorBoundary}
+                          errorTitle={"Oops...! There are some issues..!"}
+                          errorSubTitle={error.message}
+                          redirect={"/"}
+                        />
+                      )}
+                    >
+                      {newItem.path !== "/*" &&
+                      !Array.isArray(newItem.element) ? (
+                        <Protected
+                          isProtectedRoute={
+                            newItem.protected !== undefined && newItem.protected
+                          }
+                          component={newItem.element}
+                        />
+                      ) : (
+                        !Array.isArray(newItem.element) && newItem.element
+                      )}
+                    </ErrorBoundary>
+                  }
+                />
+              );
+          }
+        })}
     </Route>
   );
 };

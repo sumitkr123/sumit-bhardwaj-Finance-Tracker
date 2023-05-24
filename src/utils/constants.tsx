@@ -57,7 +57,7 @@ export const fixedimit = 2;
 export const fixedShowPageCount = 3;
 
 type typeCurrency = {
-  [key: string]: any;
+  [key: string]: JSX.Element;
 };
 
 export const currency: typeCurrency = {
