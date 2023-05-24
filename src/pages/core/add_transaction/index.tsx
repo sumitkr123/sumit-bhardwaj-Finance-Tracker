@@ -23,7 +23,7 @@ import { useAppDispatch, useAppSelector } from "../../../redux/ducks/hooks";
 import { RootState } from "../../../redux/store";
 import { Transaction } from "../../../models/transactionModel";
 
-export const AddTransaction = (): JSX.Element => {
+export const AddTransaction = (): React.JSX.Element => {
   const {
     register,
     handleSubmit,

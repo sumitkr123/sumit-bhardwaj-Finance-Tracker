@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom";
 
 type ProtectedProps = {
   component: JSX.Element;
-  isProtectedRoute: boolean | string;
+  isProtectedRoute: boolean;
 };
 
 export const Protected = ({ component, isProtectedRoute }: ProtectedProps) => {

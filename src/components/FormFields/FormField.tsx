@@ -1,4 +1,4 @@
-export const FormField = (props: any) => {
+export const FormField = (props: any): React.JSX.Element => {
   const { name, errors = {} } = props;
 
   let errorBlock = <></>;

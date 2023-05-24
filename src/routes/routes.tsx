@@ -8,13 +8,14 @@ import { ErrorPage } from "../components/errorpage";
 
 export type TypeRoutes = {
   path: string;
-  element: Array<TypeRoutes> | JSX.Element;
+  element?: JSX.Element;
   protected?: boolean;
+  further?: Array<TypeRoutes>;
 };
 
 export const routeList: TypeRoutes = {
   path: "/",
-  element: [
+  further: [
     {
       path: "",
       element: <Navigate to={"/transactions"} />,
@@ -31,7 +32,7 @@ export const routeList: TypeRoutes = {
     },
     {
       path: "transactions",
-      element: [
+      further: [
         {
           path: "",
           element: <AllData />,

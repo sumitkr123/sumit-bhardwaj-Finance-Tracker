@@ -58,7 +58,7 @@ export const dynamicRegisterForm: { [key: string]: object } = {
   },
 };
 
-export const Register = (): JSX.Element => {
+export const Register = (): React.JSX.Element => {
   const users = useSelector((state: RootState) => state.users);
   const dispatch = useDispatch();
 

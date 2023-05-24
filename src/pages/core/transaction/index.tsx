@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import "../../../assets/styles/transaction.css";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -8,7 +8,7 @@ import { TableData } from "../../../components/table/tableData";
 import { useAppSelector } from "../../../redux/ducks/hooks";
 import { Transaction } from "../../../models/transactionModel";
 
-export const ViewTransaction = (): JSX.Element => {
+export const ViewTransaction = (): React.JSX.Element => {
   const { id } = useParams();
   const navigate = useNavigate();
 

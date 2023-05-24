@@ -17,7 +17,7 @@ type Group1Type = {
 
 type GroupType = [Group1Type];
 
-export const AllData = (): JSX.Element => {
+export const AllData = (): React.JSX.Element => {
   const transactions = useAppSelector((state) => state.transactions);
 
   const [newtransactions, setNewTransactions] = useState<Transaction[]>([]);

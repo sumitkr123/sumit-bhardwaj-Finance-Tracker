@@ -1,4 +1,4 @@
-export const TableHeader = (props: any): JSX.Element => {
+export const TableHeader = (props: any): React.JSX.Element => {
   const tabHeader = props.tabHeader;
   const col = props.col;
   const sorting = props.sorting;

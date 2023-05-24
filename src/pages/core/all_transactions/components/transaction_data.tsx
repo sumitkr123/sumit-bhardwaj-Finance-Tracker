@@ -26,7 +26,7 @@ type typeTransaction = {
   transactions: Transaction[];
 };
 
-export const TransactionData = (props: typeTransaction): JSX.Element => {
+export const TransactionData = (props: typeTransaction): React.JSX.Element => {
   //Getting Data From Main component and doing sorting and pagination and searching here..!
 
   const [newData, setNewData] = useState(props.transactions);

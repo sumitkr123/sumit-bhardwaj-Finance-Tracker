@@ -5,7 +5,7 @@ type PaginationProps = {
   changepageno: (pageno: number) => void;
 };
 
-export const Pagination = (props: PaginationProps): JSX.Element => {
+export const Pagination = (props: PaginationProps): React.JSX.Element => {
   const pagination = props.pagination;
   const changepageno = props.changepageno;
 
