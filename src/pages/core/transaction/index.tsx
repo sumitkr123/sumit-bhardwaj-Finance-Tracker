@@ -2,17 +2,22 @@ import React, { useEffect, useState } from "react";
 
 import "../../../assets/styles/transaction.css";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { TransactionTabHeaders } from "../../../utils/constants";
 import { ErrorPage } from "../../../components/errorpage";
 import { TableData } from "../../../components/table/tableData";
 import { useAppSelector } from "../../../redux/ducks/hooks";
-import { Transaction } from "../../../models/transactionModel";
+import {
+  Transaction,
+  TransactionTabHeaders,
+} from "../../../models/transactionModel";
+import { RootState } from "../../../redux/store";
 
 export const ViewTransaction = (): React.JSX.Element => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const transactions = useAppSelector((state) => state.transactions);
+  const transactions = useAppSelector<Transaction[]>(
+    (state: RootState) => state.transactions
+  );
 
   const [viewtransaction, setViewTransactions] = useState<Transaction[]>([]);
 
@@ -43,7 +48,7 @@ export const ViewTransaction = (): React.JSX.Element => {
       <table className="table">
         <thead className="header">
           <tr className="headerrow">
-            {Object.keys(TransactionTabHeaders).map((keyCol) => {
+            {Object.keys(TransactionTabHeaders).map((keyCol: string) => {
               return (
                 <th className="th" key={keyCol}>
                   {TransactionTabHeaders[keyCol].name}
@@ -55,13 +60,15 @@ export const ViewTransaction = (): React.JSX.Element => {
         <tbody className="tabcontent">
           {viewtransaction.map((tdata: Transaction) => (
             <tr className="contentrow" key={tdata.id}>
-              {Object.keys(TransactionTabHeaders).map((headers, index) => (
-                <TableData
-                  key={headers + index + tdata.id}
-                  tcelldata={tdata[headers]}
-                  headers={headers}
-                />
-              ))}
+              {Object.keys(TransactionTabHeaders).map(
+                (headers: string, index: number) => (
+                  <TableData
+                    key={headers + index + tdata.id}
+                    tcelldata={tdata[headers]}
+                    headers={headers}
+                  />
+                )
+              )}
             </tr>
           ))}
         </tbody>

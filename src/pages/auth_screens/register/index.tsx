@@ -92,7 +92,7 @@ export const Register = (): React.JSX.Element => {
               }
             }
 
-            if (flag == 1) {
+            if (flag === 1) {
               return ctx.createError({
                 message: `**Email already exists..!`,
               });

@@ -1,4 +1,17 @@
-export const TableHeader = (props: any): React.JSX.Element => {
+import { Transaction } from "../../../../models/transactionModel";
+
+type TableHeaderProps = {
+  tabHeader: string;
+  col: string;
+  sorting: {
+    [key: string]: string;
+  };
+  type?: string;
+  newData: Transaction[];
+  setSortingColumn: (column: string, type: string) => void;
+};
+
+export const TableHeader = (props: TableHeaderProps): React.JSX.Element => {
   const tabHeader = props.tabHeader;
   const col = props.col;
   const sorting = props.sorting;
@@ -9,7 +22,9 @@ export const TableHeader = (props: any): React.JSX.Element => {
   return (
     <th
       className="th"
-      onClick={() => (newData.length <= 1 ? null : setSortingColumn(col, type))}
+      onClick={() =>
+        newData.length <= 1 ? null : setSortingColumn(col, type!)
+      }
     >
       <div className="sortHeader">
         <span>{tabHeader}</span>

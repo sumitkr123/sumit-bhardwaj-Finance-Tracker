@@ -4,11 +4,7 @@ import "../../../assets/styles/form.css";
 
 import { Link, useNavigate, useParams } from "react-router-dom";
 
-import {
-  dynamicTransactionForm,
-  getFile,
-  TransactionFormInitialValues,
-} from "../../../utils/constants";
+import { getFile } from "../../../utils/constants";
 
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -21,7 +17,11 @@ import { transactionValidationSchema } from "../../../validations/schema";
 import { FormField } from "../../../components/FormFields/FormField";
 import { useAppDispatch, useAppSelector } from "../../../redux/ducks/hooks";
 import { RootState } from "../../../redux/store";
-import { Transaction } from "../../../models/transactionModel";
+import {
+  Transaction,
+  TransactionFormInitialValues,
+  dynamicTransactionForm,
+} from "../../../models/transactionModel";
 
 export const AddTransaction = (): React.JSX.Element => {
   const {

@@ -1,6 +1,10 @@
-import { TransactionTabHeaders, amountFormatter } from "../../utils/constants";
+import { TransactionTabHeaders } from "../../models/transactionModel";
+import { amountFormatter } from "./currency";
 
-export const TableData = (props: any): React.JSX.Element => {
+export const TableData = (props: {
+  tcelldata: string;
+  headers: string;
+}): React.JSX.Element => {
   const tcelldata = props.tcelldata;
   const headers = props.headers;
 

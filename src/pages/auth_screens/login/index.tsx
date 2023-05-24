@@ -50,7 +50,7 @@ export const Login = (): React.JSX.Element => {
               }
             }
 
-            if (flag == 0) {
+            if (flag === 0) {
               return ctx.createError({
                 message: `**Email doesn't exist..!`,
               });
@@ -83,7 +83,7 @@ export const Login = (): React.JSX.Element => {
               }
             }
 
-            if (flag == 0) {
+            if (flag === 0) {
               return ctx.createError({
                 message: `**Password doesn't match..!`,
               });

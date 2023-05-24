@@ -6,13 +6,15 @@ import {
   month,
   paginno,
   fixedShowPageCount,
-  TransactionTabHeaders,
 } from "../../../../utils/constants";
 import { useDispatch } from "react-redux";
 import { deleteTransaction } from "../../../../redux/ducks/transaction_slice";
 import { TableHeader } from "./tableHeader";
 import { TableData } from "../../../../components/table/tableData";
-import { Transaction } from "../../../../models/transactionModel";
+import {
+  Transaction,
+  TransactionTabHeaders,
+} from "../../../../models/transactionModel";
 
 export type typePagination = {
   showPage: number;
