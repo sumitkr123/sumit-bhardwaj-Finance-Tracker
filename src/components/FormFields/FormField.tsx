@@ -84,7 +84,7 @@ const Field = ({
           {...(register ? register(name) : null)}
         >
           <option value={""}>Select {label}</option>
-          {options!.map((item: string, index: number) => (
+          {options?.map((item: string, index: number) => (
             <option key={item + index} value={item}>
               {item}
             </option>
