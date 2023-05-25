@@ -4,7 +4,7 @@ import { Register } from "../pages/auth_screens/register";
 import { AllData } from "../pages/core/all_transactions";
 import { ViewTransaction } from "../pages/core/transaction";
 import { AddTransaction } from "../pages/core/add_transaction";
-import { ErrorPage } from "../components/errorpage";
+import { ErrorPage } from "../components/errorpage/errorPage";
 
 export type TypeRoutes = {
   path: string;

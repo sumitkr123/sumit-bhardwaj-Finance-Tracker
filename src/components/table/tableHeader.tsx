@@ -1,4 +1,4 @@
-import { Transaction } from "../../../../models/transactionModel";
+import { Transaction } from "../../models/transactionModel";
 
 type TableHeaderProps = {
   tabHeader: string;

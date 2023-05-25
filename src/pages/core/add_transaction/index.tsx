@@ -15,7 +15,7 @@ import {
 } from "../../../redux/ducks/transaction_slice";
 import { transactionValidationSchema } from "../../../validations/schema";
 import { FormField } from "../../../components/FormFields/FormField";
-import { useAppDispatch, useAppSelector } from "../../../redux/ducks/hooks";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { RootState } from "../../../redux/store";
 import {
   Transaction,
@@ -43,7 +43,7 @@ export const AddTransaction = (): React.JSX.Element => {
   );
   const [submit, setSubmit] = useState<boolean>(false);
 
-  const transactions = useAppSelector((state: RootState) => {
+  const transactions = useAppSelector<Transaction[]>((state: RootState) => {
     return state.transactions;
   });
   const dispatch = useAppDispatch();
@@ -74,7 +74,7 @@ export const AddTransaction = (): React.JSX.Element => {
 
       let errflag = 0;
 
-      Object.values(allvalues).forEach((item: Transaction) => {
+      Object.values(allvalues).forEach((item) => {
         if (item === null || item === undefined) {
           errflag = 1;
           return;
@@ -93,7 +93,7 @@ export const AddTransaction = (): React.JSX.Element => {
     }
   }, [submit]);
 
-  const onSubmit = useCallback(async (data: any) => {
+  const onSubmit = useCallback(async (data: any): Promise<void> => {
     if (typeof data.receipt !== "string") {
       let file = await getFile(data.receipt[0]);
 
@@ -108,7 +108,7 @@ export const AddTransaction = (): React.JSX.Element => {
     setValues(newdata);
   }, []);
 
-  const removeFile = () => {
+  const removeFile = (): void => {
     let newvalues = { ...values };
 
     newvalues.receipt = "";
@@ -126,7 +126,7 @@ export const AddTransaction = (): React.JSX.Element => {
               <FormField
                 key={input}
                 formValues={values}
-                errors={errors}
+                error={errors[input]?.message}
                 register={register}
                 {...dynamicTransactionForm[input]}
                 operations={{
@@ -139,7 +139,7 @@ export const AddTransaction = (): React.JSX.Element => {
               <FormField
                 key={input}
                 formValues={values}
-                errors={errors}
+                error={errors[input]?.message}
                 register={register}
                 {...dynamicTransactionForm[input]}
               />

@@ -5,10 +5,10 @@ import { TransactionData } from "./components/transaction_data";
 import "../../../assets/styles/transaction.css";
 import { Link } from "react-router-dom";
 import { groupby } from "../../../utils/constants";
-import { ErrorPage } from "../../../components/errorpage";
+import { ErrorPage } from "../../../components/errorpage/errorPage";
 
 import { Cookies } from "react-cookie";
-import { useAppSelector } from "../../../redux/ducks/hooks";
+import { useAppSelector } from "../../../redux/hooks";
 import { Transaction } from "../../../models/transactionModel";
 import { RootState } from "../../../redux/store";
 

@@ -5,7 +5,7 @@ import {
 } from "react-router-dom";
 
 import { ErrorBoundary } from "react-error-boundary";
-import { ErrorPage } from "../components/errorpage";
+import { ErrorPage } from "../components/errorpage/errorPage";
 import { Protected } from "../protected";
 import { routeList, TypeRoutes } from "./routes";
 
@@ -29,7 +29,7 @@ const routeMapper = (item: TypeRoutes): React.JSX.Element => {
                         error={error}
                         resetErrorBoundary={resetErrorBoundary}
                         errorTitle={"Oops...! There are some issues..!"}
-                        errorSubTitle={error.message}
+                        errorSubTitle={error.message.toString()}
                         redirect={"/"}
                       />
                     )}

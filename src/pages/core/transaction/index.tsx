@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 
 import "../../../assets/styles/transaction.css";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { ErrorPage } from "../../../components/errorpage";
+import { ErrorPage } from "../../../components/errorpage/errorPage";
 import { TableData } from "../../../components/table/tableData";
-import { useAppSelector } from "../../../redux/ducks/hooks";
+import { useAppSelector } from "../../../redux/hooks";
 import {
   Transaction,
   TransactionTabHeaders,
@@ -23,9 +23,11 @@ export const ViewTransaction = (): React.JSX.Element => {
 
   useEffect(() => {
     if (id !== null && id !== undefined && id !== "") {
-      let newdata = [];
+      let newdata: Transaction[] = [];
 
-      newdata = transactions.filter((item) => item.id === parseInt(id));
+      newdata = transactions.filter(
+        (item: Transaction) => item.id === parseInt(id)
+      );
 
       setViewTransactions(newdata);
     } else {

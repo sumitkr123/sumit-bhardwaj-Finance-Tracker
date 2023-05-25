@@ -3,7 +3,6 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../../../redux/ducks/users_slice";
 
 import {
@@ -14,17 +13,28 @@ import {
 } from "../../../utils/constants";
 import { FormField } from "../../../components/FormFields/FormField";
 import { RootState } from "../../../redux/store";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import { User } from "../../../models/userModel";
 
 type typeRegistrationValidationSchema = {
-  name: string;
+  uname: string;
   phone: string;
   email: string;
   pass: string;
 };
 
-export const dynamicRegisterForm: { [key: string]: object } = {
-  name: {
-    name: "name",
+type typeRegisterForm = {
+  [key: string]: {
+    name: string;
+    label: string;
+    type: string;
+    passRules?: JSX.Element | string;
+  };
+};
+
+export const dynamicRegisterForm: typeRegisterForm = {
+  uname: {
+    name: "uname",
     label: "Name",
     type: "text",
   },
@@ -42,7 +52,7 @@ export const dynamicRegisterForm: { [key: string]: object } = {
     name: "pass",
     label: "Password",
     type: "password",
-    rules: (
+    passRules: (
       <p style={{ color: "red" }}>
         **Please enter strong password..!
         <br />
@@ -59,12 +69,12 @@ export const dynamicRegisterForm: { [key: string]: object } = {
 };
 
 export const Register = (): React.JSX.Element => {
-  const users = useSelector((state: RootState) => state.users);
-  const dispatch = useDispatch();
+  const users = useAppSelector<User[]>((state: RootState) => state.users);
+  const dispatch = useAppDispatch();
 
   const registrationValidationSchema: yup.ObjectSchema<typeRegistrationValidationSchema> =
     yup.object().shape({
-      name: yup
+      uname: yup
         .string()
         .trim()
         .required(`**Name can't be empty..!`)
@@ -120,7 +130,7 @@ export const Register = (): React.JSX.Element => {
 
   const navigate = useNavigate();
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: any): Promise<void> => {
     dispatch(addUser(data));
 
     navigate(`/login`);
@@ -131,10 +141,10 @@ export const Register = (): React.JSX.Element => {
       <div className="formdiv">
         <form className="form" onSubmit={handleSubmit(onSubmit)}>
           <h2>Register form</h2>
-          {Object.keys(dynamicRegisterForm).map((input) => (
+          {Object.keys(dynamicRegisterForm).map((input: string) => (
             <FormField
               key={input}
-              errors={errors}
+              error={errors[input]?.message}
               register={register}
               {...dynamicRegisterForm[input]}
             />

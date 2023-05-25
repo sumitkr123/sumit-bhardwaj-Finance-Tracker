@@ -1,4 +1,4 @@
-import { typePagination } from "./transaction_data";
+import { typePagination } from "../../pages/core/all_transactions/components/transaction_data";
 
 type PaginationProps = {
   pagination: typePagination;

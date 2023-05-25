@@ -1,7 +1,15 @@
 import { Link } from "react-router-dom";
 import "../../assets/styles/error.css";
 
-export const ErrorPage = (props: any): React.JSX.Element => {
+type ErrorProps = {
+  error?: any;
+  resetErrorBoundary?: (...args: any[]) => void;
+  errorTitle?: string;
+  errorSubTitle?: string;
+  redirect?: string;
+};
+
+export const ErrorPage = (props: ErrorProps): React.JSX.Element => {
   const error = props.error;
   const resetErrorBoundary = props.resetErrorBoundary;
 

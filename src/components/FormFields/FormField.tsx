@@ -1,19 +1,56 @@
-export const FormField = (props: any): React.JSX.Element => {
-  const { name, errors = {} } = props;
+import {
+  FieldError,
+  FieldErrorsImpl,
+  FieldValues,
+  Merge,
+  UseFormRegister,
+} from "react-hook-form";
+import { Transaction } from "../../models/transactionModel";
+import { User } from "../../models/userModel";
+import React from "react";
+
+type FormFieldProps = {
+  [key: string]: any;
+  error:
+    | string
+    | FieldError
+    | Merge<FieldError, FieldErrorsImpl<any>>
+    | undefined;
+  formValues?: Transaction | User;
+  label?: string;
+  name: string;
+  operations?: {
+    [key: string]: (
+      ...args: any[]
+    ) =>
+      | void
+      | React.Dispatch<React.SetStateAction<Transaction>>
+      | Promise<string | ArrayBuffer | null>;
+  };
+  otherType?: string;
+  register: UseFormRegister<FieldValues>;
+  type?: string;
+  passRules?: JSX.Element | string;
+  options?: string[];
+  max?: string;
+};
+
+export const FormField = (props: FormFieldProps): React.JSX.Element => {
+  const { name, error } = props;
 
   let errorBlock = <></>;
 
-  if (errors[name]) {
-    name === "pass" && props.rules
+  if (error && typeof error === "string") {
+    name === "pass" && props.passRules
       ? (errorBlock = (
           <>
-            <p style={{ color: "red" }}>{errors[name]?.message}</p>
+            <p style={{ color: "red" }}>{error}</p>
             <br />
             <br />
-            {props.rules}
+            {props.passRules}
           </>
         ))
-      : (errorBlock = <p style={{ color: "red" }}>{errors[name]?.message}</p>);
+      : (errorBlock = <p style={{ color: "red" }}>{error}</p>);
   }
 
   return (
@@ -34,7 +71,7 @@ const Field = ({
   operations,
   formValues,
   register,
-}: any) => {
+}: FormFieldProps) => {
   let fieldBlock = <></>;
 
   switch (type) {
@@ -47,7 +84,7 @@ const Field = ({
           {...(register ? register(name) : null)}
         >
           <option value={""}>Select {label}</option>
-          {options.map((item: any, index: number) => (
+          {options!.map((item: string, index: number) => (
             <option key={item + index} value={item}>
               {item}
             </option>
@@ -93,18 +130,18 @@ const Field = ({
         case "image":
           fieldBlock = (
             <>
-              {formValues[name] === "" ? (
+              {formValues![name] === "" ? (
                 <input
                   className="forminputs"
                   type="file"
                   {...(register
                     ? register(name, {
-                        onChange: async (e: any) => {
-                          let file = await operations.getFile(
+                        onChange: async (e): Promise<void> => {
+                          let file = await operations!.getFile(
                             e.target.files[0]
                           );
 
-                          operations.setValues({
+                          operations!.setValues({
                             ...formValues,
                             receipt: file,
                           });
@@ -116,14 +153,14 @@ const Field = ({
                 <>
                   <div
                     className="cross"
-                    onClick={() => operations.removeFile()}
+                    onClick={() => operations!.removeFile()}
                   >
                     X
                   </div>
                   <img
                     width={80}
                     height={60}
-                    src={`${formValues[name]}`}
+                    src={`${formValues![name]}`}
                     alt="alt"
                   />
                 </>
@@ -140,10 +177,10 @@ const Field = ({
                 type="file"
                 {...(register
                   ? register(name, {
-                      onChange: async (e: any) => {
-                        let file = await operations.getFile(e.target.files[0]);
+                      onChange: async (e): Promise<void> => {
+                        let file = await operations!.getFile(e.target.files[0]);
 
-                        operations.setValues({
+                        operations!.setValues({
                           ...formValues,
                           receipt: file,
                         });

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Pagination } from "./pagination";
+import { Pagination } from "../../../../components/table/pagination";
 import { useEffect, useMemo, useState } from "react";
 import {
   fixedimit,
@@ -9,7 +9,7 @@ import {
 } from "../../../../utils/constants";
 import { useDispatch } from "react-redux";
 import { deleteTransaction } from "../../../../redux/ducks/transaction_slice";
-import { TableHeader } from "./tableHeader";
+import { TableHeader } from "../../../../components/table/tableHeader";
 import { TableData } from "../../../../components/table/tableData";
 import {
   Transaction,
@@ -287,7 +287,7 @@ export const TransactionData = (props: typeTransaction): React.JSX.Element => {
               <table className="table">
                 <thead className="header">
                   <tr className="headerrow">
-                    {Object.keys(TransactionTabHeaders).map((keyCol) =>
+                    {Object.keys(TransactionTabHeaders).map((keyCol: string) =>
                       TransactionTabHeaders[keyCol].isSortable === true ? (
                         <TableHeader
                           key={keyCol}
@@ -319,7 +319,7 @@ export const TransactionData = (props: typeTransaction): React.JSX.Element => {
                     .map((tdata: Transaction) => (
                       <tr className="contentrow" key={tdata.id}>
                         {Object.keys(TransactionTabHeaders).map(
-                          (headers, index) => (
+                          (headers: string, index: number) => (
                             <TableData
                               key={headers + index + tdata.id}
                               tcelldata={tdata[headers]}

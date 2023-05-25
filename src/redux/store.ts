@@ -1,12 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userReducer from "./ducks/users_slice";
-import transactionReducer from "./ducks/transaction_slice";
+import { rootReducer } from "./reducers";
 
 export const store = configureStore({
-  reducer: {
-    transactions: transactionReducer,
-    users: userReducer,
-  },
+  reducer: rootReducer,
 });
 
 export type RootState = ReturnType<typeof store.getState>;
