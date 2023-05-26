@@ -9,37 +9,15 @@ import { FormField } from "../../../components/FormFields/FormField";
 import { RootState } from "../../../redux/store";
 import { User } from "../../../models/userModel";
 import { useAppSelector } from "../../../redux/hooks";
-
-type typeLoginValidationSchema = {
-  email: string;
-  pass: string;
-};
-
-type typeLogin = {
-  [key: string]: {
-    name: string;
-    label: string;
-    type: string;
-  };
-};
-
-const dynamicLoginForm: typeLogin = {
-  email: {
-    name: "email",
-    label: "Email",
-    type: "email",
-  },
-  pass: {
-    name: "pass",
-    label: "Password",
-    type: "password",
-  },
-};
+import {
+  TypeLoginValidationSchema,
+  dynamicLoginForm,
+} from "./models/loginModel";
 
 export const Login = (): React.JSX.Element => {
   const users = useAppSelector<User[]>((state: RootState) => state.users);
 
-  const loginValidationSchema: yup.ObjectSchema<typeLoginValidationSchema> = yup
+  const loginValidationSchema: yup.ObjectSchema<TypeLoginValidationSchema> = yup
     .object()
     .shape({
       email: yup
@@ -152,7 +130,7 @@ export const Login = (): React.JSX.Element => {
           {Object.keys(dynamicLoginForm).map((input: string) => (
             <FormField
               key={input}
-              error={errors[input]?.message}
+              error={errors[input]?.message as string}
               register={register}
               {...dynamicLoginForm[input]}
             />

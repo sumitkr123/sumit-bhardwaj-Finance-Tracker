@@ -6,7 +6,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 
 import { getFile } from "../../../utils/constants";
 
-import { FieldValues, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import {
@@ -126,7 +126,7 @@ export const AddTransaction = (): React.JSX.Element => {
               <FormField
                 key={input}
                 formValues={values}
-                error={errors[input]?.message}
+                error={errors[input]?.message as string}
                 register={register}
                 {...dynamicTransactionForm[input]}
                 operations={{
@@ -139,7 +139,7 @@ export const AddTransaction = (): React.JSX.Element => {
               <FormField
                 key={input}
                 formValues={values}
-                error={errors[input]?.message}
+                error={errors[input]?.message as string}
                 register={register}
                 {...dynamicTransactionForm[input]}
               />

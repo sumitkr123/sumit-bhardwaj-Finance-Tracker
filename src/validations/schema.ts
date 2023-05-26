@@ -1,19 +1,11 @@
 import * as yup from "yup";
 import { fixedLengthValue, isValidFileType, mb1 } from "../utils/constants";
+import { Transaction } from "../models/transactionModel";
 
-type typeTransactionValidationSchema = {
-  notes: string;
-  tdate: string;
-  receipt: yup.AnyObject;
-  amount: number;
-  FromAc: string;
-  ToAc: string;
-  ttype: string;
-  monthyear: string;
-};
-
-export const transactionValidationSchema: yup.ObjectSchema<typeTransactionValidationSchema> =
-  yup.object().shape({
+export const transactionValidationSchema: yup.ObjectSchema<Transaction> = yup
+  .object()
+  .shape({
+    id: yup.mixed(),
     notes: yup
       .string()
       .trim()

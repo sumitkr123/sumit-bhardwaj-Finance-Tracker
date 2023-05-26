@@ -1,21 +1,11 @@
-import {
-  FieldError,
-  FieldErrorsImpl,
-  FieldValues,
-  Merge,
-  UseFormRegister,
-} from "react-hook-form";
+import { UseFormRegister } from "react-hook-form";
 import { Transaction } from "../../models/transactionModel";
 import { User } from "../../models/userModel";
 import React from "react";
 
 type FormFieldProps = {
   [key: string]: any;
-  error:
-    | string
-    | FieldError
-    | Merge<FieldError, FieldErrorsImpl<any>>
-    | undefined;
+  error?: string;
   formValues?: Transaction | User;
   label?: string;
   name: string;
@@ -30,7 +20,7 @@ type FormFieldProps = {
   otherType?: string;
   register: UseFormRegister<Transaction> | UseFormRegister<User>;
   type?: string;
-  passRules?: JSX.Element | string;
+  passRules?: JSX.Element | string | JSX.Element[] | string[];
   options?: string[];
   max?: string;
 };
@@ -40,7 +30,7 @@ export const FormField = (props: FormFieldProps): React.JSX.Element => {
 
   let errorBlock = <></>;
 
-  if (error && typeof error === "string") {
+  if (error) {
     name === "pass" && props.passRules
       ? (errorBlock = (
           <>

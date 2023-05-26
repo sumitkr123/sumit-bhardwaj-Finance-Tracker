@@ -15,66 +15,17 @@ import { FormField } from "../../../components/FormFields/FormField";
 import { RootState } from "../../../redux/store";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { User } from "../../../models/userModel";
-
-type typeRegistrationValidationSchema = {
-  uname: string;
-  phone: string;
-  email: string;
-  pass: string;
-};
-
-type typeRegisterForm = {
-  [key: string]: {
-    name: string;
-    label: string;
-    type: string;
-    passRules?: JSX.Element | string;
-  };
-};
-
-export const dynamicRegisterForm: typeRegisterForm = {
-  uname: {
-    name: "uname",
-    label: "Name",
-    type: "text",
-  },
-  phone: {
-    name: "phone",
-    label: "Phone",
-    type: "number",
-  },
-  email: {
-    name: "email",
-    label: "Email",
-    type: "email",
-  },
-  pass: {
-    name: "pass",
-    label: "Password",
-    type: "password",
-    passRules: (
-      <p style={{ color: "red" }}>
-        **Please enter strong password..!
-        <br />
-        **First-letter should be capital character,
-        <br />
-        **After that 1 or more characters,
-        <br />
-        **And than should contain 1 character from [@,$,.] ,
-        <br />
-        **And than numbers or alphabetic characters..!
-      </p>
-    ),
-  },
-};
+import { dynamicRegisterForm } from "./models/registerModel";
 
 export const Register = (): React.JSX.Element => {
   const users = useAppSelector<User[]>((state: RootState) => state.users);
   const dispatch = useAppDispatch();
 
-  const registrationValidationSchema: yup.ObjectSchema<typeRegistrationValidationSchema> =
-    yup.object().shape({
-      uname: yup
+  const registrationValidationSchema: yup.ObjectSchema<User> = yup
+    .object()
+    .shape({
+      id: yup.mixed(),
+      name: yup
         .string()
         .trim()
         .required(`**Name can't be empty..!`)
@@ -144,7 +95,7 @@ export const Register = (): React.JSX.Element => {
           {Object.keys(dynamicRegisterForm).map((input: string) => (
             <FormField
               key={input}
-              error={errors[input]?.message}
+              error={errors[input]?.message as string}
               register={register}
               {...dynamicRegisterForm[input]}
             />

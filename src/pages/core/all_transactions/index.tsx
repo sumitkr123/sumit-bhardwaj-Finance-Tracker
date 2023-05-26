@@ -11,12 +11,7 @@ import { Cookies } from "react-cookie";
 import { useAppSelector } from "../../../redux/hooks";
 import { Transaction } from "../../../models/transactionModel";
 import { RootState } from "../../../redux/store";
-
-type Group1Type = {
-  [key: string]: Transaction[];
-};
-
-type GroupType = [Group1Type];
+import { Group1Type, GroupType } from "./models/transactionDataTypes";
 
 export const AllData = (): React.JSX.Element => {
   const transactions = useAppSelector<Transaction[]>(
@@ -41,7 +36,7 @@ export const AllData = (): React.JSX.Element => {
     let result: Group1Type = {};
 
     if (groupVal) {
-      temp.forEach((item) => {
+      temp.forEach((item: Transaction) => {
         const value = item[groupVal];
 
         result[value] = result[value] ?? [];

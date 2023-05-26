@@ -4,6 +4,8 @@ import monthYears, {
   transactionTypes,
 } from "../utils/constants";
 
+import * as yup from "yup";
+
 export interface EditTransactionPayloadType {
   edit: Transaction;
   id: number;
@@ -19,7 +21,7 @@ export interface Transaction {
   ToAc: string;
   ttype: string;
   monthyear: string;
-  receipt: string;
+  receipt: string | yup.AnyObject;
 }
 
 type typeTransactionHeaders = {
