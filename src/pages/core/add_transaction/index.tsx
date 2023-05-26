@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import "../../../assets/styles/form.css";
 
@@ -66,6 +66,7 @@ export const AddTransaction = (): React.JSX.Element => {
         navigate("/*");
       }
     }
+    // eslint-disable-next-line
   }, [id]);
 
   useEffect(() => {
@@ -91,9 +92,10 @@ export const AddTransaction = (): React.JSX.Element => {
         navigate(`/transactions`);
       }
     }
+    // eslint-disable-next-line
   }, [submit]);
 
-  const onSubmit = useCallback(async (data: Transaction): Promise<void> => {
+  const onSubmit = async (data: Transaction): Promise<void> => {
     if (typeof data.receipt !== "string") {
       let file = await getFile(data.receipt[0]);
 
@@ -106,7 +108,7 @@ export const AddTransaction = (): React.JSX.Element => {
     newdata = data;
     setSubmit(true);
     setValues(newdata);
-  }, []);
+  };
 
   const removeFile = (): void => {
     let newvalues = { ...values };

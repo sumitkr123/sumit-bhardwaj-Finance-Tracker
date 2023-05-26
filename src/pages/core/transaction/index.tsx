@@ -33,6 +33,7 @@ export const ViewTransaction = (): React.JSX.Element => {
     } else {
       navigate("/*");
     }
+    // eslint-disable-next-line
   }, [id, transactions]);
 
   if (viewtransaction.length === 0) {

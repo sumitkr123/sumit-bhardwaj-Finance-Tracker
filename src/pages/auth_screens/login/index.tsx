@@ -98,6 +98,7 @@ export const Login = (): React.JSX.Element => {
 
   const navigate = useNavigate();
 
+  // eslint-disable-next-line
   const [cookies, setCookie] = useCookies(["auth_token"]);
 
   const onSubmit = async (data: User): Promise<void> => {

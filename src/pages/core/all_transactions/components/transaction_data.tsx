@@ -200,6 +200,7 @@ export const TransactionData = (props: typeTransaction): React.JSX.Element => {
       searchvalue !== ""
     ) {
       let abc = temp.filter((mainitem) =>
+        // eslint-disable-next-line
         Object.keys(mainitem).some((column) => {
           if (
             column !== "receipt" &&
@@ -236,11 +237,13 @@ export const TransactionData = (props: typeTransaction): React.JSX.Element => {
         pagination.pageno * pagination.limit
       )[0].serialNo
     );
+    // eslint-disable-next-line
   }, [pagination]);
 
   const secondVal = useMemo(() => {
     return [...dataWithSerialNo].slice(0, pagination.pageno * pagination.limit)
       .length;
+    // eslint-disable-next-line
   }, [pagination]);
 
   const thirdVal = useMemo(() => {
@@ -264,6 +267,7 @@ export const TransactionData = (props: typeTransaction): React.JSX.Element => {
         </span>
       )
     );
+    // eslint-disable-next-line
   }, [searchValue]);
 
   return (

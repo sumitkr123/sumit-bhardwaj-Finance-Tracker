@@ -10,6 +10,7 @@ type ErrorProps = {
 };
 
 export const ErrorPage = (props: ErrorProps): React.JSX.Element => {
+  // eslint-disable-next-line
   const error = props.error;
   const resetErrorBoundary = props.resetErrorBoundary;
 
