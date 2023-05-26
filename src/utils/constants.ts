@@ -63,8 +63,11 @@ export const groupby = [
   { notes: "Notes" },
 ];
 
-export const isValidFileType = (fileName: any) => {
-  return fileName && supportedImg.includes(fileName.split(".").pop());
+export const isValidFileType = (fileName: string) => {
+  let fileType = fileName.split(".").pop();
+  if (typeof fileType === "string") {
+    return fileName && supportedImg.includes(fileType);
+  }
 };
 
 export async function getFile(file: Blob) {
