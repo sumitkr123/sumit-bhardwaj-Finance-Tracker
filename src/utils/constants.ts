@@ -70,7 +70,9 @@ export const isValidFileType = (fileName: any) => {
 export async function getFile(file: Blob) {
   fileReader.readAsDataURL(file);
 
-  await new Promise<void>((resolve) => (fileReader.onload = () => resolve()));
+  await new Promise<void>(
+    (resolve) => (fileReader.onloadend = () => resolve())
+  );
 
   return fileReader.result;
 }
