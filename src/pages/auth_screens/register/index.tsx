@@ -92,7 +92,7 @@ export const Register = (): React.JSX.Element => {
         .test({
           name: "email",
           skipAbsent: true,
-          test(value, ctx) {
+          test(value: string, ctx: yup.TestContext<yup.AnyObject>) {
             let flag = 0;
 
             for (let i in users) {
@@ -123,14 +123,14 @@ export const Register = (): React.JSX.Element => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<User>({
     resolver: yupResolver(registrationValidationSchema),
     mode: "all",
   });
 
   const navigate = useNavigate();
 
-  const onSubmit = async (data: any): Promise<void> => {
+  const onSubmit = async (data: User): Promise<void> => {
     dispatch(addUser(data));
 
     navigate(`/login`);

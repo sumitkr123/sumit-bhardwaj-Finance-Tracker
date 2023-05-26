@@ -49,7 +49,7 @@ export const Login = (): React.JSX.Element => {
         .test({
           name: "email",
           skipAbsent: true,
-          test(value: any, ctx) {
+          test(value: string, ctx) {
             if (value.trim() === "") {
               return ctx.createError({
                 message: `**Email can't be empty..!`,
@@ -80,7 +80,7 @@ export const Login = (): React.JSX.Element => {
         .test({
           name: "password",
           skipAbsent: true,
-          test(value: any, ctx) {
+          test(value: string, ctx) {
             if (value.trim() === "") {
               return ctx.createError({
                 message: `**Password can't be empty..!`,
@@ -113,7 +113,7 @@ export const Login = (): React.JSX.Element => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<User>({
     resolver: yupResolver(loginValidationSchema),
     mode: "all",
   });
@@ -122,7 +122,7 @@ export const Login = (): React.JSX.Element => {
 
   const [cookies, setCookie] = useCookies(["auth_token"]);
 
-  const onSubmit = async (data: any): Promise<void> => {
+  const onSubmit = async (data: User): Promise<void> => {
     let randomstr = "";
     randomstr +=
       data.email + data.email.split("").reverse().join("") + data.pass;

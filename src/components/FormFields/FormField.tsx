@@ -28,7 +28,7 @@ type FormFieldProps = {
       | Promise<string | ArrayBuffer | null>;
   };
   otherType?: string;
-  register: UseFormRegister<FieldValues>;
+  register: UseFormRegister<Transaction> | UseFormRegister<User>;
   type?: string;
   passRules?: JSX.Element | string;
   options?: string[];

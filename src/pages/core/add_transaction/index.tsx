@@ -6,7 +6,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 
 import { getFile } from "../../../utils/constants";
 
-import { useForm } from "react-hook-form";
+import { FieldValues, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import {
@@ -29,7 +29,7 @@ export const AddTransaction = (): React.JSX.Element => {
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm({
+  } = useForm<Transaction>({
     resolver: yupResolver(transactionValidationSchema),
     mode: "all",
   });
@@ -93,7 +93,7 @@ export const AddTransaction = (): React.JSX.Element => {
     }
   }, [submit]);
 
-  const onSubmit = useCallback(async (data: any): Promise<void> => {
+  const onSubmit = useCallback(async (data: Transaction): Promise<void> => {
     if (typeof data.receipt !== "string") {
       let file = await getFile(data.receipt[0]);
 

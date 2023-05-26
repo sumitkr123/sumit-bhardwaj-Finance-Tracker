@@ -4,7 +4,7 @@ import { fixedLengthValue, isValidFileType, mb1 } from "../utils/constants";
 type typeTransactionValidationSchema = {
   notes: string;
   tdate: string;
-  receipt: unknown;
+  receipt: yup.AnyObject;
   amount: number;
   FromAc: string;
   ToAc: string;
