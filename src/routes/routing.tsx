@@ -29,7 +29,7 @@ const routeMapper = (item: TypeRoutes): React.JSX.Element => {
                         error={error}
                         resetErrorBoundary={resetErrorBoundary}
                         errorTitle={"Oops...! There are some issues..!"}
-                        errorSubTitle={error.message.toString()}
+                        errorSubTitle={error.message as string}
                         redirect={"/"}
                       />
                     )}

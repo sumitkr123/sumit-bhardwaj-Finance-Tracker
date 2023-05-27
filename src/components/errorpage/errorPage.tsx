@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import "../../assets/styles/error.css";
 
 type ErrorProps = {
-  error?: any;
+  error?: Error;
   resetErrorBoundary?: (...args: any[]) => void;
   errorTitle?: string;
   errorSubTitle?: string;
@@ -10,8 +10,6 @@ type ErrorProps = {
 };
 
 export const ErrorPage = (props: ErrorProps): React.JSX.Element => {
-  // eslint-disable-next-line
-  const error = props.error;
   const resetErrorBoundary = props.resetErrorBoundary;
 
   const errorTitle = props.errorTitle;

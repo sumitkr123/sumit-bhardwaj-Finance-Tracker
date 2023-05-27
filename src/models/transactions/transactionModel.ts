@@ -2,7 +2,7 @@ import monthYears, {
   accountTypes,
   today,
   transactionTypes,
-} from "../utils/constants";
+} from "../../utils/constants";
 
 import * as yup from "yup";
 
@@ -24,7 +24,7 @@ export interface Transaction {
   receipt: string | yup.AnyObject;
 }
 
-type typeTransactionHeaders = {
+type TypeTransactionHeaders = {
   [key: string]: {
     name: string;
     isSortable: boolean;
@@ -33,7 +33,7 @@ type typeTransactionHeaders = {
   };
 };
 
-export const TransactionTabHeaders: typeTransactionHeaders = {
+export const TransactionTabHeaders: TypeTransactionHeaders = {
   tdate: { name: "Transaction-Date", isSortable: true, sortType: "date" },
   monthyear: { name: "Month-year", isSortable: true, sortType: "monthyear" },
   ttype: { name: "Transaction-Type", isSortable: true },
@@ -49,7 +49,7 @@ export const TransactionTabHeaders: typeTransactionHeaders = {
   notes: { name: "Notes", isSortable: true },
 };
 
-type typeTransactionForm = {
+type TypeTransactionForm = {
   [key: string]: {
     name: string;
     label: string;
@@ -60,7 +60,7 @@ type typeTransactionForm = {
   };
 };
 
-export const dynamicTransactionForm: typeTransactionForm = {
+export const DynamicTransactionForm: TypeTransactionForm = {
   tdate: {
     name: "tdate",
     label: "Transaction date",
@@ -119,4 +119,35 @@ export const TransactionFormInitialValues = {
   tdate: "",
   receipt: "",
   id: 0,
+};
+
+export type Group1Type = {
+  [key: string]: Transaction[];
+};
+
+export type GroupType = [Group1Type];
+
+export type TypePagination = {
+  showPage: number;
+  totalpage: number;
+  limit: number;
+  pageno: number;
+  pages: number[];
+};
+
+export type TypeTransaction = {
+  transactions: Transaction[];
+  groupVal?: string;
+};
+
+export type TableHeaderProps = {
+  tabHeader: string;
+  col: string;
+  sorting: {
+    [key: string]: string;
+  };
+  type?: string;
+  newData: Transaction[];
+  groupVal?: string;
+  setSortingColumn: (column: string, type: string) => void;
 };

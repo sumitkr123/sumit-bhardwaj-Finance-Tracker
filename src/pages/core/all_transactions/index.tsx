@@ -9,9 +9,9 @@ import { ErrorPage } from "../../../components/errorpage/errorPage";
 
 import { Cookies } from "react-cookie";
 import { useAppSelector } from "../../../redux/hooks";
-import { Transaction } from "../../../models/transactionModel";
+
 import { RootState } from "../../../redux/store";
-import { Group1Type, GroupType } from "./models/transactionDataTypes";
+import { Group1Type, GroupType, Transaction } from "../../../models/exports";
 
 export const AllData = (): React.JSX.Element => {
   const transactions = useAppSelector<Transaction[]>(
@@ -106,7 +106,7 @@ export const AllData = (): React.JSX.Element => {
                     <div key={value} className="container">
                       <div className="wholeTabWithEverything">
                         <h1>{value}</h1>
-                        <TransactionData transactions={groupedData[0][value]} />
+                        <TransactionData transactions={groupedData[0][value]} groupVal={groupVal} />
                       </div>
                     </div>
                   )

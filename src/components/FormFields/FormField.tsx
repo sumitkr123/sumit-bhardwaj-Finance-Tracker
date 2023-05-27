@@ -1,7 +1,6 @@
 import { UseFormRegister } from "react-hook-form";
-import { Transaction } from "../../models/transactionModel";
-import { User } from "../../models/userModel";
 import React from "react";
+import { Transaction, User } from "../../models/exports";
 
 type FormFieldProps = {
   [key: string]: any;

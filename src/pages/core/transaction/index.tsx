@@ -5,11 +5,9 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { ErrorPage } from "../../../components/errorpage/errorPage";
 import { TableData } from "../../../components/table/tableData";
 import { useAppSelector } from "../../../redux/hooks";
-import {
-  Transaction,
-  TransactionTabHeaders,
-} from "../../../models/transactionModel";
+
 import { RootState } from "../../../redux/store";
+import { Transaction, TransactionTabHeaders } from "../../../models/exports";
 
 export const ViewTransaction = (): React.JSX.Element => {
   const { id } = useParams();

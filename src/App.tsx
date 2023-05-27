@@ -5,8 +5,9 @@ import { Provider } from "react-redux";
 import { store } from "./redux/store";
 import { CookiesProvider } from "react-cookie";
 import { routes } from "./routes/routing";
+import React from "react";
 
-export default function App() {
+const App = (): React.JSX.Element => {
   return (
     <CookiesProvider>
       <Provider store={store}>
@@ -14,4 +15,6 @@ export default function App() {
       </Provider>
     </CookiesProvider>
   );
-}
+};
+
+export default App;

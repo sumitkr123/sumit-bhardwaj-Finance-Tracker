@@ -1,14 +1,15 @@
 import { Navigate } from "react-router-dom";
-import { Login } from "../pages/auth_screens/login";
-import { Register } from "../pages/auth_screens/register";
+import { Login } from "../pages/authentication/login";
+import { Register } from "../pages/authentication/register";
 import { AllData } from "../pages/core/all_transactions";
 import { ViewTransaction } from "../pages/core/transaction";
 import { AddTransaction } from "../pages/core/add_transaction";
 import { ErrorPage } from "../components/errorpage/errorPage";
+import React from "react";
 
 export type TypeRoutes = {
   path: string;
-  element?: JSX.Element;
+  element?: React.JSX.Element;
   protected?: boolean;
   further?: Array<TypeRoutes>;
 };

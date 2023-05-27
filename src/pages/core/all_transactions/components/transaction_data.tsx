@@ -3,7 +3,6 @@ import { Pagination } from "../../../../components/table/pagination";
 import { useEffect, useMemo, useState } from "react";
 import {
   fixedimit,
-  month,
   paginno,
   fixedShowPageCount,
 } from "../../../../utils/constants";
@@ -14,21 +13,12 @@ import { TableData } from "../../../../components/table/tableData";
 import {
   Transaction,
   TransactionTabHeaders,
-} from "../../../../models/transactionModel";
+  TypePagination,
+  TypeTransaction,
+} from "../../../../models/exports";
+import { doSort } from "../../../../utils/helpers";
 
-export type typePagination = {
-  showPage: number;
-  totalpage: number;
-  limit: number;
-  pageno: number;
-  pages: number[];
-};
-
-type typeTransaction = {
-  transactions: Transaction[];
-};
-
-export const TransactionData = (props: typeTransaction): React.JSX.Element => {
+export const TransactionData = (props: TypeTransaction): React.JSX.Element => {
   //Getting Data From Main component and doing sorting and pagination and searching here..!
 
   const [newData, setNewData] = useState(props.transactions);
@@ -39,7 +29,7 @@ export const TransactionData = (props: typeTransaction): React.JSX.Element => {
     columnValueType: "",
   });
 
-  const [pagination, setPagination] = useState<typePagination>({
+  const [pagination, setPagination] = useState<TypePagination>({
     showPage: fixedShowPageCount,
     totalpage: 0,
     limit: fixedimit,
@@ -75,69 +65,16 @@ export const TransactionData = (props: typeTransaction): React.JSX.Element => {
     // eslint-disable-next-line
   }, [newData, pagination.limit]);
 
-  const doSort = (getAllTransactions: Transaction[]) => {
-    getAllTransactions.sort((a, b) => {
-      switch (sorting.columnValueType) {
-        case "number":
-          return sorting.sortingOrder === "asc"
-            ? parseInt(a[sorting.sortingColumnName]) >
-              parseInt(b[sorting.sortingColumnName])
-              ? 1
-              : -1
-            : parseInt(a[sorting.sortingColumnName]) <
-              parseInt(b[sorting.sortingColumnName])
-            ? 1
-            : -1;
-
-        case "monthyear":
-          let fmonth = a[sorting.sortingColumnName].split(" ")[0];
-          let smonth = b[sorting.sortingColumnName].split(" ")[0];
-
-          let fyear = parseInt(a[sorting.sortingColumnName].split(" ")[1]);
-          let syear = parseInt(b[sorting.sortingColumnName].split(" ")[1]);
-
-          return sorting.sortingOrder === "asc"
-            ? month.indexOf(fmonth) > month.indexOf(smonth) && fyear >= syear
-              ? 1
-              : -1
-            : month.indexOf(fmonth) < month.indexOf(smonth) && fyear <= syear
-            ? 1
-            : -1;
-
-        case "date":
-          let fdate = new Date(a[sorting.sortingColumnName]);
-          let sdate = new Date(b[sorting.sortingColumnName]);
-
-          return sorting.sortingOrder === "asc"
-            ? fdate > sdate
-              ? 1
-              : -1
-            : fdate < sdate
-            ? 1
-            : -1;
-
-        default:
-          return sorting.sortingOrder === "asc"
-            ? a[sorting.sortingColumnName] > b[sorting.sortingColumnName]
-              ? 1
-              : -1
-            : a[sorting.sortingColumnName] < b[sorting.sortingColumnName]
-            ? 1
-            : -1;
-      }
-    });
-  };
-
   useEffect(() => {
     let getAllTransactions = [...newData];
 
     switch (sorting.sortingOrder) {
       case "asc":
-        doSort(getAllTransactions);
+        doSort(getAllTransactions, sorting);
         break;
 
       case "desc":
-        doSort(getAllTransactions);
+        doSort(getAllTransactions, sorting);
         break;
 
       default:
@@ -298,6 +235,7 @@ export const TransactionData = (props: typeTransaction): React.JSX.Element => {
                           tabHeader={TransactionTabHeaders[keyCol].name}
                           col={keyCol}
                           sorting={sorting}
+                          groupVal={props.groupVal}
                           setSortingColumn={setSortingColumn}
                           type={TransactionTabHeaders[keyCol].sortType}
                           newData={newData}

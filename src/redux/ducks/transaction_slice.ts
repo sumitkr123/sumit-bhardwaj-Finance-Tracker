@@ -1,9 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import {
-  EditTransactionPayloadType,
-  Transaction,
-} from "../../models/transactionModel";
+
 import { defaultTransactions } from "../../utils/constants";
+import { EditTransactionPayloadType, Transaction } from "../../models/exports";
 
 const initialState: Transaction[] = defaultTransactions;
 

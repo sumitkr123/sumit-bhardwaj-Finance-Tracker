@@ -1,7 +1,7 @@
-import { typePagination } from "../../pages/core/all_transactions/components/transaction_data";
+import { TypePagination } from "../../models/exports";
 
 type PaginationProps = {
-  pagination: typePagination;
+  pagination: TypePagination;
   changepageno: (pageno: number) => void;
 };
 

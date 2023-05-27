@@ -1,8 +1,8 @@
-type typeCurrency = {
+type TypeCurrency = {
   [key: string]: JSX.Element;
 };
 
-const currency: typeCurrency = {
+const currency: TypeCurrency = {
   rupee: <span>&#8377;</span>,
   dollar: <span>&#36;</span>,
   pound: <span>&#163;</span>,
@@ -13,9 +13,9 @@ const currency: typeCurrency = {
 export const amountFormatter = (amount: string, valueType: string) => {
   let newamount = amount.toString();
   let length = newamount.length;
-  type typenewstr = JSX.Element | string;
+  type TypeNewStr = JSX.Element | string;
 
-  let newstr: typenewstr = "";
+  let newstr: TypeNewStr = "";
 
   if (length <= 3) {
     newstr += newamount;

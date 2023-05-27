@@ -13,15 +13,15 @@ import {
   addTransaction,
   editTransaction,
 } from "../../../redux/ducks/transaction_slice";
-import { transactionValidationSchema } from "../../../validations/schema";
+import { TransactionValidationSchema } from "../../../validations/schema";
 import { FormField } from "../../../components/FormFields/FormField";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { RootState } from "../../../redux/store";
 import {
+  DynamicTransactionForm,
   Transaction,
   TransactionFormInitialValues,
-  dynamicTransactionForm,
-} from "../../../models/transactionModel";
+} from "../../../models/exports";
 
 export const AddTransaction = (): React.JSX.Element => {
   const {
@@ -30,7 +30,7 @@ export const AddTransaction = (): React.JSX.Element => {
     setValue,
     formState: { errors },
   } = useForm<Transaction>({
-    resolver: yupResolver(transactionValidationSchema),
+    resolver: yupResolver(TransactionValidationSchema),
     mode: "all",
   });
 
@@ -123,14 +123,14 @@ export const AddTransaction = (): React.JSX.Element => {
     <div className="container">
       <div className="formdiv">
         <form className="form" onSubmit={handleSubmit(onSubmit)}>
-          {Object.keys(dynamicTransactionForm).map((input) =>
-            dynamicTransactionForm[input].type === "file" ? (
+          {Object.keys(DynamicTransactionForm).map((input) =>
+            DynamicTransactionForm[input].type === "file" ? (
               <FormField
                 key={input}
                 formValues={values}
                 error={errors[input]?.message as string}
                 register={register}
-                {...dynamicTransactionForm[input]}
+                {...DynamicTransactionForm[input]}
                 operations={{
                   getFile: getFile,
                   removeFile: removeFile,
@@ -143,7 +143,7 @@ export const AddTransaction = (): React.JSX.Element => {
                 formValues={values}
                 error={errors[input]?.message as string}
                 register={register}
-                {...dynamicTransactionForm[input]}
+                {...DynamicTransactionForm[input]}
               />
             )
           )}
