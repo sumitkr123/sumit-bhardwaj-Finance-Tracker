@@ -11,7 +11,8 @@ const currency: TypeCurrency = {
 };
 
 export const amountFormatter = (amount: string, valueType: string) => {
-  let newamount = amount.toString();
+  let newamount = amount;
+
   let length = newamount.length;
   type TypeNewStr = JSX.Element | string;
 

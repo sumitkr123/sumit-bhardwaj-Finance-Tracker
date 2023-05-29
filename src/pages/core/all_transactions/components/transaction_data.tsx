@@ -5,6 +5,7 @@ import {
   fixedimit,
   paginno,
   fixedShowPageCount,
+  TransactionTabHeaders,
 } from "../../../../utils/constants";
 import { useDispatch } from "react-redux";
 import { deleteTransaction } from "../../../../redux/ducks/transaction_slice";
@@ -12,7 +13,6 @@ import { TableHeader } from "../../../../components/table/tableHeader";
 import { TableData } from "../../../../components/table/tableData";
 import {
   Transaction,
-  TransactionTabHeaders,
   TypePagination,
   TypeTransaction,
 } from "../../../../models/exports";
@@ -264,7 +264,7 @@ export const TransactionData = (props: TypeTransaction): React.JSX.Element => {
                           (headers: string, index: number) => (
                             <TableData
                               key={headers + index + tdata.id}
-                              tcelldata={tdata[headers]}
+                              tcelldata={tdata[headers].toString()}
                               headers={headers}
                             />
                           )

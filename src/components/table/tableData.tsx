@@ -1,4 +1,4 @@
-import { TransactionTabHeaders } from "../../models/exports";
+import { TransactionTabHeaders } from "../../utils/constants";
 import { amountFormatter } from "./currency";
 
 export const TableData = (props: {

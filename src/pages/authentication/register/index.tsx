@@ -7,7 +7,8 @@ import { FormField } from "../../../components/FormFields/FormField";
 import { RootState } from "../../../redux/store";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { RegistrationValidationSchema } from "../../../validations/schema";
-import { DynamicRegisterForm, User } from "../../../models/exports";
+import { User } from "../../../models/exports";
+import { DynamicRegisterForm } from "../../../utils/constants";
 
 export const Register = (): React.JSX.Element => {
   const users = useAppSelector<User[]>((state: RootState) => state.users);

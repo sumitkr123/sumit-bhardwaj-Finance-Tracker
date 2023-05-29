@@ -2,13 +2,13 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
-import { cookieExpireTime } from "../../../utils/constants";
+import { DynamicLoginForm, cookieExpireTime } from "../../../utils/constants";
 import { FormField } from "../../../components/FormFields/FormField";
 import { RootState } from "../../../redux/store";
 
 import { useAppSelector } from "../../../redux/hooks";
 import { LoginValidationSchema } from "../../../validations/schema";
-import { DynamicLoginForm, User } from "../../../models/exports";
+import { User } from "../../../models/exports";
 
 export const Login = (): React.JSX.Element => {
   const users = useAppSelector<User[]>((state: RootState) => state.users);

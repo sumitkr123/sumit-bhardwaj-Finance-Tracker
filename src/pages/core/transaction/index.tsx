@@ -7,7 +7,8 @@ import { TableData } from "../../../components/table/tableData";
 import { useAppSelector } from "../../../redux/hooks";
 
 import { RootState } from "../../../redux/store";
-import { Transaction, TransactionTabHeaders } from "../../../models/exports";
+import { Transaction } from "../../../models/exports";
+import { TransactionTabHeaders } from "../../../utils/constants";
 
 export const ViewTransaction = (): React.JSX.Element => {
   const { id } = useParams();

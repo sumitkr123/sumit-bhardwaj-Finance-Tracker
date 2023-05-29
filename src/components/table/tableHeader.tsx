@@ -7,13 +7,15 @@ export const TableHeader = (props: TableHeaderProps): React.JSX.Element => {
   const type = props.type;
   const newData = props.newData;
   const setSortingColumn = props.setSortingColumn;
-  const groupVal=props.groupVal;
+  const groupVal = props.groupVal;
 
   return (
     <th
       className="th"
       onClick={() =>
-        newData.length <= 1 || groupVal===col  ? null : setSortingColumn(col, type!)
+        newData.length <= 1 || groupVal === col
+          ? null
+          : setSortingColumn(col, type!)
       }
     >
       <div className="sortHeader">

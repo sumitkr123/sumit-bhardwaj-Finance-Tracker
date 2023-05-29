@@ -1,3 +1,11 @@
+import { PassRuleJSX } from "../components/FormFields/PasswordRule";
+import {
+  TypeLogin,
+  TypeRegisterForm,
+  TypeTransactionForm,
+  TypeTransactionHeaders,
+} from "../models/exports";
+
 export const paginno = [1, 2, 3, 5, 10, 20, 30, 40];
 
 export const fixedLengthValue = 250;
@@ -299,3 +307,117 @@ export const defaultUsers = [
     pass: "Ak@123456",
   },
 ];
+
+export const TransactionTabHeaders: TypeTransactionHeaders = {
+  tdate: { name: "Transaction-Date", isSortable: true, sortType: "date" },
+  monthyear: { name: "Month-year", isSortable: true, sortType: "monthyear" },
+  ttype: { name: "Transaction-Type", isSortable: true },
+  FromAc: { name: "From-A/c", isSortable: true },
+  ToAc: { name: "To-A/c", isSortable: true },
+  amount: {
+    name: "Amount",
+    isSortable: true,
+    sortType: "number",
+    type: "amount",
+  },
+  receipt: { name: "Receipt", isSortable: false, type: "image" },
+  notes: { name: "Notes", isSortable: true },
+};
+
+export const DynamicTransactionForm: TypeTransactionForm = {
+  tdate: {
+    name: "tdate",
+    label: "Transaction date",
+    type: "date",
+    max: today.toISOString().split("T")[0],
+  },
+  notes: {
+    name: "notes",
+    label: "Notes",
+    type: "textarea",
+  },
+  amount: {
+    name: "amount",
+    label: "Amount",
+    type: "number",
+  },
+  FromAc: {
+    name: "FromAc",
+    label: "From A/c",
+    type: "select",
+    options: accountTypes,
+  },
+  ToAc: {
+    name: "ToAc",
+    label: "To A/c",
+    type: "select",
+    options: accountTypes,
+  },
+  ttype: {
+    name: "ttype",
+    label: "Transaction type",
+    type: "select",
+    options: transactionTypes,
+  },
+  monthyear: {
+    name: "monthyear",
+    label: "Month year",
+    type: "select",
+    options: monthYears,
+  },
+  receipt: {
+    name: "receipt",
+    label: "Receipt",
+    type: "file",
+    otherType: "image",
+  },
+};
+
+export const TransactionFormInitialValues = {
+  notes: "",
+  amount: "",
+  FromAc: "",
+  ToAc: "",
+  ttype: "",
+  monthyear: "",
+  tdate: "",
+  receipt: "",
+  id: 0,
+};
+
+export const DynamicRegisterForm: TypeRegisterForm = {
+  name: {
+    name: "name",
+    label: "Name",
+    type: "text",
+  },
+  phone: {
+    name: "phone",
+    label: "Phone",
+    type: "number",
+  },
+  email: {
+    name: "email",
+    label: "Email",
+    type: "email",
+  },
+  pass: {
+    name: "pass",
+    label: "Password",
+    type: "password",
+    passRules: PassRuleJSX,
+  },
+};
+
+export const DynamicLoginForm: TypeLogin = {
+  email: {
+    name: "email",
+    label: "Email",
+    type: "email",
+  },
+  pass: {
+    name: "pass",
+    label: "Password",
+    type: "password",
+  },
+};

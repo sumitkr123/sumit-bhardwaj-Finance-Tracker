@@ -1,5 +1,3 @@
-import { PassRuleJSX } from "../../components/FormFields/PasswordRule";
-
 export interface User {
   [key: string]: any;
   id: number;
@@ -14,7 +12,7 @@ export type TypeLoginValidationSchema = {
   pass: string;
 };
 
-type TypeLogin = {
+export type TypeLogin = {
   [key: string]: {
     name: string;
     label: string;
@@ -22,48 +20,11 @@ type TypeLogin = {
   };
 };
 
-export const DynamicLoginForm: TypeLogin = {
-  email: {
-    name: "email",
-    label: "Email",
-    type: "email",
-  },
-  pass: {
-    name: "pass",
-    label: "Password",
-    type: "password",
-  },
-};
-
-type TypeRegisterForm = {
+export type TypeRegisterForm = {
   [key: string]: {
     name: string;
     label: string;
     type: string;
     passRules?: JSX.Element | string | JSX.Element[] | string[];
   };
-};
-
-export const DynamicRegisterForm: TypeRegisterForm = {
-  name: {
-    name: "name",
-    label: "Name",
-    type: "text",
-  },
-  phone: {
-    name: "phone",
-    label: "Phone",
-    type: "number",
-  },
-  email: {
-    name: "email",
-    label: "Email",
-    type: "email",
-  },
-  pass: {
-    name: "pass",
-    label: "Password",
-    type: "password",
-    passRules: PassRuleJSX,
-  },
 };

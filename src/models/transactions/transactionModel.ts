@@ -1,9 +1,3 @@
-import monthYears, {
-  accountTypes,
-  today,
-  transactionTypes,
-} from "../../utils/constants";
-
 import * as yup from "yup";
 
 export interface EditTransactionPayloadType {
@@ -24,7 +18,7 @@ export interface Transaction {
   receipt: string | yup.AnyObject;
 }
 
-type TypeTransactionHeaders = {
+export type TypeTransactionHeaders = {
   [key: string]: {
     name: string;
     isSortable: boolean;
@@ -33,23 +27,7 @@ type TypeTransactionHeaders = {
   };
 };
 
-export const TransactionTabHeaders: TypeTransactionHeaders = {
-  tdate: { name: "Transaction-Date", isSortable: true, sortType: "date" },
-  monthyear: { name: "Month-year", isSortable: true, sortType: "monthyear" },
-  ttype: { name: "Transaction-Type", isSortable: true },
-  FromAc: { name: "From-A/c", isSortable: true },
-  ToAc: { name: "To-A/c", isSortable: true },
-  amount: {
-    name: "Amount",
-    isSortable: true,
-    sortType: "number",
-    type: "amount",
-  },
-  receipt: { name: "Receipt", isSortable: false, type: "image" },
-  notes: { name: "Notes", isSortable: true },
-};
-
-type TypeTransactionForm = {
+export type TypeTransactionForm = {
   [key: string]: {
     name: string;
     label: string;
@@ -58,67 +36,6 @@ type TypeTransactionForm = {
     otherType?: string;
     options?: string[];
   };
-};
-
-export const DynamicTransactionForm: TypeTransactionForm = {
-  tdate: {
-    name: "tdate",
-    label: "Transaction date",
-    type: "date",
-    max: today.toISOString().split("T")[0],
-  },
-  notes: {
-    name: "notes",
-    label: "Notes",
-    type: "textarea",
-  },
-  amount: {
-    name: "amount",
-    label: "Amount",
-    type: "number",
-  },
-  FromAc: {
-    name: "FromAc",
-    label: "From A/c",
-    type: "select",
-    options: accountTypes,
-  },
-  ToAc: {
-    name: "ToAc",
-    label: "To A/c",
-    type: "select",
-    options: accountTypes,
-  },
-  ttype: {
-    name: "ttype",
-    label: "Transaction type",
-    type: "select",
-    options: transactionTypes,
-  },
-  monthyear: {
-    name: "monthyear",
-    label: "Month year",
-    type: "select",
-    options: monthYears,
-  },
-  receipt: {
-    name: "receipt",
-    label: "Receipt",
-    type: "file",
-    otherType: "image",
-  },
-};
-
-export const TransactionFormInitialValues = {
-  notes: "",
-  amount: "",
-  FromAc: "",
-  ToAc: "",
-  ttype: "",
-  monthyear: "",
-  tdate: "",
-  receipt: "",
-  id: 0,
 };
 
 export type Group1Type = {

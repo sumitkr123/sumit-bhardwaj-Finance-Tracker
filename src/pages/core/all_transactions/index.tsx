@@ -106,7 +106,10 @@ export const AllData = (): React.JSX.Element => {
                     <div key={value} className="container">
                       <div className="wholeTabWithEverything">
                         <h1>{value}</h1>
-                        <TransactionData transactions={groupedData[0][value]} groupVal={groupVal} />
+                        <TransactionData
+                          transactions={groupedData[0][value]}
+                          groupVal={groupVal}
+                        />
                       </div>
                     </div>
                   )
