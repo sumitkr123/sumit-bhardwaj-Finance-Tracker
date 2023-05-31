@@ -10,8 +10,8 @@ const currency: TypeCurrency = {
   euro: <span>&#8364;</span>,
 };
 
-export const amountFormatter = (amount: string, valueType: string) => {
-  let newamount = amount;
+export const amountFormatter = (amount: string | number, valueType: string) => {
+  let newamount = amount.toString();
 
   let length = newamount.length;
   type TypeNewStr = JSX.Element | string;

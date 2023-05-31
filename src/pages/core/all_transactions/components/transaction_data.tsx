@@ -264,7 +264,7 @@ export const TransactionData = (props: TypeTransaction): React.JSX.Element => {
                           (headers: string, index: number) => (
                             <TableData
                               key={headers + index + tdata.id}
-                              tcelldata={tdata[headers].toString()}
+                              tcelldata={tdata[headers]}
                               headers={headers}
                             />
                           )
